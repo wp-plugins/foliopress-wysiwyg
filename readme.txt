@@ -42,7 +42,7 @@ manually.
 
 = Is Foliopress WYSIWYG able to work with the images already stored on the site? =
 
-Yes it is. Depending on your PHP configuration, you might have to change the permission according to  [this guide](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/prepare-ftp-files-for-seo-images).
+Yes it is. Depending on your PHP configuration, you might have to change the directory permissions according to [this guide](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/prepare-ftp-files-for-seo-images) in order to make thumbnails work.
 
 = What about my own toolbar? =
 
