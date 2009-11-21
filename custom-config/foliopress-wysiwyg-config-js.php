@@ -16,6 +16,8 @@ automatically load into Options page. Again make sure skin you are adding is
 correct.
 */
 
+/* toolbars */
+
 FCKConfig.ToolbarSets["Default"] = [ 
 	['Source','DocProps','-','Save','NewPage','Preview','-','Templates'], 
 	['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'], 
@@ -38,7 +40,7 @@ FCKConfig.ToolbarSets["Basic"] = [
 ];
 
 FCKConfig.ToolbarSets["Foliovision"] = [
-	['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','-','Source','-','FitWindow']
+	['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','FontFormat','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','-','Source','-','FitWindow']
 	//wp_buttons,
 ];
 
@@ -56,6 +58,114 @@ FCKConfig.ToolbarSets["Foliovision-Full"] = [
 ];
 
 FCKConfig.ToolbarSets["Custom"] = [ <?php echo stripslashes($options['customtoolbar']); ?> ];
+
+/* dropdown */
+//FCKConfig.FontFormats	= 'h5center;h5left;h5right;p;h1;h2;h3;h4;pre;del;code' ;
+FCKConfig.FontFormats	= '<?php echo $options['customdropdown-fontformats']; ?>' ;
+
+FCKConfig.CoreStyles =
+{
+    // custom formating
+	/*'h5left'	: { Element : 'h5', Attributes : { 'class' : 'left' } },
+	'h5center'	: { Element : 'h5', Attributes : { 'class' : '' } },
+	'h5right'	: { Element : 'h5', Attributes : { 'class' : 'right' } },
+	'del'       : { Element : 'del' },
+	'code'       : { Element : 'code' },*/
+	<?php echo $options['customdropdown-corestyles']; ?>,
+
+	// Basic Inline Styles.
+	'Bold'			: { Element : 'strong', Overrides : 'b' },
+	'Italic'		: { Element : 'em', Overrides : 'i' },
+	'Underline'		: { Element : 'u' },
+	'StrikeThrough'	: { Element : 'strike' },
+	'Subscript'		: { Element : 'sub' },
+	'Superscript'	: { Element : 'sup' },
+
+	// Basic Block Styles (Font Format Combo).
+	'p'				: { Element : 'p' },
+	'div'			: { Element : 'div' },
+	'pre'			: { Element : 'pre' },
+	'address'		: { Element : 'address' },
+	'h1'			: { Element : 'h1' },
+	'h2'			: { Element : 'h2' },
+	'h3'			: { Element : 'h3' },
+	'h4'			: { Element : 'h4' },
+	'h5'			: { Element : 'h5' },
+	'h6'			: { Element : 'h6' },
+
+	// Other formatting features.
+	'FontFace' :
+	{
+		Element		: 'span',
+		Styles		: { 'font-family' : '#("Font")' },
+		Overrides	: [ { Element : 'font', Attributes : { 'face' : null } } ]
+	},
+
+	'Size' :
+	{
+		Element		: 'span',
+		Styles		: { 'font-size' : '#("Size","fontSize")' },
+		Overrides	: [ { Element : 'font', Attributes : { 'size' : null } } ]
+	},
+
+	'Color' :
+	{
+		Element		: 'span',
+		Styles		: { 'color' : '#("Color","color")' },
+		Overrides	: [ { Element : 'font', Attributes : { 'color' : null } } ]
+	},
+
+	'BackColor'		: { Element : 'span', Styles : { 'background-color' : '#("Color","color")' } },
+
+	'SelectionHighlight' : { Element : 'span', Styles : { 'background-color' : 'navy', 'color' : 'white' } }
+};
+
+
+FCKToolbarFontFormatCombo.prototype.GetStyles = function()
+{
+	var styles = {} ;
+
+	// Get the format names from the language file.
+	var aNames = FCKLang['FontFormats'].split(';') ;
+	var oNames = {
+		// custom formating
+		/*del     : 'Deleted text',
+		code    : 'Computer code',
+		h5left  : 'H5 Image left',
+		h5center: 'H5 Image center',
+		h5right : 'H5 Image right',*/
+		<?php echo $options['customdropdown-fontformatnames']; ?>,
+		
+		p		: aNames[0],
+		pre		: aNames[1],
+		address	: aNames[2],
+		h1		: aNames[3],
+		h2		: aNames[4],
+		h3		: aNames[5],
+		h4		: aNames[6],
+		h5		: aNames[7],
+		h6		: aNames[8],
+		div		: aNames[9] || ( aNames[0] + ' (DIV)')
+	} ;
+
+	// Get the available formats from the configuration file.
+	var elements = FCKConfig.FontFormats.split(';') ;
+
+	for ( var i = 0 ; i < elements.length ; i++ )
+	{
+		var elementName = elements[ i ] ;
+		var style = FCKStyles.GetStyle( '_FCK_' + elementName ) ;
+		if ( style )
+		{
+			style.Label = oNames[ elementName ] ;
+			styles[ '_FCK_' + elementName ] = style ;
+		}
+		else
+			alert( "The FCKConfig.CoreStyles['" + elementName + "'] setting was not found. Please check the fckconfig.js file" ) ;
+	}
+
+	return styles ;
+}
 
 
 /* This will be applied to the body element of the editor
@@ -110,3 +220,5 @@ FCKConfig.RemoveFormatTags = 'b,big,del,dfn,em,font,i,ins,kbd,q,samp,small,span,
 FCKConfig.Plugins.Add( 'foliopress-preformated' );
 //FCKConfig.Plugins.Add( 'foliopress-table-cleanup' );
 //FCKConfig.Plugins.Add( 'foliopress-word-cleanup' );
+
+FCKConfig.Plugins.Add( 'Abbr' );

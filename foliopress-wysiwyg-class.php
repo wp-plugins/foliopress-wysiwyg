@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.6
+ * @version 0.9.7
  * @package foliopress-wysiwyg
  */
 
@@ -206,13 +206,25 @@ class fp_wysiwyg_class{
 '/',
 ['Style','FontFormat','FontName','FontSize']";*/
             "['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','-','Source','-','FitWindow']";
+        
+        //  todo - add content
+        if( !isset( $this->aOptions['customdropdown'] ) ) $this->aOptions['customdropdown'] = '<h5 class="">Centered image</h5>
+<h5 class="left">Left aligned image</h5>
+<h5 class="right">Right aligned image</h5>
+<p>Normal paragraph</p>
+<h1>Header 1</h1>
+<h2>Header 2</h2>
+<h3>Header 3</h3>
+<h4>Header 4</h4>';
+        $this->parse_dropdown_menu();
 		
 		if ( !isset( $this->aOptions['multipleimageposting'] ) ) $this->aOptions['multipleimageposting'] = true;
 		
 		if ( !isset( $this->aOptions['autowpautop'] ) ) $this->aOptions['autowpautop'] = true;
-		/// End of addition
-		
-		
+		/// End of addition	
+
+    update_option( FV_FCK_OPTIONS, $this->aOptions );    
+
 		//$this->KillTinyMCE( null );
 	}
 	
@@ -482,11 +494,15 @@ class fp_wysiwyg_class{
 				if( isset( $_POST['PreWPAutop'] ) ) $this->aOptions['autowpautop'] = true;
 				///  End of addition
 				
-				/// Addition 2009/10/25 Foliovision
+				/// Addition 2009/11/04 Foliovision
 				if( isset( $_POST['bodyid'] ) ) $this->aOptions['bodyid'] = $_POST['bodyid'];
 				if( isset( $_POST['bodyclass'] ) ) $this->aOptions['bodyclass'] = $_POST['bodyclass'];
 				if( isset( $_POST['customtoolbar'] ) ) $this->aOptions['customtoolbar'] = stripslashes($_POST['customtoolbar']);
+				if( isset( $_POST['customdropdown'] ) ) $this->aOptions['customdropdown'] = stripslashes($_POST['customdropdown']);
+				
+                $this->parse_dropdown_menu();
 				/// End of addition
+				
 
 				if( isset( $_POST['KFMThumbCount'] ) ){
 					$aThumbs = array();
@@ -575,6 +591,60 @@ class fp_wysiwyg_class{
    }
    
    ///  End of addition
+   
+   function parse_dropdown_menu() {
+        $items = explode("\r\n",$this->aOptions['customdropdown']);             //  one item per line
+        $i = 0;                                                                 //  counter
+        foreach ($items AS $item) {
+            $i++;
+            preg_match('/<(.*?)>/i',$item,$match);                              //  take only the part inside <>
+            if(!$match[0])
+                continue;
+            preg_match('/<([^>]*?)[\s>]/i',$match[0],$element);                    //  match the element name
+            preg_match('/>([^<]*?)</i',$item,$name);                            //  match the enclosed text - name
+            //echo 'Name: \''.$name[1].'\' Element: \''.$element[1].'\', ';
+            preg_match_all('/([a-z]*?)="(.*?)"/i',$match[0],$attributes);       //  match the attributes
+            $attr_text = '';
+            $styles_text = '';
+            if(isset($attributes[1])) {
+                foreach($attributes[1] AS $key => $attribute) {
+                    if(strcasecmp('style',$attribute)==0) {                     //  style
+                        $styles_text .= $attributes[2][$key];
+                    }
+                    else {                                                      //  everything else
+                        if(isset($attributes[2][$key]))
+                            $attr_text .= '\''.$attribute.'\' : \''.$attributes[2][$key].'\', ';
+                        else
+                            $attr_text .= '\''.$attribute.'\', ';
+                    }
+                }
+            }
+            $styles_text = preg_replace('/\b([^;]*?):/i','\'$1\' :',$styles_text);  //  put css property into ''
+            $styles_text = preg_replace('/\b([^\s]*?);/i','\'$1\', ',$styles_text);  //  put css values into ''
+            
+            $attr_text = rtrim($attr_text,', ');
+            $styles_text = rtrim($styles_text,', ');
+            
+            if(strlen($corestyles)>0)
+                $corestyles .= ",\r\n";
+            $corestyles .= "'".$element[1]."_".$i."' : { Element : '".$element[1]."'";        //  do the proper output
+            if(strlen($attr_text)>0)
+                $corestyles .= ", Attributes : { ".$attr_text." } ";
+            if(strlen($styles_text)>0)
+                $corestyles .= ", Styles : { ".$styles_text." } ";
+            
+            $corestyles .= " }";
+            
+            $fontformats .= "".$element[1]."_".$i.";";
+            if(strlen($fontformatnames)>0)
+                $fontformatnames .= ",\r\n";
+            $fontformatnames .= "".$element[1]."_".$i." : '".$name[1]."'"; 
+            
+        }
+        $this->aOptions['customdropdown-fontformats'] = rtrim($fontformats,';');
+        $this->aOptions['customdropdown-corestyles'] = rtrim($corestyles,',');
+        $this->aOptions['customdropdown-fontformatnames'] = rtrim($fontformatnames,','); 
+    }
 }
 
 $fp_wysiwyg = new fp_wysiwyg_class();

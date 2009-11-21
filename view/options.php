@@ -127,6 +127,10 @@
                     <td><textarea rows="8" cols="80" name="customtoolbar"><?php echo $this->aOptions['customtoolbar']; ?></textarea></td>
                 </tr>
                 <tr valign="top">
+                    <th scope="row"><label for="customdropdown">Dropdown Customization</label></th>
+                    <td><textarea rows="8" cols="80" name="customdropdown"><?php echo $this->aOptions['customdropdown']; ?></textarea></td>
+                </tr>
+                <tr valign="top">
                     <th scope="row">Compatibility</th>
                     <td><fieldset>
                         <label for="PreWPAutop"><input id="chkPreWPAutop" type="checkbox" name="PreWPAutop" value="yes" <?php if($this->aOptions['autowpautop']) echo 'checked="checked"'; ?> /> Do wpautop before editing a post if there are no <code>&lt;p&gt;</code> tags in the post.</label><br /><span class="description">If your posts were created with the default Wordpress editor (TinyMCE), you need to leave this on, as TinyMCE is storing posts without any HTML markup for the paragraphs. You may want to disable it if some of your special posts are destroyed after opening with Foliopress WYSIWYG.</span><br />

@@ -28,7 +28,7 @@
 
 	<!-- Block Styles -->
 
-	<!--
+	
 	# These styles are already available in the "Format" combo, so they are not
 	# needed here by default.
 
@@ -42,7 +42,8 @@
 	<Style name="Document Block" element="div" />
 	<Style name="Preformatted Text" element="pre" />
 	<Style name="Address" element="address" />
-	-->
+	<Style name="Abbrev" element="abbr" />
+	
 
 	<!-- Inline Styles -->
 
