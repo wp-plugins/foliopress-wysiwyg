@@ -47,3 +47,7 @@ Yes it is. Depending on your PHP configuration, you might have to change the dir
 = What about my own toolbar? =
 
 You can configure it in the Advanced options.
+
+= What about some more buttons? =
+
+You can customize the styling dropdown.
