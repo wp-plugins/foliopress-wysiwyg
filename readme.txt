@@ -3,7 +3,7 @@ Contributors: FolioVision
 Tags: wysiwyg,editor,foliopress,image,images,seo,lightbox
 Requires at least: 2.2.3
 Tested up to: 2.8.6
-Stable tag: 0.9.7
+Stable tag: trunk
 
 Foliopress WYSIWYG is the editor you were always hoping for, every time you installed a new content management system.
 
