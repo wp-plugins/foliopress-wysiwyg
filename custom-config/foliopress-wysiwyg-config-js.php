@@ -220,5 +220,3 @@ FCKConfig.RemoveFormatTags = 'b,big,del,dfn,em,font,i,ins,kbd,q,samp,small,span,
 FCKConfig.Plugins.Add( 'foliopress-preformated' );
 //FCKConfig.Plugins.Add( 'foliopress-table-cleanup' );
 //FCKConfig.Plugins.Add( 'foliopress-word-cleanup' );
-
-FCKConfig.Plugins.Add( 'Abbr' );
