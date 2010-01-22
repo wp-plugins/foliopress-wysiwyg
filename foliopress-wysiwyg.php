@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: FolioPress WYSIWYG
-Plugin URI: http://www.foliovision.com
+Plugin URI: http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg
 Description: WYSIWYG FCKEditor with custom Image Management and nice skin.
 Version: 0.9.7
 Author: Foliovision s r.o.
