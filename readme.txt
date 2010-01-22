@@ -24,7 +24,7 @@ Foliopress WYSIWYG is the editor you were always hoping for, every time you inst
 * Foliopress WYSIWYG will never go out of date: Foliopress WYSIWYG is assembled from best of breed open source projects so it will always be on the cutting edge of web design. The parts are carefully assembled as modules with no modifications to core code so you can always drop the latest version of the core libraries in for a seamless and instant upgrade.
 * Foliopress WYSIWYG is so easy and fun to use, that you just might want to retire your word processor and write all your documents online.
 * Uses FCKEditor with upgrades, equivalent to CKEditor.
-* Includes a full extended toolbar just like tinyMCE Advanced.
+* Includes a fully extended toolbar just like tinyMCE Advanced.
 
 [Support](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg) |
 [Change Log](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/changelog)
