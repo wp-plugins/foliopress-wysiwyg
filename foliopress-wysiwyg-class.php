@@ -5,14 +5,16 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.7
+ * @version 0.9.8
  * @package foliopress-wysiwyg
  */
 
 /**
  * Including wordpress
  */ 
-require_once( realpath( dirname(__FILE__) . '/../../../wp-config.php' ) );
+///	Modification	12/02/2010
+require_once( realpath( dirname(__FILE__) . '/../../../wp-load.php' ) );
+///	End of modification
 /**
  * Some basic functions for this class to work
  */
@@ -58,7 +60,7 @@ class fp_wysiwyg_class{
 	 * Plugin version
 	 * @var string
 	 */
-	var $strVersion = '0.9';
+	var $strVersion = '0.9.8';
 	/**
 	 * Custom options array.
 	 * Array of options that are stored in database:
@@ -150,8 +152,10 @@ class fp_wysiwyg_class{
 	 */
 	const FVC_FV_REGEX_PATH = 'include/foliovision-regex.js';
 	
-   const FVC_HIDEMEDIA = 'HideMediaButtons';
-
+	const FVC_HIDEMEDIA = 'HideMediaButtons';
+	
+	const FVC_MAXW = 'MaxWidth';
+	const FVC_MAXH = 'MaxHeight';
 
 
 
@@ -192,7 +196,7 @@ class fp_wysiwyg_class{
 		if( !isset( $this->aOptions[self::FVC_PNG] ) ) $this->aOptions[self::FVC_PNG] = true;
 		if( !isset( $this->aOptions[self::FVC_PNG_LIMIT] ) ) $this->aOptions[self::FVC_PNG_LIMIT] = 5000;
 		/// Addition 2009/06/02  mVicenik Foliovision
-		if( !isset( $this->aOptions[self::FVC_HIDEMEDIA] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = false;
+		if( !isset( $this->aOptions[self::FVC_HIDEMEDIA] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = true;
 		/// End of addition
 		/// Addition 2009/10/29   Foliovision
 		if( !isset( $this->aOptions['customtoolbar'] ) ) $this->aOptions['customtoolbar'] =
@@ -205,7 +209,7 @@ class fp_wysiwyg_class{
 ['Underline','StrikeThrough','-','Subscript','Superscript'], ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'], ['Image','Flash','Table','Rule','Smiley','SpecialChar','PageBreak'],['TextColor','BGColor'], ['About'],
 '/',
 ['Style','FontFormat','FontName','FontSize']";*/
-            "['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','-','Source','-','FitWindow']";
+            "['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','FontFormat','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','FVWPFlowplayer','-','Source','-','FitWindow']";
         
         //  todo - add content
         if( !isset( $this->aOptions['customdropdown'] ) ) $this->aOptions['customdropdown'] = '<h5 class="">Centered image</h5>
@@ -220,7 +224,12 @@ class fp_wysiwyg_class{
 		
 		if ( !isset( $this->aOptions['multipleimageposting'] ) ) $this->aOptions['multipleimageposting'] = true;
 		
+		if ( !isset( $this->aOptions['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = "body { width: 600px; margin-left: 10px; }";
+		
 		if ( !isset( $this->aOptions['autowpautop'] ) ) $this->aOptions['autowpautop'] = true;
+		
+		if( !isset( $this->aOptions[self::FVC_MAXW] ) ) $this->aOptions[self::FVC_MAXW] = 960;
+		if( !isset( $this->aOptions[self::FVC_MAXH] ) ) $this->aOptions[self::FVC_MAXH] = 960;
 		/// End of addition	
 
     update_option( FV_FCK_OPTIONS, $this->aOptions );    
@@ -482,8 +491,8 @@ class fp_wysiwyg_class{
 				if( isset( $_POST['KFMLightbox'] ) && 'yes' == $_POST['KFMLightbox'] ) $this->aOptions[self::FVC_KFM_LIGHTBOX] = true;
 				
 				///  Addition 2009/06/02  mVicenik Foliovision
-				$this->aOptions[self::FVC_HIDEMEDIA] = false;
-				if( isset( $_POST['HideMediaButtons'] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = true;
+				$this->aOptions[self::FVC_HIDEMEDIA] = true;
+				if( isset( $_POST['HideMediaButtons'] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = false;
 				///  End of addition
 				
 				///  Addition 2009/10/29  mVicenik Foliovision
@@ -502,6 +511,10 @@ class fp_wysiwyg_class{
 				
                 $this->parse_dropdown_menu();
 				/// End of addition
+
+				///	Addition 2010/02/01
+				if( isset( $_POST['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = $_POST['wysiwygstyles'];
+				///	End of addition
 				
 
 				if( isset( $_POST['KFMThumbCount'] ) ){
@@ -523,6 +536,9 @@ class fp_wysiwyg_class{
 				$this->aOptions[self::FVC_PNG] = isset( $_POST['PNGTransform'] ) ? true : false;
 				$this->aOptions[self::FVC_PNG_LIMIT] = intval( $_POST['PNGLimit'] );
 				if( $this->aOptions[self::FVC_PNG_LIMIT] < 0 || $this->aOptions[self::FVC_PNG_LIMIT] > 50000 ) $this->aOptions[self::FVC_PNG_LIMIT] = 5000;
+				
+				if( isset( $_POST['MaxWidth'] ) ) $this->aOptions[self::FVC_MAXW] = intval( $_POST['MaxWidth'] );
+				if( isset( $_POST['MaxHeight'] ) ) $this->aOptions[self::FVC_MAXH] = intval( $_POST['MaxHeight'] );
 				
 				update_option( FV_FCK_OPTIONS, $this->aOptions );
 			}
@@ -601,8 +617,8 @@ class fp_wysiwyg_class{
             if(!$match[0])
                 continue;
             preg_match('/<([^>]*?)[\s>]/i',$match[0],$element);                    //  match the element name
-            preg_match('/>([^<]*?)</i',$item,$name);                            //  match the enclosed text - name
-            //echo 'Name: \''.$name[1].'\' Element: \''.$element[1].'\', ';
+            preg_match('/>([^<]*?)(<|$)/i',$item,$name);                            //  match the enclosed text or the text after the singular tag - name
+
             preg_match_all('/([a-z]*?)="(.*?)"/i',$match[0],$attributes);       //  match the attributes
             $attr_text = '';
             $styles_text = '';
@@ -643,8 +659,9 @@ class fp_wysiwyg_class{
         }
         $this->aOptions['customdropdown-fontformats'] = rtrim($fontformats,';');
         $this->aOptions['customdropdown-corestyles'] = rtrim($corestyles,',');
-        $this->aOptions['customdropdown-fontformatnames'] = rtrim($fontformatnames,','); 
+        $this->aOptions['customdropdown-fontformatnames'] = rtrim($fontformatnames,',');
     }
+    
 }
 
 $fp_wysiwyg = new fp_wysiwyg_class();

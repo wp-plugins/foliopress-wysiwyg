@@ -6,43 +6,120 @@ require_once( 'initialise.php' );
 require_once( 'foliovision.php' );
 require_once(KFM_BASE_PATH.'includes/kaejax.php');
 
-//require_once( realpath( $_SERVER['DOCUMENT_ROOT'] . '/wordpress/wp-config.php' ) );
-//if( !isset( $kfm_sec ) || sha1( 'security' ) != $kfm_sec ) die( var_export( $kfm_sec, true ) );
-/// Addition		pBaran		11/07/2008		Foliovision
-/// KFM will send cookie about last opened dir and will open it on start
-$iDir = 0;
-if( isset( $_COOKIE['kfm_last_opened_dir'] ) ){
-   try{
-   	$iDir = intval( $_COOKIE['kfm_last_opened_dir'] );
-   	if( 1 < $iDir ){
-   		//$strFiles = json_encode( kfm_loadFiles( $iDir ) );
-   		$aobjDirsTemp = array();
-   		$iCur = $iDir;
-   		$iIndex = 0;
-   		while( $iCur >= 1 ){
-   			$objDir = kfmDirectory::getInstance( $iCur );
-   			//var_dump( $objDir->name );
-   			//var_dump( $objDir->path );
-   			$aobjDirsTemp[$iIndex] = $objDir;
-   			$iCur = $objDir->pid;
-   			$iIndex++;
-   		}
-   		
-   		$aobjDirs= array();
-   		for( $i=0; $i<$iIndex; $i++ ) $aobjDirs[$i] = $aobjDirsTemp[$iIndex-$i-1];
-   		
-   		$aaDirs = array();
-   		require_once( KFM_BASE_PATH.'includes/directories.php' );
-   		for( $i=0; $i<$iIndex; $i++ ) $aaDirs[$i] = _loadDirectories( $aobjDirsTemp[$iIndex-$i-1]->id );
-   		
-   		$strDirs = json_encode( $aaDirs );
-   	}else $iDir = 0;
-   }catch( Exception $ex ){
-      $iDir = 0;
-   }
+//	this would take you to directory base on a cookie
+
+	//require_once( realpath( $_SERVER['DOCUMENT_ROOT'] . '/wordpress/wp-config.php' ) );
+	//if( !isset( $kfm_sec ) || sha1( 'security' ) != $kfm_sec ) die( var_export( $kfm_sec, true ) );
+	/// Addition		pBaran		11/07/2008		Foliovision
+	/// KFM will send cookie about last opened dir and will open it on start
+	/*$iDir = 0;
+	if( isset( $_COOKIE['kfm_last_opened_dir'] ) ){
+	   try{
+	   	$iDir = intval( $_COOKIE['kfm_last_opened_dir'] );
+	   	if( 1 < $iDir ){
+	   		//$strFiles = json_encode( kfm_loadFiles( $iDir ) );
+	   		$aobjDirsTemp = array();
+	   		$iCur = $iDir;
+	   		$iIndex = 0;
+	   		while( $iCur >= 1 ){
+	   			$objDir = kfmDirectory::getInstance( $iCur );
+	   			//var_dump( $objDir->name );
+	   			//var_dump( $objDir->path );
+	   			$aobjDirsTemp[$iIndex] = $objDir;
+	   			$iCur = $objDir->pid;
+	   			$iIndex++;
+	   		}
+	   		
+	   		$aobjDirs= array();
+	   		for( $i=0; $i<$iIndex; $i++ ) $aobjDirs[$i] = $aobjDirsTemp[$iIndex-$i-1];
+	   		
+	   		$aaDirs = array();
+	   		require_once( KFM_BASE_PATH.'includes/directories.php' );
+	   		for( $i=0; $i<$iIndex; $i++ ) $aaDirs[$i] = _loadDirectories( $aobjDirsTemp[$iIndex-$i-1]->id );
+	   		
+	   		$strDirs = json_encode( $aaDirs );
+	   	}else $iDir = 0;
+	   }catch( Exception $ex ){
+	      $iDir = 0;
+	   }
+	}*/
+	/// End of addition		pBaran		11/07/2008
+
+///	Addition	28/01/10	Foliovision
+require_once( KFM_BASE_PATH.'includes/directory.class.php' );
+
+//	create directory $sNewDirPath
+//$sNewDirPath = 'test/if/it/works';
+$sNewDirPath = date( 'Y\/m' ) ;	//	year/month structure
+$aNewDir = explode( '/', $sNewDirPath );
+
+$sBasePath = $_SERVER['DOCUMENT_ROOT'].$kfm_userfiles;
+
+$objDir = new kfmDirectory();
+
+//	let's use KFM stuff to create the directory and the enter into it, this makes sure everything will be fine in db
+foreach( $aNewDir AS $sNewDir) {
+	//echo 'stepping into '.$sNewDir.' ';
+	
+	$iDirParent = $objDir->id;
+	
+	//	check for dir in KFM db
+	$aNewDir = db_fetch_row("SELECT * FROM ".$objDir->db_prefix."directories WHERE name = '".$sNewDir."' AND parent = ".$iDirParent." ");
+	
+	//	if it does not exist at all, create it
+	if( !file_exists( $objDir->getPath().$sNewDir ) ) {
+		//echo ' does not exist! ';
+		$objDir->createSubdir( $sNewDir );
+	}
+	//	or it might exist, but not in db, then add it into db
+	else if( $aNewDir == NULL ) {
+		//echo ' does not exist in db! ';
+		$objDir->addSubdirToDb( $sNewDir );
+		
+	}
+	//	get the id of our new directory
+	$aCurDir = db_fetch_row("SELECT * FROM ".$objDir->db_prefix."directories WHERE name = '".$sNewDir."' AND parent = ".$iDirParent." ");
+	
+	$iDir = $aCurDir['id'];
+	
+	$objDir = kfmDirectory::getInstance( $aCurDir['id'] );
+
 }
-/// End of addition		pBaran		11/07/2008
-			
+//	in the end, we have the directory id in $iDir, so we can enter it with Peter's code:
+
+//	enter the directory with id $iDir
+if( 1 < $iDir ){
+	//$strFiles = json_encode( kfm_loadFiles( $iDir ) );
+	$aobjDirsTemp = array();
+	$iCur = $iDir;
+	$iIndex = 0;
+	while( $iCur >= 1 ){
+		$objDir = kfmDirectory::getInstance( $iCur );
+		//var_dump( $objDir->name );
+		//var_dump( $objDir->path );
+		$aobjDirsTemp[$iIndex] = $objDir;
+		$iCur = $objDir->pid;
+		$iIndex++;
+	}
+	
+	$aobjDirs= array();
+	for( $i=0; $i<$iIndex; $i++ ) $aobjDirs[$i] = $aobjDirsTemp[$iIndex-$i-1];
+	
+	$aaDirs = array();
+	require_once( KFM_BASE_PATH.'includes/directories.php' );
+	for( $i=0; $i<$iIndex; $i++ ) $aaDirs[$i] = _loadDirectories( $aobjDirsTemp[$iIndex-$i-1]->id );
+	///	Addition	16/02/2010
+	//	take care of directories with quotes
+	foreach( $aaDirs AS $key => $value ) {
+		foreach( $aaDirs[$key]['directories'] AS $k => $v )
+			$aaDirs[$key]['directories'][$k][0] = str_replace( '"', '\"', $aaDirs[$key]['directories'][$k][0]);
+	}
+	///	End of addition
+	$strDirs = json_encode( $aaDirs );//var_dump($strDirs);echo "\n"."\n";var_dump(json_decode($strDirs));die('enough for now');
+}else $iDir = 0;
+///	End of addition
+
+		//$iDir = 0;
 
 
 header('Content-type: text/html; Charset=utf-8');
@@ -141,6 +218,13 @@ header('Content-type: text/html; Charset=utf-8');
 			kfm_directory_over = <?php echo $iDir; ?>;
 			<?php if( 1 < $iDir ) : ?>
 				var kfm_startup_dirs = Json.evaluate( '<?php echo $strDirs; ?>', true );
+				///	Addition	16/02/2010	if something fails, don't hang up but go to the root directory
+				if( kfm_startup_dirs == null ) {
+					kfm_startup_dirs = '';
+					kfm_directory_over = 0;
+					kfm_cwd_id_startup = 0;
+				}
+				///	End of addition
 			<?php endif; ?>
 			/// End of addition		pBaran		11/07/2008
 

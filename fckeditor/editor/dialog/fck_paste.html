@@ -94,6 +94,12 @@ window.onload = function ()
 
 	dialog.SetOkButton( true ) ;
 	dialog.SetAutoSize( true ) ;
+	
+	///	Addition	21/01/10	Foliovision
+	//	let's make sure the pasting area receives the focus automatically!
+	var mytext = document.getElementById("txtData");
+	mytext.focus(); 
+	///	End of addition
 }
 
 function Ok()

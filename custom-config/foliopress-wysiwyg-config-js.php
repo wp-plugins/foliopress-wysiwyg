@@ -40,12 +40,12 @@ FCKConfig.ToolbarSets["Basic"] = [
 ];
 
 FCKConfig.ToolbarSets["Foliovision"] = [
-	['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','FontFormat','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','-','Source','-','FitWindow']
+	['Cut','Copy','Paste','foliopress-paste','-','Bold','Italic','-','FontFormat','RemoveFormat','-','OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','Anchor','-','foliopress-more','-','kfmBridge','FVWPFlowplayer','-','Source','-','FitWindow']
 	//wp_buttons,
 ];
 
 FCKConfig.ToolbarSets["Foliovision-Full"] = [ 
-	['Cut','Copy','Paste','-','Undo','Redo','-','Bold','Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','Link','Unlink','Anchor','-','kfmBridge'], 
+	['Cut','Copy','Paste','-','Undo','Redo','-','Bold','Italic','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','-','OrderedList','UnorderedList','-','Outdent','Indent','-','Link','Unlink','Anchor','-','kfmBridge','FVWPFlowplayer'], 
 	//['Subscript','Superscript','-', 
 	//media_buttons, 
 	'/', 
@@ -120,6 +120,28 @@ FCKConfig.CoreStyles =
 	'SelectionHighlight' : { Element : 'span', Styles : { 'background-color' : 'navy', 'color' : 'white' } }
 };
 
+function odump(object, depth, max){
+  depth = depth || 0;
+  max = max || 2;
+
+  if (depth > max)
+    return false;
+
+  var indent = "";
+  for (var i = 0; i < depth; i++)
+    indent += "  ";
+
+  var output = "";  
+  for (var key in object){
+    output += "\n" + indent + key + ": ";
+    switch (typeof object[key]){
+      case "object": output += odump(object[key], depth + 1, max); break;
+      case "function": output += "function"; break;
+      default: output += object[key]; break;        
+    }
+  }
+  return output;
+}
 
 FCKToolbarFontFormatCombo.prototype.GetStyles = function()
 {
@@ -163,7 +185,7 @@ FCKToolbarFontFormatCombo.prototype.GetStyles = function()
 		else
 			alert( "The FCKConfig.CoreStyles['" + elementName + "'] setting was not found. Please check the fckconfig.js file" ) ;
 	}
-
+//alert( odump( styles ) );
 	return styles ;
 }
 
@@ -195,8 +217,11 @@ FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/<?php print( $fp_wysiwyg->aOpti
 FCKConfig.Plugins.Add( 'kfm' );
 FCKConfig.Plugins.Add( 'kfmBridge' );
 FCKConfig.Plugins.Add( 'foliopress-wp' );
-FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../custom-config/foliopress-editor.css';
-if( FCKConfig.BodyId || FCKConfig.BodyClass ) FCKConfig.EditorAreaCSS = '<?php bloginfo('stylesheet_url'); ?>';
+FCKConfig.EditorAreaCSS = FCKConfig.BasePath + '../../custom-config/foliopress-editor.php';
+if( FCKConfig.BodyId || FCKConfig.BodyClass ) {
+	//FCKConfig.EditorAreaCSS = '<?php bloginfo('stylesheet_url'); ?>';
+	FCKConfig.BodyClass = FCKConfig.BodyClass + ' wysiwyg';
+}
 
 FCKConfig.Plugins.Add( 'foliopress-clean' );
 <?php  
@@ -220,3 +245,6 @@ FCKConfig.RemoveFormatTags = 'b,big,del,dfn,em,font,i,ins,kbd,q,samp,small,span,
 FCKConfig.Plugins.Add( 'foliopress-preformated' );
 //FCKConfig.Plugins.Add( 'foliopress-table-cleanup' );
 //FCKConfig.Plugins.Add( 'foliopress-word-cleanup' );
+
+FCKConfig.Plugins.Add( 'FVWPFlowplayer', 'en' );
+FCKConfig.Plugins.Add( 'Abbr','en') ; 

@@ -11,10 +11,17 @@ $kfm_password='';
 #### Change		pBaran		06/12/2007		Foliovision
 require_once( dirname(__FILE__).'/includes/load.wp.conf.php' );
 MyLoadWPConfig( dirname(__FILE__).'/../../../../../../../wp-config.php' );
+#### Addition	12/02/2010	let's check if db info was found
+global $kfm_db_name;
+if( trim($kfm_db_name) == '')	#	if not, let's try another location of wp-config file
+	MyLoadWPConfig( dirname(__FILE__).'/../../../../../../../../wp-config.php' );
+#### End of addition
 #### End of change		pBaran		06/12/2007
 
 #### Check if user is logged in
-require_once( dirname(__FILE__).'/../../../../../../../wp-config.php' );
+#### Modification	12/02/2010
+require_once( dirname(__FILE__).'/../../../../../../../wp-load.php' );
+#### End of modification
 $current_user;
 if(!$current_user->id)
     die('Access denied.');

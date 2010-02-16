@@ -6,6 +6,10 @@
 }	
 function kfm_kaejax_handle_client_request(){
 	if(!isset($_POST['kaejax']))return;
+	///  Addition - Dreamhost fix
+	if( strpos( $_POST['kaejax'], '{\"' ) == 0 )
+		$_POST['kaejax'] = stripslashes( $_POST['kaejax'] );
+	///  End of addition
 	$unmangled=kfm_decode_unicode_url(str_replace(array('%2B',"\r","\n","\t"),array('+','\r','\n','\t'),$_POST['kaejax']));
 	$obj=json_decode($unmangled);
 	$fs=$obj->c;

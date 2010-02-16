@@ -57,13 +57,21 @@
                 <th scope="row"><label for="FCKWidth">Width of FCKEditor</label></th>
 				<td><input type="text" name="FCKWidth" value="<?php print( $this->aOptions[self::FVC_WIDTH] ); ?>" class="small-text" /><span class="description">(0 is default, for unlimited width)</span></td>
 			</tr>
-			<tr valign="top"> 
-                <th scope="row"><label for="HideMediaButtons">Disable Wordpress uploader buttons</label></th>
-                <td><input id="chkHideMediaButtons" type="checkbox" name="HideMediaButtons" value="checkbox" <?php if($this->aOptions[self::FVC_HIDEMEDIA]) echo 'checked="checked"'; ?> /></td>
+			<tr valign="top">
+                <th scope="row"><label for="HideMediaButtons">Enable Wordpress uploader buttons</label></th>
+                <td><input id="chkHideMediaButtons" type="checkbox" name="HideMediaButtons" value="checkbox" <?php if($this->aOptions[self::FVC_HIDEMEDIA] == false) echo 'checked="checked"'; ?> /></td>
 			</tr>
 			<tr valign="top"> 
                 <th scope="row"><label for="HideMediaButtons">Multiple image posting</label></th>
                 <td><input id="chkMultipleImagePosting" type="checkbox" name="MultipleImagePosting" value="checkbox" <?php if($this->aOptions['multipleimageposting']) echo 'checked="checked"'; ?> /><span class="description">Disable if you want image management window to close automatically after posting a single image.</span></td>
+			</tr>
+			<tr>
+				<th scope="row">Max Image Size</th>
+				<td>
+					<label for="MaxWidth">Width <input type="text" name="MaxWidth" value="<?php echo $this->aOptions[self::FVC_MAXW]; ?>" class="small-text" /></label>
+					<label for="MaxHeight">Height <input type="text" name="MaxHeight" value="<?php echo $this->aOptions[self::FVC_MAXH]; ?>" class="small-text" /></label>
+					<span class="description">All images with one of dimensions above one of these limits will be sized down when uploading.</span>
+				</td>
 			</tr>
 			<tr valign="top"> 
                 <th scope="row"><label for="listKFMThumbs">Thumbnail sizes</label></th>
@@ -84,6 +92,14 @@
                         <br />
                         <span class="description">Enter the name of the class used for styling of the articles on the front page. If necessary, use multiple classes (separated by blank spaces) or add the ID of the container element.</span>
                     </fieldset></td>
+            </tr>
+            
+            <tr valign="top"> 
+                <th scope="row">Custom WYSIWYG CSS</th>
+                <td>
+                        <textarea id="wysiwygstyles" type="text" name="wysiwygstyles" value="<?php echo $this->aOptions['wysiwygstyles']; ?>" class="regular-text" rows="8" cols="70" /><?php echo $this->aOptions['wysiwygstyles']; ?></textarea><br />
+                        <span class="description">If you use WYSIWYG CSS styles above, you can fix whatever you want here for the editor window.</span>
+                </td>
             </tr>
 		</table>
 		<br />

@@ -309,6 +309,7 @@ function kfmAdd_returnImageThumbnail( id, size ){
 		}else{
 			g_objPreviewWindow.focus();
 		}
+
 		g_strPreviousUrl = aUrlSize[0];
 		/// Addition    29/10/09    Foliovision
 		if(bMultipleImagePosting!=1)

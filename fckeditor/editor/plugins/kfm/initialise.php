@@ -26,7 +26,9 @@ function sql_escape($sql){
 function kfm_dieOnError($error){
 	if(!PEAR::isError($error))return;
 	echo '<strong>Error</strong><br />'.$error->getMessage().'<br />'.$error->userinfo.'<hr />';
-	var_dump($error);
+	///	Modification	12/02/2010	let's not expose too much
+	//var_dump($error);
+	///	End of modification
 	exit;
 }
 
