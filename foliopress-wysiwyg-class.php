@@ -586,7 +586,7 @@ class fp_wysiwyg_class{
             return $content;
         }
         if(strlen($content)>0) {   // try to guess if the post should use wpautop
-            if(stripos($content,'<p>')===FALSE && (stripos($content,'<')!==FALSE || stripos($content,'>')!==FALSE))
+            if(stripos($content,'<p>')===FALSE)
                 return wpautop($content);      
             /*if(stripos($content,'&lt;p&gt;')===FALSE && (stripos($content,'<')===FALSE || stripos($content,'>')===FALSE) )
                 return wpautop($content);*/      
