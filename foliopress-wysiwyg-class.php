@@ -513,7 +513,7 @@ class fp_wysiwyg_class{
 				/// End of addition
 
 				///	Addition 2010/02/01
-				if( isset( $_POST['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = $_POST['wysiwygstyles'];
+				if( isset( $_POST['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = stripslashes( $_POST['wysiwygstyles'] );
 				///	End of addition
 				
 
