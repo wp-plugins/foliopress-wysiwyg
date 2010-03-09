@@ -246,5 +246,4 @@ FCKConfig.Plugins.Add( 'foliopress-preformated' );
 //FCKConfig.Plugins.Add( 'foliopress-table-cleanup' );
 //FCKConfig.Plugins.Add( 'foliopress-word-cleanup' );
 
-FCKConfig.Plugins.Add( 'FVWPFlowplayer', 'en' );
-FCKConfig.Plugins.Add( 'Abbr','en') ; 
+FCKConfig.Plugins.Add( 'FVWPFlowplayer' );
