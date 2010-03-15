@@ -1,9 +1,9 @@
 if( typeof FV_Regex == 'undefined' ) LoadScript( FCKConfig.PluginsPath + 'foliopress-clean/foliovision-regex.js' );
 
-const STR_REGEXP_LT = "(?:\\x3C)";
-const STR_REGEXP_GT = "(?:\\x3E)";
-const STR_REGEXP_FS = "(?:\\x2F)";
-const STR_DEFAULT_TAGS = "p|div"
+STR_REGEXP_LT = "(?:\\x3C)";
+STR_REGEXP_GT = "(?:\\x3E)";
+STR_REGEXP_FS = "(?:\\x2F)";
+STR_DEFAULT_TAGS = "p|div"
 
 var FPClean = new Object();
 FPClean.bLoaded = false;
