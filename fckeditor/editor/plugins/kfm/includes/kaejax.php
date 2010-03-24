@@ -5,25 +5,24 @@
 	$kfm_kaejax_is_loaded=1;#strstr($_SERVER['REQUEST_URI'],'kfm_kaejax_is_loaded');
 }	
 function kfm_kaejax_handle_client_request(){
-	if(!isset($_POST['kaejax']))return;
-	///  Addition - Dreamhost fix
-	if( strpos( $_POST['kaejax'], '{\"' ) == 0 )
-		$_POST['kaejax'] = stripslashes( $_POST['kaejax'] );
-	///  End of addition
-	$unmangled=kfm_decode_unicode_url(str_replace(array('%2B',"\r","\n","\t"),array('+','\r','\n','\t'),$_POST['kaejax']));
-	$obj=json_decode($unmangled);
+	if(!isset($_POST['kaejax']))return;  
+  //added zUhrikova 2010/02/12
+  $kae_replaced = str_replace('\"','"',$_POST['kaejax']);
+  $unmangled=kfm_decode_unicode_url(str_replace(array('%2B',"\r","\n","\t"),array('+','\r','\n','\t'),$kae_replaced));
+  $obj=kfm_json_decode($unmangled);
 	$fs=$obj->c;
 	$ret=array();
 	$ret['results']=array();
-	foreach($fs as $f)$ret['results'][]=call_user_func_array($f->f,$f->v);
+	
+	foreach($fs as $f) $ret['results'][]=call_user_func_array($f->f,$f->v);
 	$ret['errors']=kfm_getErrors();
 	$ret['messages']=kfm_getMessages();
-	header('Content-type: text/javascript; Charset=utf-8');
-	echo json_encode($ret);
+	header('Content-type: text/javascript; charset=UTF-8');
+	echo kfm_json_encode($ret);
 	exit;
 }
 function kfm_kaejax_get_one_stub($func_name){
-	$a='function x_'.$func_name.'()'.LSQUIGG.'kfm_kaejax_do_call("'.$func_name.'",$A(arguments));'.RSQUIGG.'function_urls.'.$func_name."='".$_SERVER['PHP_SELF'].GET_PARAMS."';";
+	$a='function x_'.$func_name.'(){kfm_kaejax_do_call("'.$func_name.'",arguments);}function_urls.'.$func_name."='".$_SERVER['PHP_SELF'].GET_PARAMS."';";
 	if(!$GLOBALS['kfm_kaejax_is_loaded'])$a.='kfm_kaejax_is_loaded=1;';
 	$GLOBALS['kfm_kaejax_is_loaded']=1;
 	return $a;
@@ -58,4 +57,3 @@ function kfm_decode_unicode_url($str){
 	}
 	return $res.substr($str, $i);
 }
-?>

@@ -103,11 +103,17 @@
             </tr>
 		</table>
 		<br />
-		
+
 		<p><input type="button" name="advanced_options" class="button" value="Advanced Options" onclick="ShowAdvancedOptions()" /></p>
 		<div id="divAdvanced" style="visibility: hidden; position: absolute; top: 10px;">
 			<h3>Advanced Options</h3>
 			<table class="form-table">
+					<tr valign="top">
+              <th scope="row">Use Flash Uploader</th>
+              <td><fieldset>
+                  <label for="UseFlashUploader"><input id="chkUseFlashUploader" type="checkbox" name="UseFlashUploader" value="yes" onclick="KFMLink_change()" <?php if($this->aOptions[self::FVC_USE_FLASH_UPLOADER]) echo 'checked="checked"'; ?> /> Flash uploader will enable you to upload multiple images at once. You might want to disable it for better compatibility.</label>
+              </fieldset></td>
+          </tr>
                 <tr valign="top">
                     <th scope="row">Thumbnails</th>
                     <td><fieldset>
@@ -136,6 +142,12 @@
                     <td><fieldset>
                         <label for="PNGTransform"><input id="chkPNGTransform" type="checkbox" name="PNGTransform" value="yes" onclick="KFM_CheckPNG( !bPNGTransform );"<?php if( $this->aOptions[self::FVC_PNG] ) echo ' checked="checked"'; ?> /> Transform not colorful true-color PNG images to 8-bit color PNG</label><br />
                         <label for="PNGLimit">Limit of colorful true-color PNG <input type="text" id="txtPNGLimit" name="PNGLimit" value="<?php echo $this->aOptions[self::FVC_PNG_LIMIT]; ?>" class="small-text" /></label>
+                    </fieldset></td>
+                </tr>
+				<tr valign="top"> 
+                    <th scope="row">Default directory</th>
+                    <td><fieldset>
+                        <label for="DIRset"><input id="chkDIRset" type="checkbox" name="DIRset" value="yes" onclick="KFM_CheckDIR( !bDIRset );"<?php if( $this->aOptions[self::FVC_DIR] ) echo ' checked="checked"'; ?> /> Open the Year/Month directory as default.</label><br />
                     </fieldset></td>
                 </tr>
                 <tr valign="top">
@@ -206,6 +218,8 @@
 	
 	var bPNGTransform = <?php echo ($this->aOptions[self::FVC_PNG]) ? 'true' : 'false'; ?>;
 	KFM_CheckPNG( bPNGTransform );
+	var bDIRset = <?php echo ($this->aOptions[self::FVC_DIR]) ? 'true' : 'false'; ?>;
+	KFM_CheckDIR( bDIRset );
 	
 	var aKFMThumbs = new Array();
 	<?php for( $i=0; $i<count( $this->aOptions[self::FVC_KFM_THUMBS] ); $i++ ) print( 'aKFMThumbs[' . $i . '] = ' . $this->aOptions[self::FVC_KFM_THUMBS][$i] . ";\n" ); ?>

@@ -1,5 +1,5 @@
 <?php
-
+// original code from pBaran Foliovision
 function mykfm_FileExistsUnderDirTree( $strName, $strRoot, $aBannedFolders ){
 	$aFiles = scandir( $strRoot );
 	if( $aFiles == false ) return false;
@@ -19,10 +19,16 @@ function mykfm_FileExistsUnderDirTree( $strName, $strRoot, $aBannedFolders ){
 
 function mykfm_CreateTempNameForFile( $strName, $strPath ){
 	$i = 1;
-	while( file_exists( $strPath . "\\" . $strName . $i ) ){
+	// changed zUhrikova 9/2/2010 
+	
+   $info = pathinfo($strName);
+   $file_name =  basename($strName,'.'.$info['extension']);
+
+	while( file_exists( $strPath . '/' .  $file_name . '-' . $i . '.'.$info['extension']) ){
 		$i++;
+	// end of change zUhrikova
 	}
-	$strFile = $strName . $i;
+	$strFile = $file_name . '-' . $i . '.'.$info['extension'];
 	return $strFile;
 }
 

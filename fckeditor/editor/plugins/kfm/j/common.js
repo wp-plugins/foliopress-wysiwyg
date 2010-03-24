@@ -1,4 +1,40 @@
 // see ../license.txt for licensing
+function _(str,context,vars,htmlonly){ // translations
+	var el;
+	if(typeof(str)=='array' || typeof(str)=='object'){
+		context=str[1];
+		vars=str[2];
+		str=str[0];
+	}
+	if(typeof(str)!='string')alert(typeof(str)+"\n"+str);
+	// { set up variables
+	if(!context)context='kfm';
+	if(!vars)vars=[];
+	// }
+	if(!kfm.lang[str]){
+//		alert('missing language string\n------------\n'+str+'\n------------\nplease email kae@verens.com with the correct translation');
+		kfm.lang[str]=str;
+	}
+	if(htmlonly){
+		el='<span class="kfmlang kfmlang_'+str.toLowerCase().replace(/[^a-z0-9]/g,'')+'">'+kfm.lang[str]+'</span>';
+	}
+	else{
+		el=document.createElement('span');
+		el.className='kfmlang kfmlang_'+str.toLowerCase().replace(/[^a-z0-9]/g,'');
+		el.original=[str,context,vars];
+		el.appendChild(document.createTextNode(kfm.lang[str]));
+	}
+	return el;
+}
+function kfm_addWidget(obj){
+	kfm_widgets.push(obj);
+}
+function array_remove_values(arr,vals){
+	if($type(vals)!='array')vals=[vals];
+	var i,tmp=[];
+	for(i=0;i<arr.length;++i)if(vals.indexOf(arr[i])==-1)tmp.push(arr[i]);
+	return tmp;
+}
 function clearSelections(){
 	window.getSelection().removeAllRanges();
 }
@@ -28,23 +64,14 @@ function kfm_kaejax_do_call(func_name,args){
 	window.kfm_kaejax_timeouts[uri].callbacks[l]=args[args.length-1];
 }
 function kfm_kaejax_sendRequests(uri){
-	var t=window.kfm_kaejax_timeouts[uri],callbacks=window.kfm_kaejax_timeouts[uri].callbacks;
+	// { get the request queue for the uri, and clear the queue
+	var t=window.kfm_kaejax_timeouts[uri];
+	var callbacks=t.callbacks;
 	t.callbacks=null;
 	window.kfm_kaejax_timeouts[uri]=null;
-	var x=new XMLHttpRequest(),post_data="kaejax="+escape(Json.toString(t)).replace(kfm_regexps.plus,'%2B').replace(kfm_regexps.ascii_stuff,'%u00$1').replace(/\n/g,' ');
-	post_data=kfm_sanitise_ajax(post_data);
-	x.open('POST',uri,true);
-	x.setRequestHeader("Method","POST "+uri+" HTTP/1.1");
-	x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-	x.onreadystatechange=function(){
-		if(x.readyState!=4){
-			return;
-		}
-		var r=x.responseText;
-		if(r.substring(0,5)=='error'){
-			return kfm.alert(r);
-		}
-		var v=eval('('+unescape(r)+')');
+	// }
+	// { send the requests to the server, and send the results back to the callbacks when the server's finished
+	$j.post(uri,{kaejax:Json.toString(t)},function(v){
 		var f,p,i;
 		if(v.errors.length)kfm.showErrors(v.errors);
 		if(v.messages.length)kfm.showMessages(v.messages);
@@ -57,20 +84,19 @@ function kfm_kaejax_sendRequests(uri){
 			}
 			f(v.results[i],p);
 		}
-	};
-	x.send(post_data);
+	},'json');
+	// }
 }
 function loadJS(url,id,lang,onload){
-	var i=0;
+	var i=0,el;
 	for(;i<loadedScripts.length;++i){
 		if(loadedScripts[i]==url){
 			return 0;
 		}
 	}
 	loadedScripts.push(url);
-	var el=new Element('script',{
-		'type':'text/javascript'
-	});
+	el=document.createElement('script');
+	el.type='text/javascript';
 	if(id){
 		el.id=id;
 	}
@@ -96,17 +122,8 @@ function loadJS(url,id,lang,onload){
 		};
 	}
 	el.src=url;
-	$E('head').appendChild(el);
+	document.getElementsByTagName('HEAD')[0].appendChild(el);
 	return 1;
-}
-function newForm(action,method,enctype,target){
-	if(window.ie)return $(document.createElement('<form action="'+action+'" method="'+method+'" enctype="'+enctype+'" target="'+target+'">'));
-	return new Element('form',{
-		'action':action,
-		'method':method,
-		'enctype':enctype,
-		'target':target
-	});
 }
 function newInput(n,t,v,cl){
 	var b;
@@ -114,58 +131,46 @@ function newInput(n,t,v,cl){
 		t='text';
 	}
 	switch(t){
-		case 'checkbox':{
-			b=new Element('input',{
-				'id':n,
-				'name':n,
-				'type':'checkbox',
-				'styles':{
-					'width':'auto'
-				}
-			});
+		case 'checkbox': // {{{
+			b=document.createElement('input');
+			b.type='checkbox';
+			b.style.width='auto';
 			break;
-		}
-		case 'textarea':{
-			b=new Element('textarea',{
-				'id':n,
-				'id':n
-			});
+		// }}}
+		case 'textarea': // {{{
+			b=document.createElement('textarea');
 			break;
-		}
-		default:{
-			b=new Element('input',{
-				'id':n,
-				'name':n,
-				'type':t
-			});
-		}
+		// }}}
+		default: // {{{
+			b=document.createElement('input');
+			b.type=t;
+		// }}}
 	}
+	b.id=n;
+	b.name=n;
 	if(v){
 		if(t=='checkbox'){
 			$extend(b,{checked:'checked',defaultChecked:'checked'});
 		}
-		else if(t!='datetime'){
-			b.value=v;
-		}
+		else b.value=v;
 	}
 	if(cl)b.className=cl;
 	return b;
 }
 function newLink(h,t,id,c,title){
-	if(!title){
-		title='';
-	}
-	return (new Element('a',{
-		'id':id,
-		'class':c,
-		'href':h,
-		'title':title
-	})).setHTML(t);
+	if(!title)title='';
+	var a=document.createElement('a');
+	a.id=id;
+	a.className=c;
+	a.href=h;
+	a.title=title;
+	a.innerHTML=t;
+	return a;
 }
 function newSelectbox(name,keys,vals,s,f){
-	var el2=new Element('select',{
-		'id':name
-	}),el3,s2=0,i=0;
+	var el2,el3,s2=0,i=0;
+	el2=document.createElement('select');
+	el2.id=name;
 	if(!s){
 		s=0;
 	}
@@ -175,26 +180,51 @@ function newSelectbox(name,keys,vals,s,f){
 	for(;i<vals.length;++i){
 		var v1=vals[i].toString();
 		var v2=v1.length>20?v1.substr(0,27)+'...':v1;
-		el3=(new Element('option',{
-			value:keys[i],
-			title:v1
-		})).setHTML(v2);
-		if(keys[i]==s){
-			s2=i;
-		}
+		el3=document.createElement('option');
+		el3.value=keys[i];
+		el3.title=v1;
+		el3.innerHTML=v2;
+		if(keys[i]==s)s2=i;
 		el2.appendChild(el3);
 	}
 	el2.selectedIndex=s2;
-	if(f){
-		el2.onchange=f;
-	}
+	if(f)el2.onchange=f;
 	return el2;
 }
 function newText(a){
 	return document.createTextNode(a);
 }
+function $defined(obj){
+	return (obj != undefined);
+}
+function $pick(obj, picked){
+	return $defined(obj) ? obj : picked;
+}
+function $type(obj){
+	if (!$defined(obj)) return false;
+	if (obj.htmlElement) return 'element';
+	var type = typeof obj;
+	if (type == 'object' && obj.nodeName){
+		switch(obj.nodeType){
+			case 1: return 'element';
+			case 3: return (/\S/).test(obj.nodeValue) ? 'textnode' : 'whitespace';
+		}
+	}
+	if (type == 'object' || type == 'function'){
+		switch(obj.constructor){
+			case Array: return 'array';
+			case RegExp: return 'regexp';
+			case Class: return 'class';
+		}
+		if (typeof obj.length == 'number'){
+			if (obj.item) return 'collection';
+			if (obj.callee) return 'arguments';
+		}
+	}
+	return type;
+}
 if(window.ie){
-	function XMLHttpRequest(){
+	XMLHttpRequest=function(){
 		var l=(ScriptEngineMajorVersion()>=5)?"Msxml2":"Microsoft";
 		return new ActiveXObject(l+".XMLHTTP")
 	}
@@ -203,3 +233,25 @@ if(window.ie){
 if(window.webkit){
 	loadJS('j/browser-specific.konqueror.js');
 }
+var Json = {
+toString: function(obj){
+switch($type(obj)){
+case 'string':
+return '"' + obj.replace(/(["\\])/g, '\\$1') + '"';
+case 'array':
+return '[' + obj.map(Json.toString).join(',') + ']';
+case 'object':
+var string = [];
+for (var property in obj) string.push(Json.toString(property) + ':' + Json.toString(obj[property]));
+return '{' + string.join(',') + '}';
+case 'number':
+if (isFinite(obj)) break;
+case false:
+return 'null';
+}
+return String(obj);
+},
+evaluate: function(str, secure){
+return (($type(str) != 'string') || (secure && !str.test(/^("(\\.|[^"\\\n\r])*?"|[,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t])+?$/))) ? null : eval('(' + str + ')');
+}
+};
