@@ -19,8 +19,6 @@ $kfm_langStrings=array(
 	"bannedFilenameExtension"        => "banned extension in file name",
 	"cannotEditRestrictedExtension"  => "cannot edit \"%1\"\nrestricted by file extension",
 	"cannotMoveIntoSelf"             => "cannot move a directory into its own sub-directory",
-  "cannotMoveLink"                 => "Cannot move a link",
-  "cannotRenameLink"               => "Cannot rename a link",
 	"cannotRenameFromTo"             => "cannot rename \"%1\" to \"%2\"",
 	"CMSRefusesFileDelete"           => "CMS does not allow \"%1\" to be deleted",
 	"couldNotMoveDirectory"          => "could not move directory \"%1\" to \"%2\"",
@@ -70,20 +68,6 @@ $kfm_langStrings=array(
 	"error: filename not allowed"    => "error: filename not allowed",
 	"error: url must begin with http"=> "error: url must begin with http",
 	"UNKNOWN TAG"                    => "UNKNOWN TAG \"%1\"",
-	"error: unzip failed"            => "error: unzip failed",
-	# 1.4
-	'files'									=> 'files',
-	'folders'								=> 'Folders',
-	'maps'									=> 'Maps',
-	'icons'									=> 'Icons',
-	'listview'								=> 'List view',
-	'list'									=> 'List',
-	'settings'								=> 'Settings',
-	'logout'									=> 'Log out',
-	'name'									=> 'Name',
-	'size'									=> 'Size',
-	'filename'								=> 'Filename',
-	'type'									=> 'Type',
-	'lastModified'							=> 'from js file'
+	"error: unzip failed"            => "error: unzip failed"
 );
 ?>

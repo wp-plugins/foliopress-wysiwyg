@@ -39,16 +39,17 @@ RenameDir:
 	"Преименуване",
 
 // file
-"delete file":
+DeleteFile:
 	"Изтрий",
-"rename file": "Преименувай",
-"rotate clockwise":
+RenameFile:
+	"Преименувай",
+RotateClockwise:
 	"Завърти надясно",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"Завърти наляво",
-"resize image":
+ResizeImage:
 	"Промени големината на картинката",
-"change caption":
+ChangeCaption:
 	"Промени Заглавието",
 
 // create a file
@@ -128,6 +129,8 @@ FileTooLargeForThumb:
 	"грешка: Картинката \"%1\" е много голяма за да направя миниатюра. Моля, сменете я с по-малка.",
 CouldntReadDir:
 	"грешка: не виждам папката",
+CannotRenameFile:
+	"грешка: не мога да променя \"%1\" на \"%2\"",
 FilenameAlreadyExists:
 	"грешка: вече същестува файл с това име",
 
@@ -148,13 +151,13 @@ LockPanels:
 	"Заключи панелите",
 UnlockPanels:
 	"Отключи панелите",
-"create empty file":
+CreateEmptyFile:
 	"Създай празен файл",
 DownloadFileFromUrl:
 	"Свали файла от URL",
 DirectoryProperties:
 	"Свойства на папката",
-"select all":
+SelectAll:
 	"Избери всичко",
 SelectNone:
 	"Не избирай",
@@ -164,7 +167,7 @@ LoadingKFM:
 	"Зареждане на KFM",
 Name:
 	"име",
-"file details":
+FileDetails:
 	"Информация за файла",
 Search:
 	"Търсене",
@@ -178,7 +181,7 @@ DirNotInDb:
 	"Папката не е в базата данни",
 ShowPanel:
 	"Покажи панел \"%1\"",
-"change caption":
+ChangeCaption:
 	"Промени заглавието",
 NewDirectory:
 	"Нова папка",
@@ -226,13 +229,13 @@ ExtractZippedFile:
 	"Разархивирай",
 
 // new in 0.8
-"view image":
+ViewImage:
 	"Покажи картинката",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"Подай миниатюра",
-"add tags to files":
+AddTagsToFiles:
 	"Добави таг на файла",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"Изтрий  таг на файла",
 HowWouldYouLikeToRenameTheseFiles:
 	"Как искате да преименувате тези файлове?\n\nПример: \"images-***.jpg\" ще преименува файловете на \"images-001.jpg\", \"images-002.jpg\", ...",
@@ -264,6 +267,7 @@ AndNMore: "...and %1 more...",
 Browse: "Browse...",
 ExtractAfterUpload: "extract after upload",
 NotAnImageOrImageDimensionsNotReported: "error: not an image, or image dimensions not reported",
+PermissionDeniedCannotDeleteFile: "permission denied: cannot delete file",
 RenameTheDirectoryToWhat: "Rename the directory '%1' to what?",
 RenamedDirectoryAs: "Renamed '%1' as '%2'",
 TheFilenameShouldEndWithN: "The filename should end with %1",
@@ -283,7 +287,7 @@ Cancel: "cancel"
 	CouldNotMoveFiles       : "error: could not move file[s]",
 	CopyFiles               : "copy files", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "move files",
-	"about KFM"                : "about KFM",
+	AboutKfm                : "about KFM",
 	Errors                  : "Errors",
 	Ok                      : "OK" // as in "OK / Cancel"
 }

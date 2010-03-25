@@ -36,16 +36,17 @@ RenameDir:
 	"schimbarea numelui mapei",
 
 //file
-"delete file":
+DeleteFile:
 	"ştergerea fişierului",
-"rename file": "schimbarea numelui fişierului",
-"rotate clockwise":
+RenameFile:
+	"schimbarea numelui fişierului",
+RotateClockwise:
 	"rotaţie la dreaptă",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"rotaţie la stângă",
-"resize image":
+ResizeImage:
 	"schimbarea mărimii imaginii",
-"change caption":
+ChangeCaption:
 	"schimbarea titlului",
 
 // create a file
@@ -125,6 +126,8 @@ FileTooLargeForThumb:
 	"eroare: \"%1\" este prea mare pentru crearea schiţei. Schimbaţi fişierul cu un alt cu o mărime mai mică",
 CouldntReadDir:
 	"eroare: este imposibil de citit mapă",
+CannotRenameFile:
+	"eroare: este imposibil de schimbat numele mapei \"%1\" în \"%2\"",
 FilenameAlreadyExists:
 	"eroare: fişierul cu acelaşi nume deja există",
 
@@ -145,13 +148,13 @@ LockPanels:
 	"fixarea panelelor",
 UnlockPanels:
 	"scoaterea fixării panelelor",
-"create empty file":
+CreateEmptyFile:
 	"crearea fişierului gol",
 DownloadFileFromUrl:
 	"încărca din URL",
 DirectoryProperties:
 	"Caracteristicile mapei",
-"select all":
+SelectAll:
 	"sublinia tot",
 SelectNone:
 	"anula subliniare",
@@ -161,7 +164,7 @@ LoadingKFM:
 	"încărcare KFM",
 Name:
 	"nume",
-"file details":
+FileDetails:
 	"Informaţie despre fişier",
 Search:
 	"Căutare",
@@ -175,7 +178,7 @@ DirNotInDb:
 	"mapă lipseşte în baza de date",
 ShowPanel:
 	"de vizualizat panelă \"%1\"",
-"change caption":
+ChangeCaption:
 	"Schimbarea Titlului",
 NewDirectory:
 	"Mapă nouă",
@@ -224,13 +227,13 @@ ExtractZippedFile:
 
 
 // new in 0.8
-"view image":
+ViewImage:
 	"vizionarea imaginii",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"utilizarea schiţei în loc de imagine încărcată",
-"add tags to files":
+AddTagsToFiles:
 	"adăuga tag-uri la fişier(re)",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"scoate tag-uri din fişier(re)",
 HowWouldYouLikeToRenameTheseFiles:
 	"Cum doriţi să schimbaţi numele acestor fişierelor?\n\nde exemplu: \"images-***.jpg\" va schimba numele în \"images-001.jpg\", \"images-002.jpg\", ...",
@@ -262,6 +265,7 @@ AndNMore: "...şi %1 încă...",
 Browse: "Browse...",
 ExtractAfterUpload: "extragerea după primirea",
 NotAnImageOrImageDimensionsNotReported: "eroare: nu este o imagine, sau dimensiunile imaginii nu au fost stabilite",
+PermissionDeniedCannotDeleteFile: "accesul înterzis: fişierul nu poate fi şters",
 RenameTheDirectoryToWhat: "Modifica numele mapei din '%1' în...?",
 RenamedDirectoryAs: "Numele mapei a fost modificată din '%1' în '%2'",
 TheFilenameShouldEndWithN: "La sfârşitul numii de fişier trebuie să puneţi %1",
@@ -281,7 +285,7 @@ Cancel: "cancel"
 	CouldNotMoveFiles       : "eroare: imposibil de mutat fişier[e]",
 	CopyFiles               : "copia fişierele", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "muta fişierele",
-	"about KFM"                : "despre KFM",
+	AboutKfm                : "despre KFM",
 	Errors                  : "Eroare",
 	Ok                      : "OK" // as in "OK / Cancel"
 }

@@ -13,18 +13,9 @@ abbr { border-bottom: 1px dotted rgb(102, 102, 102); cursor: help; }
 </head>
 <body scroll="no" style="OVERFLOW: hidden">
 <?php
-//	WP < 2.7 fix
-if( file_exists( dirname(__FILE__) . '/../../../../../../../wp-load.php' ) )
-	require_once( realpath( dirname(__FILE__) . '/../../../../../../../wp-load.php' ) );
-else
-	require_once( realpath( dirname(__FILE__) . '/../../../../../../../wp-config.php' ) );
-
-global $current_user;
-
-if(!$current_user->id)
-    die('Access denied.');
-    
-$plugins = get_option('active_plugins');$found = false;
+include( dirname( __FILE__ ).'/../../../../../../../wp-load.php');
+$plugins = get_option('active_plugins');
+$found = false;
 
 foreach ( $plugins AS $plugin ) {
 	if( stripos($plugin,'fv-wordpress-flowplayer') !== FALSE )

@@ -36,17 +36,17 @@ RenameDir:
 	"переименовать",
 
 //file
-"delete file":
+DeleteFile:
 	"удалить",
-"rename file":
+RenameFile:
 	"переименовать",
-"rotate clockwise":
+RotateClockwise:
 	"повернуть вправо",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"повернуть влево",
-"resize image":
+ResizeImage:
 	"изменить размер картинки",
-"change caption":
+ChangeCaption:
 	"изменить подпись",
 
 // create a file
@@ -126,6 +126,8 @@ FileTooLargeForThumb:
 	"ошибка: \"%1\" слишком большой чтобы сделать эскиз. Замените файл на меньший по размеру",
 CouldntReadDir:
 	"ошибка: невозможно прочитать каталог",
+CannotRenameFile:
+	"ошибка: нельзя переименовать \"%1\" в \"%2\"",
 FilenameAlreadyExists:
 	"ошибка: файл с таким именем уже существует",
 
@@ -146,13 +148,13 @@ LockPanels:
 	"закрепить панели",
 UnlockPanels:
 	"снять закрепление панелей",
-"create empty file":
+CreateEmptyFile:
 	"создать пустой файл",
 DownloadFileFromUrl:
 	"загрузить с URL",
 DirectoryProperties:
 	"Свойства каталога",
-"select all":
+SelectAll:
 	"выделить все",
 SelectNone:
 	"снять выделение",
@@ -162,7 +164,7 @@ LoadingKFM:
 	"загрузка KFM",
 Name:
 	"имя",
-"file details":
+FileDetails:
 	"Информация о файле",
 Search:
 	"Поиск",
@@ -176,7 +178,7 @@ DirNotInDb:
 	"папка отсутствует в базе данных",
 ShowPanel:
 	"показать панель \"%1\"",
-"change caption":
+ChangeCaption:
 	"Изменить Подпись",
 NewDirectory:
 	"Новая папка",
@@ -226,13 +228,13 @@ ExtractZippedFile:
 
 
 // new in 0.8
-"view image":
+ViewImage:
 	"просмотреть изображение",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"использовать для показа эскиз вместо рисунка",
-"add tags to files":
+AddTagsToFiles:
 	"добавить тэги к файлу(файлам)",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"убрать тэги с файла(файлов)",
 HowWouldYouLikeToRenameTheseFiles:
 	"Как бы вы хотели переименовать эти файлы?\n\nнапример: \"images-***.jpg\" переименует файлы в \"images-001.jpg\", \"images-002.jpg\", ...",
@@ -264,6 +266,7 @@ AndNMore: "...и %1 еще...",
 Browse: "Обзор...",
 ExtractAfterUpload: "распаковать после загрузки",
 NotAnImageOrImageDimensionsNotReported: "ошибка: не изображение, или размеры изображения не заданы",
+PermissionDeniedCannotDeleteFile: "доступ запрещен: невозможно удалить файл",
 RenameTheDirectoryToWhat: "Переименовать каталог '%1' в...?",
 RenamedDirectoryAs: "Переименован '%1' в '%2'",
 TheFilenameShouldEndWithN: " Имя файла должно заканчиваться на %1",
@@ -283,7 +286,7 @@ Cancel: "отменить"
 	CouldNotMoveFiles       : "ошибка: невозможно переместить файл[ы]",
 	CopyFiles               : "скопировать файлы", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "переместить файлы",
-	"about KFM"                : "о KFM",
+	AboutKfm                : "о KFM",
 	Errors                  : "Ошибки",
 	Ok                      : "OK" // as in "OK / Cancel"
 }

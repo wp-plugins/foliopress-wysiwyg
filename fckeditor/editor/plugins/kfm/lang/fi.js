@@ -39,16 +39,17 @@ RenameDir:
 	"nimeä uudelleen",
 
 // file
-"delete file":
+DeleteFile:
 	"poista",
-"rename file": "nimeä uudelleen",
-"rotate clockwise":
+RenameFile:
+	"nimeä uudelleen",
+RotateClockwise:
 	"kierrä myötäpäivään",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"kierrä vastapäivään",
-"resize image":
+ResizeImage:
 	"muuta kuvan kokoa",
-"change caption":
+ChangeCaption:
 	"vaihda otsikkoa",
 
 // create a file
@@ -99,7 +100,7 @@ UnknownPanelState:
 // MissingDirWrapper:
 // 	"error: puuttuva tiedoston wrapperi: \"kfm_directories%1\".",
 SetStylesError:
-	"virhe:  \"%1\" ei voi asettaa \"%2:ksi.",
+	"virhe:  \"%1\" ei voi asettaa \"%2\:ksi.",
 NoPanel:
 	"virhe: panelia \"%1\" ei ole.",
 FileSelected:
@@ -128,6 +129,8 @@ FileTooLargeForThumb:
 	"virhe: \"%1\" on liian iso pikkukuvan tekemiseksi. Korvaa kuva pienemmällä tiedostolla.",
 CouldntReadDir:
 	"virhe: ei voinut lukea hakemistoa",
+CannotRenameFile:
+	"virhe: ei voi nimetä \"%1\" nimelle \"%2\"",
 FilenameAlreadyExists:
 	"virhe: nimetty tiedosto on jo olemassa",
 
@@ -148,13 +151,13 @@ LockPanels:
 	"Lukitse panelit",
 UnlockPanels:
 	"poista panelien lukko",
-"create empty file":
+CreateEmptyFile:
 	"luo tyhjä tiedosto",
 DownloadFileFromUrl:
 	"lataa tiedosto URL:stä",
 DirectoryProperties:
 	"Hakemiston ominaisuudet",
-"select all":
+SelectAll:
 	"valitse kaikki",
 SelectNone:
 	"poista valinta",
@@ -164,7 +167,7 @@ LoadingKFM:
 	"lataamassa KFM:ää",
 Name:
 	"nimi",
-"file details":
+FileDetails:
 	"Tiedoston tiedot",
 Search:
 	"Etsi",
@@ -178,7 +181,7 @@ DirNotInDb:
 	"hakemistoa ei ole tietokannassa",
 ShowPanel:
 	"näytä paneli \"%1\"",
-"change caption":
+ChangeCaption:
 	"Vaihda otsikkoa",
 NewDirectory:
 	"Uusi hakemisto",
@@ -226,13 +229,13 @@ ExtractZippedFile:
 	"Extract zipped file",
 
 // new in 0.8
-"view image":
+ViewImage:
 	"view image",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"return thumbnail to opener",
-"add tags to files":
+AddTagsToFiles:
 	"add tags to file(s)",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"remove tags from file(s)",
 HowWouldYouLikeToRenameTheseFiles:
 	"How would you like to rename these files?\n\nexample: \"images-***.jpg\" will rename files to \"images-001.jpg\", \"images-002.jpg\", ...",
@@ -264,6 +267,7 @@ AndNMore: "...and %1 more...",
 Browse: "Browse...",
 ExtractAfterUpload: "extract after upload",
 NotAnImageOrImageDimensionsNotReported: "error: not an image, or image dimensions not reported",
+PermissionDeniedCannotDeleteFile: "permission denied: cannot delete file",
 RenameTheDirectoryToWhat: "Rename the directory '%1' to what?",
 RenamedDirectoryAs: "Renamed '%1' as '%2'",
 TheFilenameShouldEndWithN: "The filename should end with %1",
@@ -283,7 +287,7 @@ Cancel: "cancel"
 	CouldNotMoveFiles       : "error: could not move file[s]",
 	CopyFiles               : "copy files", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "move files",
-	"about KFM"                : "about KFM",
+	AboutKfm                : "about KFM",
 	Errors                  : "Errors",
 	Ok                      : "OK" // as in "OK / Cancel"
 }

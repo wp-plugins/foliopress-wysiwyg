@@ -5,19 +5,16 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.9
+ * @version 0.9.8
  * @package foliopress-wysiwyg
  */
 
 /**
  * Including wordpress
  */ 
-//	WP < 2.7 compatibility
-if( file_exists( dirname(__FILE__) . '/../../../wp-load.php' ) )
-	require_once( realpath( dirname(__FILE__) . '/../../../wp-load.php' ) );
-else
-	require_once( realpath( dirname(__FILE__) . '/../../../wp-config.php' ) );
-	
+///	Modification	12/02/2010
+require_once( realpath( dirname(__FILE__) . '/../../../wp-load.php' ) );
+///	End of modification
 /**
  * Some basic functions for this class to work
  */
@@ -136,10 +133,6 @@ class fp_wysiwyg_class{
 	/**
 	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
 	 */
-	const FVC_DIR = 'DIRset';
-	/**
-	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
-	 */
 	const FVC_PNG_LIMIT = 'PNGLimit';
 	
 	/**
@@ -163,15 +156,7 @@ class fp_wysiwyg_class{
 	
 	const FVC_MAXW = 'MaxWidth';
 	const FVC_MAXH = 'MaxHeight';
-	
-	/**
-	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
-	 */
-	const FVC_USE_FLASH_UPLOADER = 'UseFlashUploader';
-	
-	///	Addition 2010/03/16	zUhrikova	Foliovision
-	const FVC_IMAGES_CHANGED = 'image_path_changed';
-	///	End of addition
+
 
 
 ///  -----------------------------------------------------------------------------------------------------------------
@@ -210,7 +195,6 @@ class fp_wysiwyg_class{
 		if( !isset( $this->aOptions[self::FVC_JPEG] ) ) $this->aOptions[self::FVC_JPEG] = 80;
 		if( !isset( $this->aOptions[self::FVC_PNG] ) ) $this->aOptions[self::FVC_PNG] = true;
 		if( !isset( $this->aOptions[self::FVC_PNG_LIMIT] ) ) $this->aOptions[self::FVC_PNG_LIMIT] = 5000;
-		if( !isset( $this->aOptions[self::FVC_DIR] ) ) $this->aOptions[self::FVC_DIR] = true;
 		/// Addition 2009/06/02  mVicenik Foliovision
 		if( !isset( $this->aOptions[self::FVC_HIDEMEDIA] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = true;
 		/// End of addition
@@ -246,7 +230,6 @@ class fp_wysiwyg_class{
 		
 		if( !isset( $this->aOptions[self::FVC_MAXW] ) ) $this->aOptions[self::FVC_MAXW] = 960;
 		if( !isset( $this->aOptions[self::FVC_MAXH] ) ) $this->aOptions[self::FVC_MAXH] = 960;
-		if( !isset( $this->aOptions[self::FVC_USE_FLASH_UPLOADER] ) ) $this->aOptions[self::FVC_USE_FLASH_UPLOADER] = true;
 		/// End of addition	
 
     update_option( FV_FCK_OPTIONS, $this->aOptions );    
@@ -409,10 +392,7 @@ class fp_wysiwyg_class{
 			oFCKeditor.ReplaceTextarea();
 		}
 		
-		<?php
-		if( $this->bUseFCK ) {
-			print( 'fv_wysiwyg_load();' );
-		} ?>
+		<?php if( $this->bUseFCK ) print( 'fv_wysiwyg_load();' ); ?>
 		</script>
 <?php 
 	}
@@ -487,32 +467,22 @@ class fp_wysiwyg_class{
 				$aSetup['JPGQuality'] = $this->aOptions[self::FVC_JPEG];
 				$aSetup['transform'] = $this->aOptions[self::FVC_PNG];
 				$aSetup['transform_limit'] = $this->aOptions[self::FVC_PNG_LIMIT];
-				$aSetup['ddir'] = $this->aOptions[self::FVC_DIR];
-
 				
 				KFM_RecreateThumbnailsSilent( realpath( $_SERVER['DOCUMENT_ROOT'].$this->aOptions[self::FVC_IMAGES] ), $this->aOptions[self::FVC_KFM_THUMBS], $kfm_workdirectory, $aSetup );
 			}
 			
 			/// This is regular saving of options that are on the main Options page
 			if( isset( $_POST['options_save'] ) ){
-				///	Addition	2010/03/16	zUhrikova	Foliovision
-				$this->aOptions[self::FVC_IMAGES_CHANGED]=false;
-				if ($this->aOptions[self::FVC_IMAGES] != $_POST['ImagesPath']){
-					$this->aOptions[self::FVC_IMAGES_CHANGED]=true;
-				}
-        ///	End of addition
-				
 				$this->aOptions[self::FVC_SKIN] = $_POST['FCKSkins'];
 				$this->aOptions[self::FVC_TOOLBAR] = $_POST['FCKToolbar'];
-				///  Modification  2009/04/03 mVicenik Foliovision			  
-				//	TODO some fix for missing / slash at the begining if needed
+				///  Modification   03/04/09 mVicenik Foliovision			  
 				if(strrpos($_POST['ImagesPath'],'/')!=(strlen($_POST['ImagesPath'])-1) && $_POST['ImagesPath']!='/')
 				  $_POST['ImagesPath'] = $_POST['ImagesPath'].'/';
 				if($_POST['ImagesPath']=='')
 				  $this->aOptions[self::FVC_IMAGES] = '/';
 			   else
 				  $this->aOptions[self::FVC_IMAGES] = $_POST['ImagesPath'];
-				///  End of modification  2009/04/03 mVicenik Foliovision
+				///  End of modification   03/04/09 mVicenik Foliovision
 				$this->aOptions[self::FVC_WIDTH] = $_POST['FCKWidth'];
 
 				$this->aOptions[self::FVC_KFM_LINK] = false;
@@ -543,7 +513,7 @@ class fp_wysiwyg_class{
 				/// End of addition
 
 				///	Addition 2010/02/01
-				if( isset( $_POST['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = $_POST['wysiwygstyles'];
+				if( isset( $_POST['wysiwygstyles'] ) ) $this->aOptions['wysiwygstyles'] = stripslashes( $_POST['wysiwygstyles'] );
 				///	End of addition
 				
 
@@ -566,13 +536,9 @@ class fp_wysiwyg_class{
 				$this->aOptions[self::FVC_PNG] = isset( $_POST['PNGTransform'] ) ? true : false;
 				$this->aOptions[self::FVC_PNG_LIMIT] = intval( $_POST['PNGLimit'] );
 				if( $this->aOptions[self::FVC_PNG_LIMIT] < 0 || $this->aOptions[self::FVC_PNG_LIMIT] > 50000 ) $this->aOptions[self::FVC_PNG_LIMIT] = 5000;
-				$this->aOptions[self::FVC_DIR] = isset( $_POST['DIRset'] ) ? true : false;
 				
 				if( isset( $_POST['MaxWidth'] ) ) $this->aOptions[self::FVC_MAXW] = intval( $_POST['MaxWidth'] );
 				if( isset( $_POST['MaxHeight'] ) ) $this->aOptions[self::FVC_MAXH] = intval( $_POST['MaxHeight'] );
-				
-				$this->aOptions[self::FVC_USE_FLASH_UPLOADER] = false;
-				if( isset( $_POST[self::FVC_USE_FLASH_UPLOADER] ) ) $this->aOptions[self::FVC_USE_FLASH_UPLOADER] = true;
 				
 				update_option( FV_FCK_OPTIONS, $this->aOptions );
 			}
@@ -604,7 +570,7 @@ class fp_wysiwyg_class{
 		}
 	}
 	
-	///  Addition2009/03/25 mVicenik Foliopress
+	///  Addition 25/03/09 mVicenik Foliopress
 	//   this is from Dean's FCK, thank you!
 	function add_admin_js()
 	{
@@ -614,14 +580,9 @@ class fp_wysiwyg_class{
 	}
 	
     function do_wpautop($content) {
-    		global $post;
-				$meta = get_post_meta( $post->ID, 'wysiwyg', true );
-
-				if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
-					return $content;
-				}
-
-        if(!$this->aOptions['autowpautop']) {
+        //var_dump($content);
+ 
+        if($this->aOptions['autowpautop']!=true) {
             return $content;
         }
         if(strlen($content)>0) {   // try to guess if the post should use wpautop
@@ -634,42 +595,15 @@ class fp_wysiwyg_class{
     }
 	///  End of addition
 	
-	///   Addition2009/03/20 mVicenik Foliovision
+	///   Addition 20/03/09 mVicenik Foliovision
 	function fv_remove_mediabuttons($content) {
-			global $post;
-			$meta = get_post_meta( $post->ID, 'wysiwyg', true );
-			if( $meta['plain_text_editing'] == 1 ) {
-				$this->bUseFCK = false;
-				$aOptions = get_option( FV_FCK_OPTIONS );
-				return '';
-			}
-			
-			$aOptions = get_option( FV_FCK_OPTIONS );
-      if( isset( $aOptions['HideMediaButtons'] ) && $aOptions['HideMediaButtons'] == true)
-				return '';
-			else
-				return $content;
+      return '';
    }
    ///  End of addition
    
-   ///   Addition2009/06/29 mVicenik Foliovision
+   ///   Addition 29/06/09 mVicenik Foliovision
    function remove_blank_p($content) {
       return str_replace('<p>&nbsp;</p>', '', $content);
-   }
-   
-   function wp_insert_post($id) {
-   		$meta = get_post_meta( $id, 'wysiwyg', true );
-   		if( isset( $_POST['plain_text_editing']) ) {
-				$meta['plain_text_editing'] = true;
-			}
-			else {
-				$meta['plain_text_editing'] = false;
-			}
-			update_post_meta( $id, 'wysiwyg', $meta );
-			
-			$post = get_post( $id );
-			$meta['post_modified'] = $post->post_modified;
-			update_post_meta( $id, 'wysiwyg', $meta );
    }
    
    ///  End of addition
@@ -728,56 +662,6 @@ class fp_wysiwyg_class{
         $this->aOptions['customdropdown-fontformatnames'] = rtrim($fontformatnames,',');
     }
     
-    /*
-    Make sure the content won't get destroyed by WP functions
-    */
-    function the_content($content) {
-    	global $post;
-			$meta = get_post_meta( $post->ID, 'wysiwyg', true );
-			if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
-				////
-				//echo '<span style="background: lightgreen;">removing filters!</span>';
-				////
-				remove_filter ('the_content',  'wpautop');
-				remove_filter ('the_content',  'wptexturize');
-			}
-			else {
-				add_filter ('the_content',  'wpautop');
-				add_filter ('the_content',  'wptexturize');	
-			}
-    	return $content;
-    }
-    
-    function meta_box_add() {
-    	add_meta_box('foliopress-wysiwyg','Post Author', array(&$this, 'meta_box'), 'post', 'side','high');
-    	add_meta_box('foliopress-wysiwyg','Post Author', array(&$this, 'meta_box'), 'page', 'side','high');	
-    }
-    
-    function meta_box() {
-    	global $current_user, $user_ID, $post;
-    	
-			$authors = get_editable_user_ids( $current_user->id, true, $post->post_type ); // TODO: ROLE SYSTEM
-			if ( $post->post_author && !in_array($post->post_author, $authors) )
-				$authors[] = $post->post_author;
-		?>
-		<label class="screen-reader-text" for="post_author_override"><?php _e('Author'); ?></label><?php wp_dropdown_users( array('include' => $authors, 'name' => 'post_author_override', 'selected' => empty($post->ID) ? $user_ID : $post->post_author) ); ?>
-		<?php
-			
-			$meta = get_post_meta( $post->ID, 'wysiwyg', true );
-			?><label for="plain_text_editing"><input name="plain_text_editing" type="checkbox" id="plain_text_editing" value="true" <?php checked(1, $meta['plain_text_editing']); ?> /> <?php _e('Plain text editing'); ?> <abbr title="This will disable WYSIWYG editor for this post, as well as all the WP formating routines (wptexturize and wpautop). Turn this option off only if you are sure this post won't get destroyed by it.">(?)</abbr>
-</label><?php
-    }
-    
-    function remove_meta_boxes($type, $context = '', $post = 0){
-			foreach (array('normal', 'advanced', 'side') as $context){
-				remove_meta_box('authordiv', 'post', $context);
-			}
-
-			foreach (array('normal', 'advanced', 'side') as $context){
-				remove_meta_box('pageauthordiv', 'page', $context);
-			}
-		}
-		 
 }
 
 $fp_wysiwyg = new fp_wysiwyg_class();

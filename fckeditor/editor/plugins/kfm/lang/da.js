@@ -35,16 +35,17 @@ DeleteDir:
 RenameDir:
 	"Omdøb",
 
-"delete file":
+DeleteFile:
 	"Slet",
-"rename file": "Omdøb",
-"rotate clockwise":
+RenameFile:
+	"Omdøb",
+RotateClockwise:
 	"Rotér med uret",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"Rotér mod uret",
-"resize image":
+ResizeImage:
 	"Skalér billede",
-"change caption":
+ChangeCaption:
 	"Rediger billedbeskrivelse",
 
 WhatFilenameToCreateAs:
@@ -90,7 +91,7 @@ UnknownPanelState:
 	"Fejl: Ukendt Panel status.", 
 
 SetStylesError:
-	"Fejl: Kan ikke sætte \"%1\" til \"%2.", 
+	"Fejl: Kan ikke sætte \"%1\" til \"%2\.", 
 NoPanel:
 	"Fejl: Panelet \"%1\" eksisterer ikke.",
 FileSelected:
@@ -118,6 +119,8 @@ FileTooLargeForThumb:
 	"Fejl: Billedet \"%1\" er for stort til at lave et ikon af. Erstat venligst filen med en mindre version.", 
 CouldntReadDir:
 	"Kunne ikke læse mappen",
+CannotRenameFile:
+	"Fejl: Kunne ikke omdøbe filen \"%1\" til \"%2\"",
 FilenameAlreadyExists:
 	"Fejl: En fil med samme navn eksisterer allerede",
 
@@ -138,13 +141,13 @@ LockPanels:
 	"Lås paneler",
 UnlockPanels:
 	"Lås paneler op",
-"create empty file":
+CreateEmptyFile:
 	"Opret tom fil",
 DownloadFileFromUrl:
 	"Hent fil fra URL",
 DirectoryProperties:
 	"Mappe egenskaber",
-"select all":
+SelectAll:
 	"Marker alle",
 SelectNone:
 	"Afmarker valgte",
@@ -154,7 +157,7 @@ LoadingKFM:
 	"Loader KFM",
 Name:
 	"Navn",
-"file details":
+FileDetails:
 	"Egenskaber",
 Search:
 	"Søg",
@@ -168,7 +171,7 @@ DirNotInDb:
 	"Mappen kunne ikke findes i databasen",
 ShowPanel:
 	"Vis panel \"%1\"",
-"change caption":
+ChangeCaption:
 	"Ret beskrivelse", 
 NewDirectory:
 	"Ny mappe",
@@ -216,13 +219,13 @@ ExtractZippedFile:
 	"Pak zip-fil ud",
 
 // new in 0.8
-"view image":
+ViewImage:
 	"Vis billede",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"Returnér thumbnail til editor",
-"add tags to files":
+AddTagsToFiles:
 	"Tilføj tags til fil(er)",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"Fjern tags fra fil(er)",
 HowWouldYouLikeToRenameTheseFiles:
 	"Ønsker du at omdøbe disse filer?\n\nEksempel: \"billede-***.jpg\" vil omdøbe filerne til \"billede-001.jpg\", \"billede-002.jpg\", ...",
@@ -254,6 +257,7 @@ AndNMore: "...and %1 more...",
 Browse: "Browse...",
 ExtractAfterUpload: "extract after upload",
 NotAnImageOrImageDimensionsNotReported: "error: not an image, or image dimensions not reported",
+PermissionDeniedCannotDeleteFile: "permission denied: cannot delete file",
 RenameTheDirectoryToWhat: "Rename the directory '%1' to what?",
 RenamedDirectoryAs: "Renamed '%1' as '%2'",
 TheFilenameShouldEndWithN: "The filename should end with %1",
@@ -273,7 +277,7 @@ Cancel: "cancel"
 	CouldNotMoveFiles       : "error: could not move file[s]",
 	CopyFiles               : "copy files", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "move files",
-	"about KFM"                : "about KFM",
+	AboutKfm                : "about KFM",
 	Errors                  : "Errors",
 	Ok                      : "OK" // as in "OK / Cancel"
 }

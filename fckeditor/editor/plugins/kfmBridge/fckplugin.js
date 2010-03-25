@@ -56,16 +56,7 @@ FCKCustomKFMCommand.prototype.GetState = function(){
  *	Function that inserts html code directly to cursor location in FCK window
  */
 function FCKSetHTML( html ){
-//   FCK.InsertHtml( html);
-// zUhrikova Foliovision 2010/03/23
-// fixing the buggy InsertHtml in Safari and Chrome, adding empty span solves it (however it creates  <p>&nbsp;</p>)
-if (FCKBrowserInfo.IsSafari) {
-   FCK.InsertHtml( html+"<span></span>" );
-   //FCK.InsertHtml( html+"<br />" );
-   //FCK.InsertHtml( html+"\r\n" );
-   }
-else   
-   FCK.InsertHtml( html);
+   FCK.InsertHtml( html );
 }
 
 function kfmBridge_ItIsMe(){

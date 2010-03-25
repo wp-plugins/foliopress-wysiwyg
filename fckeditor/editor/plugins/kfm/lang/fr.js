@@ -26,13 +26,13 @@ ErrorPrefix:
 Directories:
 	"Dossiers",
 CurrentWorkingDir:
-	"Dossier Actuel: \"%1\"",
+	'Dossier Actuel: "%1"',
 Logs:
 	"Messages",
 FileUpload:
 	"Envoi de fichier",
 DirEmpty:
-	"aucun fichier dans \"%1\"",
+	'aucun fichier dans "%1"',
 
 CreateSubDir:
 	"nouveau sous-dossier",
@@ -41,31 +41,32 @@ DeleteDir:
 RenameDir:
 	"renommer",
 
-"delete file":
+DeleteFile:
 	"supprimer",
-"rename file": "renommer",
-"rotate clockwise":
+RenameFile:
+	"renommer",
+RotateClockwise:
 	"rotation sens horaire",
-"rotate anti-clockwise":
+RotateAntiClockwise:
 	"rotation sens anti-horaire",
-"resize image":
+ResizeImage:
 	"redimensionner l'image",
-"change caption":
+ChangeCaption:
 	"modifier le titre",
 
 WhatFilenameToCreateAs:
 	"Créer le fichier sous quel nom?",
 AskIfOverwrite:
-	"Le fichier \"%1\" existe déjà. Remplacer?",
+	'Le fichier "%1" existe déjà. Remplacer?',
 NoForwardslash:
 	"\nVous ne pouvez pas utiliser '/' dans le nom du fichier",
 
 CreateDirMessage:
-	"Créer un sous-dossier de \"%1\": ",
+	'Créer un sous-dossier de "%1": ',
 DelDirMessage:
-	"Etes-vous certain de vouloir supprimer le dossier \"%1\"?",
+	'Etes-vous certain de vouloir supprimer le dossier "%1"?',
 DelFileMessage:
-	"Etes-vous certain de vouloir supprimer le fichier \"%1\"?",
+	'Etes-vous certain de vouloir supprimer le fichier "%1"?',
 DelMultipleFilesMessage:
 	"Etes-vous certain de vouloir supprimer les fichiers suivants?\n\n'",
 DownloadFileFromMessage:
@@ -74,18 +75,18 @@ FileSavedAsMessage:
 	"Sous quel nom désirez-vous enregistrer le fichier?",
 
 CurrentSize:
-	"Taille Actuelle: \"%1\" x \"%2\"\n",
+	'Taille Actuelle: "%1" x "%2"\n',
 NewWidth:
 	"Nouvelle Largeur?",
 NewWidthConfirmTxt:
-	"Nouvelle Largeur: \"%1\"\n",
+	'Nouvelle Largeur: "%1"\n',
 NewHeight:
 	"Nouvelle Hauteur?",
 NewHeightConfirmTxt:
-	"Nouvelle Hauteur: \"%1\"\n\nLes informations sont-elles exactes?",
+	'Nouvelle Hauteur: "%1"\n\nLes informations sont-elles exactes?',
 
 RenamedFile:
-	"fichier \"%1\" renommé en \"%2\".",
+	'fichier "%1" renommé en "%2".',
 DirRefreshed:
 	"dossiers actualisés.",
 FilesRefreshed:
@@ -95,36 +96,38 @@ NotMoreThanOneFile:
 UnknownPanelState:
 	"erreur: état du panneau inconnu.",
 MissingDirWrapper:
-	"erreur: dossier parent manquant: \"kfm_directories%1\".",
+	'erreur: dossier parent manquant: "kfm_directories%1".',
 SetStylesError:
-	"erreur: impossible d\'attribuer \"%2\" à \"%1\".",
+	'erreur: impossible d\'attribuer "%2" à "%1".',
 NoPanel:
-	"erreur: le panneau \"%1\" n\'existe pas.",
+	'erreur: le panneau "%1" n\'existe pas.',
 FileSelected:
-	"fichier sélectionné: \"%1\"",
+	'fichier sélectionné: "%1"',
 Log_ChangeCaption:
-	"titre de \"%1\" modifié en \"%2\"",
+	'titre de "%1" modifié en "%2"',
 UrlNotValidLog:
-	"erreur: l\'URL doit commencer par \"http:\"",
+	'erreur: l\'URL doit commencer par "http:"',
 MovingFilesTo:
-	"fichiers [\"%1\"] déplacés dans \"%2\"",
+	'fichiers ["%1"] déplacés dans "%2"',
 
 DirectoryNameExists:
 	"un dossier de ce nom existe déjà.",
 FileNameNotAllowd:
 	"erreur: nom de fichier incorrect",
 CouldNotWriteFile:
-	"erreur: impossible d\'écrire le fichier \"%1\".",
+	'erreur: impossible d\'écrire le fichier "%1".',
 CouldNotRemoveDir:
 	"Impossible de supprimer le dossier.\nAssurez-vous qu'il est vide",
 UrlNotValid:
-	"erreur: l\'URL doit commencer par \"http:\"",
+	'erreur: l\'URL doit commencer par "http:"',
 CouldNotDownloadFile:
-	"erreur: impossible de télécharger le fichier \"%1\".",
+	'erreur: impossible de télécharger le fichier "%1".',
 FileTooLargeForThumb:
-	"erreur: \"%1\" est trop gros pour créer une vignette. Veuillez remplacer ce fichier par une version plus petite.",
+	'erreur: "%1" est trop gros pour créer une vignette. Veuillez remplacer ce fichier par une version plus petite.',
 CouldntReadDir:
 	"erreur: impossible de lire ce dossier",
+CannotRenameFile:
+	'erreur: impossible de renommer "%1" en "%2"',
 FilenameAlreadyExists:
 	"erreur: un fichier de ce nom existe déjà",
 
@@ -145,13 +148,13 @@ LockPanels:
 	"verrouiller les panneaux",
 UnlockPanels:
 	"déverrouiller les panneaux",
-"create empty file":
+CreateEmptyFile:
 	"créer un fichier vide",
 DownloadFileFromUrl:
 	"télécharger un fichier",
 DirectoryProperties:
 	"Propriétés de Dossier",
-"select all":
+SelectAll:
 	"tout sélectionner",
 SelectNone:
 	"tout désélectionner",
@@ -161,7 +164,7 @@ LoadingKFM:
 	"chargement de KFM",
 Name:
 	"Nom",
-"file details":
+FileDetails:
 	"Propriétés de Fichier",
 Search:
 	"Chercher",
@@ -175,7 +178,7 @@ DirNotInDb:
 	"dossier inconnu dans la base de données",
 ShowPanel:
 	"afficher le panneau \"%1\"",
-"change caption":
+ChangeCaption:
 	"Changer le Titre",
 NewDirectory:
 	"Nouveau Dossier",
@@ -223,13 +226,13 @@ ExtractZippedFile:
 	"Décompresser le fichier",
 
 // new in 0.8
-"view image":
+ViewImage:
 	"voir l'image",
-"return thumbnail to opener":
+ReturnThumbnailToOpener:
 	"renvoyer une vignette à l'éditeur",
-"add tags to files":
+AddTagsToFiles:
 	"ajouter des libellés au(x) fichier(s)",
-"remove tags from files":
+RemoveTagsFromFiles:
 	"supprimer des libellés de ce(s) fichier(s)",
 HowWouldYouLikeToRenameTheseFiles:
 	"Comment souhaitez-vous renommer ces fichiers?\n\nexample: \"images-***.jpg\" les renommera en \"images-001.jpg\", \"images-002.jpg\", ...",
@@ -261,6 +264,7 @@ AndNMore: "...et %1 autres...",
 Browse: "Parcourir...",
 ExtractAfterUpload: "décompresser après envoi",
 NotAnImageOrImageDimensionsNotReported: "erreur: pas une image, ou impossible de déterminer ses dimensions",
+PermissionDeniedCannotDeleteFile: "permission refusée: impossible de supprimer le fichier",
 RenameTheDirectoryToWhat: "Renommer le dossier '%1' en?",
 RenamedDirectoryAs: "dossier '%1' renommé en '%2'",
 TheFilenameShouldEndWithN: "Le nom du fichier devrait finir par %1",
@@ -280,7 +284,7 @@ Cancel: "annuler"
 	CouldNotMoveFiles       : "error: could not move file[s]",
 	CopyFiles               : "copy files", // when dragging files to a directory, two choices appear - "copy files" and "move files"
 	MoveFiles               : "move files",
-	"about KFM"                : "about KFM",
+	AboutKfm                : "about KFM",
 	Errors                  : "Errors",
 	Ok                      : "OK" // as in "OK / Cancel"
 }
