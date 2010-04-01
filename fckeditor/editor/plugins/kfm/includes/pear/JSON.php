@@ -1,6 +1,5 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Converts to and from JSON format.
  *
@@ -112,7 +111,7 @@ define('SERVICES_JSON_SUPPRESS_ERRORS', 32);
  * $value = $json->decode($input);
  * </code>
  */
-class Services_JSON
+class kfm_Services_JSON
 {
    /**
     * constructs a new JSON instance
@@ -381,7 +380,7 @@ class Services_JSON
                                             array_values($var));
 
                     foreach($properties as $property) {
-                        if(Services_JSON::isError($property)) {
+                        if(kfm_Services_JSON::isError($property)) {
                             return $property;
                         }
                     }
@@ -393,7 +392,7 @@ class Services_JSON
                 $elements = array_map(array($this, 'encode'), $var);
 
                 foreach($elements as $element) {
-                    if(Services_JSON::isError($element)) {
+                    if(kfm_Services_JSON::isError($element)) {
                         return $element;
                     }
                 }
@@ -435,7 +434,7 @@ class Services_JSON
     {
         $encoded_value = $this->encode($value);
 
-        if(Services_JSON::isError($encoded_value)) {
+        if(kfm_Services_JSON::isError($encoded_value)) {
             return $encoded_value;
         }
 

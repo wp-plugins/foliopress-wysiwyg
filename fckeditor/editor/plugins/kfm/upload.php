@@ -1,162 +1,220 @@
 <?php
-# see docs/license.txt for licensing
-include('initialise.php');
-///	Addition	28/01/10	Foliovision
-include('includes/image-non-class.php');
-///	End of addition
+/**
+ * KFM - Kae's File Manager
+ *
+ * upload.php - uploads a file and adds it to the db
+ *
+ * @category None
+ * @package  None
+ * @author   Kae Verens <kae@verens.com>
+ * @author   Benjamin ter Kuile <bterkuile@gmail.com>
+ * @license  docs/license.txt for licensing
+ * @link     http://kfm.verens.com/
+ */
 
-/// Change		pBaran		07/12/2007		Foliovision
+require_once 'initialise.php';
+
+/// Added		zUhrikova		5/02/2010		Foliovision
+include('includes/image-non-class.php');
+$bRename = false;
+$bRenaming = false;
+$errors = array();
 require_once( 'includes/myFileChecker.php' );
 
-$errors=array();
-$bRename = false;
-$strRenameTemp = '';
-
-if($kfm_allow_file_upload){
-	$filename = NULL;
-	$tmpname = NULL;
-	$toDir = kfmDirectory::getInstance( $kfm_session->get( 'cwd_id' ) );
-	
-	if( isset( $_GET['rename'] ) ){
-		$filename = $_GET['rename'];
-		$tmpname = $toDir->path . '/' . $_GET['tempname'];
-	}else{
-		$file = isset( $_FILES['kfm_file'] ) ? $_FILES['kfm_file'] : $_FILES['Filedata'];
-		$filename = $file['name'];
-		$tmpname = $file['tmp_name'];
+if ($kfm->setting('allow_file_upload')) {
+	$fids     = array();
+	$files    = array();
+	$fdata    = isset($_FILES['kfm_file'])?$_FILES['kfm_file']:$_FILES['Filedata'];
+	if(is_array($fdata['name'])){
+		for($i=0;$i<count($fdata['name']);++$i){
+			$files[]=array(
+				'name'    =>$fdata['name'][$i],
+				'tmp_name'=>$fdata['tmp_name'][$i],
+			);
+		}
 	}
-	
-	/// Addition		pBaran		13/03/2008-19/03/2008		Foliovision
-	// files uploaded will be striped of every stupid characters
-	$filename = preg_replace( '/[^\w\d\.\-\s_]/' , '' , $filename );
-	// files uploaded will have their names striped of underscores and spaces and replaced with hyphen
-	$filename = str_replace( array( '_', ' ', '--' ), '-', $filename );
-	/// End of addition		pBaran		13/03/2008-19/03/2008
-	
-	///	Addition	28/01/10	Foliovision
-	//	let's add / only if is missing at the end of the path
-	$dirpath = $toDir->path;
-	if( strrpos($dirpath,'/') != strlen($dirpath)-1 )
-		$to = $toDir->path . '/' . $filename;
-	else
-		$to = $toDir->path . $filename;
-	///	End of addition
-	
-	if( !kfm_checkAddr( $to ) ) $errors[] = kfm_lang( 'bannedFilenameExtension' );
-	else if( !kfmFile::checkName( $filename ) ) $errors[] = 'The filename: ' . $filename . ' is not allowed';
-	else{
-		if( file_exists( $to ) ){
-			if( is_uploaded_file( $tmpname ) ){
-				$strRenameTemp = mykfm_CreateTempNameForFile( $filename, $toDir->path );
-				move_uploaded_file( $tmpname, $toDir->path . '/' . $strRenameTemp );
-				chmod( $toDir->path . '/' . $strRenameTemp, octdec( '0' . $kfm_default_upload_permission ) );
+	else $files[]=$fdata;
+	$replace  = isset($_REQUEST['fid'])?(int)$_REQUEST['fid']:0;
+	//$replace  = isset($_REQUEST['rename_to'])?1:0;
+	foreach($files as $file){
+		$tmpname  = $file['tmp_name'];
+		// { filename
+		$filename = $file['name'];
+		if(isset($_REQUEST['rename_to'])){
+        $filename=$_REQUEST['rename_to'];
+        $bRenaming = true;
+        if(isset($_REQUEST['tmp_name']))$tmpname=$_REQUEST['tmp_name'];
+      }
+      /// Addition		pBaran		13/03/2008-19/03/2008		Foliovision
+	   // files uploaded will be striped of every stupid characters
+	   $filename = preg_replace( '/[^\w\d\.\-\s_]/' , '' , $filename );
+	   // files uploaded will have their names striped of underscores and spaces and replaced with hyphen
+	   $filename = str_replace( array( '_', ' ', '--' ), '-', $filename );
+	   /// End of addition		pBaran		13/03/2008-19/03/2008
+
+		// }
+		// { directory
+		if(isset($_REQUEST['directory_name'])){
+			$dirs				   = explode(DIRECTORY_SEPARATOR, trim($_REQUEST['directory_name'], ' '.DIRECTORY_SEPARATOR));
+			$subdir				 = $user_root_dir;
+			$startup_sequence_array = array();
+			foreach ($dirs as $dirname) {
+				$parent=$subdir;
+				$subdir = $parent->getSubdir($dirname);
+				if(!$subdir){
+					kfm_createDirectory($parent->id,$dirname);
+					$subdir=$parent->getSubdir($dirname);
+				}
+				$kfm_startupfolder_id	 = $subdir->id;
+			}
+			$kfm_session->set('cwd_id', $kfm_startupfolder_id);
+			$cwd=$kfm_startupfolder_id;
+		}
+		else $cwd = $kfm_session->get('cwd_id');
+		if(isset($_REQUEST['cwd']) && $_REQUEST['cwd']>0)$cwd=$_REQUEST['cwd'];
+		// }
+		if(!$cwd) $errors[] = kfm_lang('CWD not set');
+		else {
+			$toDir = kfmDirectory::getInstance($cwd);
+			if($replace){
+				$replace_file = kfmFile::getInstance($replace);
+				$to           = $replace_file->path;
+				if($replace_file->isImage()) $replace_file->deleteThumbs();
+			}
+			else $to = $toDir->path().''.$filename;
+         // add zUhrikova
+			if ($bRenaming) $sTestFile = $toDir->path().'/'.$tmpname;
+			else $sTestFile = $tmpname;
+         // end add zUhrikova
+         if (!is_file($sTestFile)) $errors[] = 'No file uploaded.';//Dir->path().'/'.$tmpname
+			else if (!kfmFile::checkName($filename)) {
+				$errors[] = 'The filename: '.$filename.' is not allowed';
+			}
+			else if(in_array(kfmFile::getExtension($filename),$kfm->setting('banned_upload_extensions'))){
+				$errors[] = 'The extension: '.kfmFile::getExtension($filename).' is not allowed';
+			}
+			// { check to see if it's an image, and if so, is it bloody massive
+			if(in_array(kfmFile::getExtension($filename),array('jpg', 'jpeg', 'gif', 'png', 'bmp'))){
+				//list($width, $height, $type, $attr)=getimagesize($tmpname);
+			//	if($width>$toDir->maxWidth() || $height>$toDir->maxHeight()){
+			  if(file_exists($tmpname)){
+            /// change zUhrikova 9/2/2010 Foliovision
+				   $aImageInfo = getimagesize($tmpname);
+				   $freemem = (str_replace('M','',ini_get('memory_limit') )*1048576 - memory_get_usage());
+      			//	fix for PNG
+      			if( $aImageInfo['channels']=='' )
+      				$aImageInfo['channels'] = 3;
+      			$imagemem = Round(($aImageInfo[0] * $aImageInfo[1] * $aImageInfo['bits'] * $aImageInfo['channels'] / 8 + Pow(2, 16)) * 2);
+      			if($freemem <= $imagemem) {
+      				$bTooHot = true;
+      				$errors[] = "The file size exceeds available memory. File cannot be uploaded, please resize it locally.";
+      				unlink( $tmpname );
+      			}
+      			else {		
+       				if($aImageInfo[0] > $toDir->maxWidth() || $aImageInfo[1] > $toDir->maxHeight()) {
+      					$iRatio = (int) $aImageInfo[1]/$aImageInfo[0];
+      					if($aImageInfo[0] > $aImageInfo[1]) {
+      						$iNewHeight = $toDir->maxWidth() * $iRatio;	
+      						$iNewWidth = $toDir->maxWidth();
+      					} else {
+      						$iNewWidth = $toDir->maxHeight() / $iRatio;
+      						$iNewHeight = $toDir->maxHeight();
+      					}
+      					FV_CreateResizedCopy($tmpname, $tmpname, $iNewWidth, $iNewHeight, $aImageInfo);
+      				}
+      			}
+					//$errors[] = 'Please do not upload images which are larger than '.$toDir->maxWidth().'x'.$toDir->maxHeight();
+					// end of change zUhrikova 9/2/2010
+				}
+			}
+			// }
+		}
+		if ($cwd==$kfm->setting('root_folder_id') && !$kfm->setting('allow_files_in_root')) $errors[] = 'Cannot upload files to the root directory';
+		if (!$replace && file_exists($to)){
+		// changed zUhrikova 9/2/2010 Folivision
+		  if( is_uploaded_file( $tmpname ) ){
+				$strRenameTemp = mykfm_CreateTempNameForFile( $filename, $toDir->path() );
+				move_uploaded_file( $tmpname, $toDir->path() . '/' . $strRenameTemp );
+				chmod( $toDir->path() . '/' . $strRenameTemp, octdec( '0' . $kfm_default_upload_permission ) );
 			}else $strRenameTemp = basename( $tmpname );
 
 			$bRename = true;
-		}else{
-			$objReturn = kfm_move_uploaded_file( $filename, $to, $tmpname );
-			if( true !== $objReturn && is_string( $objReturn ) ) $errors[] = $objReturn;
-			
-			///	Resize!
-			global $iJPGQuality, $iMaxWidth, $iMaxHeight;
-			
-			$aImageInfo = getimagesize($to);
-			
-			///	Let's throw away too big images
-			$freemem = (str_replace('M','',ini_get('memory_limit') )*1048576 - memory_get_usage());
-			
-			//	fix for PNG
-			if( $aImageInfo['channels']=='' )
-				$aImageInfo['channels'] = 3;
-			
-			$imagemem = Round(($aImageInfo[0] * $aImageInfo[1] * $aImageInfo['bits'] * $aImageInfo['channels'] / 8 + Pow(2, 16)) * 2);
-			if($freemem <= $imagemem) {
-				$bTooHot = true;
-				unlink( $to );
-			}
-			else {		
-				if($aImageInfo[0] > $iMaxWidth || $aImageInfo[1] > $iMaxHeight) {
-					$iRatio = (int) $aImageInfo[1]/$aImageInfo[0];
-					if($aImageInfo[0] > $aImageInfo[1]) {
-						$iNewHeight = $iMaxWidth * $iRatio;	
-						$iNewWidth = $iMaxWidth;
-					} else {
-						$iNewWidth = $iMaxHeight / $iRatio;
-						$iNewHeight = $iMaxHeight;
-					}
-					FV_CreateResizedCopy($to, $to, $iNewWidth, $iNewHeight, $aImageInfo, $iJPGQuality);
-				}
-			}
-			///
+			// end of change zUhrikova 9/2/2010
+         $errors[] = 'File with that name already exists. Your file has been renamed to ' . $strRenameTemp;
+      }
+		if (!count($errors)) {
+		   if ($bRenaming) kfm_move_uploaded_file( $filename, $to, $toDir->path().$tmpname );
+         else kfm_move_uploaded_file( $filename, $to, $tmpname );
+         //move_uploaded_file($tmpname, $to);//$toDir->path().
+   		if (!file_exists($to)) $errors[] = kfm_lang('failedToSaveTmpFile' , $toDir->path().$tmpname, $to);//file_exists($to)
+   		else 
+            if ($kfm->setting('only_allow_image_upload') && !getimagesize($to)) {
+   			   $errors[] = 'only images may be uploaded';
+   			   unlink($to);
+   		   }
+			   else {
+   				chmod($to, octdec('0'.$kfm->setting('default_upload_permission')));
+   				$fid  = kfmFile::addToDb($filename, $kfm_session->get('cwd_id'));
+   				$file = kfmFile::getInstance($fid);
+   				$bRename = false;
+   				if (function_exists('exif_imagetype')) {
+   					$imgtype = @exif_imagetype($to);
+   					if ($imgtype) {
+   						$file    = kfmImage::getInstance($file);
+   						$comment = '';
+   						if ($imgtype==1) { // gif
+   							$fc    = file_get_contents($to);
+   							$arr   = explode('!', $fc);
+   							$found = 0;
+   							for ($i = 0;$i<count($arr)&&!$found;++$i) {
+   								$block = $arr[$i];
+   								if (substr($block, 0, 2)==chr(254).chr(21)) {
+   									$found   = 1;
+   									$comment = substr($block, 2, strpos($block, 0)-1);
+   								}
+   							}
+   						}
+   						else {
+   							$data = @exif_read_data($to, 0, true);
+   							if (is_array($data)&&isset($data['COMMENT'])&&is_array($data['COMMENT'])) $comment = join("\n", $data['COMMENT']);
+   						}
+   						$file->setCaption($comment);
+   					}
+   					else if (isset($_POST['kfm_unzipWhenUploaded'])&&$_POST['kfm_unzipWhenUploaded']) {
+   						kfm_extractZippedFile($fid);
+   						$file->delete();
+   					}
+   				}
+   				$fids[]=$fid;
+			   }
 		}
 	}
-	
 }
-else $errors[]=kfm_lang( 'permissionDeniedUpload' );
-//$bTooHot = true;
+else $errors[] = kfm_lang('permissionDeniedUpload');
+
+if (isset($_REQUEST['swf']) && $_REQUEST['swf']==1) {
+	if(count($errors))echo join("\n", $errors);
+	else echo 'OK';
+	exit;
+}
 ?>
 <html>
-	<head>
-		<script type="text/javascript">
-		//parent.document.write("<?php echo $freemem.' '.$imagemem; ?>");
-		<?php
-		//echo 'alert(\''.$aImageInfo[0].' '.$aImageInfo[1].' '.$aImageInfo[2].' '.$aImageInfo[3].' '.$aImageInfo['mime'].' '.$aImageInfo['bits'].' '.$aImageInfo['channels'].' '.$freemem.' '.$imagemem.'\');';
-		?>
-		<?php if( $bTooHot ){ ?>
-			parent.document.write(""+
-			"<style>"+
-			"body {"+
-			"	font-family: sans-serif;"+
-			"	/*font-size: 0.9em;*/"+
-			"	font-size: 14px;"+
-			"	line-height: 1.6em;"+
-			"	color: #696969 /*gray*/;"+
-			"	background: white;"+
-			"}"+
-			"strong {font-weight: bold}"+
-			"em {font-style: italic}"+
-			"small {font-size: 0.85em}"+
-			"a {color: #B51212;}"+
-			"a:visited {color: #666;}"+
-			"a:hover {color: #411;}"+
-			".message { width: 650px; margin-top: 48px; margin-left: auto; margin-right: auto; }"+
-			".logo { float: right; padding-left: 16px; }"+
-			"</style>"+
-			"<?php echo $freemem.' have and need '.$imagemem.' '; ?>"+
-			"<div class='message'>"+
-			"<div class='logo'><img src='foliovision-logo.png' /></div>"+
-			"<h2>Image Too big</h2>"+
-			"<p>Hey guys, you shouldn't be uploading so big images to our servers, we can't handle it.</p>"+
-			"<p>You should try to make it maximally 2000px wide (or tall, if it's a portrait).</p>"+
-			"<p>Here are some choices how to resize the image:</p>"+
-			"<ul>"+
-			"	<li>Use <strong>Preview</strong> or <strong>Graphicconverter</strong> if you are on a Mac computer</li>"+
-			"	<li>Use <a href='http://www.photoscape.org/ps/main/download.php'>Photoscape</a> if you are in Windows</li>"+
-			"	<li>If you have <strong>Photoshop</strong> use its <em>\"Save for Web\"</em> and you will get the best quality picture</li"+
-			"	<li>If you have a good connection you can use some <strong>online tool</strong> like <a href='http://www.picresize.com/'>picresize.com</a></li>"+
-			"</ul>"+
-			"<p><a href='index.php?lang=en&kfm_caller_type=fck&type=Image'>Ok, I will resize my image and do it properly</a></p>"+
-			"</div>"
-			)
-		<?php } else if( $bRename ){ ?>
-		
-			var strMess = "I'm sorry but you've already uploaded an image with that name. If you would like Google to find your image and for your image";
-			strMess += "to have a good caption we recommend using words with dashes, i.e. vancouver-freighters-in-harbour.jpg. Please rename your image now!";
-			var strNewName = prompt( strMess, '<?php print( $filename ); ?>' );
-			if( strNewName == null || strNewName == '' ) parent.x_kfm_move_uploaded_file( '', '', '<?php print( addcslashes( realpath( $toDir->path . '/' . $strRenameTemp ), "\\" ) ); ?>', function(a){} );
-			else window.location = 'upload.php?rename=' + strNewName + '&tempname=' + '<?php print( $strRenameTemp ); ?>';
-			
-		<?php 
-		}else{
-			$js = isset( $_REQUEST['js'] ) ? $js : '';
-			if( isset( $_REQUEST['onload'] ) ) echo $_REQUEST['onload'];
-			else if( isset( $_REQUEST['onupload'] ) ) echo $_REQUEST['onupload'];
-			else if( count( $errors ) ) echo 'alert("' . addslashes( join( "\n", $errors ) ) . '");';
-			else echo 'parent.x_kfm_loadFiles(' . $kfm_session->get( 'cwd_id' ) . ',parent.kfm_refreshFiles);parent.kfm_dir_openNode(' . $kfm_session->get( 'cwd_id' ) . ');' . $js;
-		}
-		?>
-		</script>
-	</head>
-	<body>
-	</body>
+<head>
+<script type="text/javascript">
+<?
+         $js = isset($_REQUEST['js'])?$js:'';
+         if (isset($_REQUEST['onload'])) echo $_REQUEST['onload'];
+         else if (isset($_REQUEST['onupload'])) echo $_REQUEST['onupload'];
+         else if (count($errors)) echo 'alert("'.addslashes(join("\n", $errors)).'");';
+//         else
+         {
+         	echo 'parent.kfm_vars.startup_selectedFiles=['.join(',',$fids).'];';
+         	echo 'parent.x_kfm_loadFiles('.$kfm_session->get('cwd_id').',parent.kfm_refreshFiles);';
+         	echo 'parent.kfm_dir_openNode('.$kfm_session->get('cwd_id').');'.$js;
+       }
+       ?>
+</script>
+</head>
+<body>
+</body>
 </html>

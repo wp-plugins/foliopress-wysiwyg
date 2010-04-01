@@ -13,17 +13,15 @@ function kfm_api_getDirectoryId($address){
 	if($arr[count($arr)-1]==''&&count($arr)>1)array_pop($arr);
 	foreach($arr as $n){
 		$r=db_fetch_row("select id from ".KFM_DB_PREFIX."directories where parent=".$curdir." and name='".sql_escape($n)."'");
-		if(!count($r))return 0;
+		if($r===false || !count($r))return 0;
 		$curdir=$r['id'];
 	}
 	return $curdir;
 }
 function kfm_api_removeFile($id){
-	$f=new kfmFile($id);
+	$f=kfmFile::getInstance($id);
 	$p=$f->parent;
 	$f->delete();
 	return kfm_loadFiles($p);
 }
 $kfm_api_auth_override=1;
-
-?>

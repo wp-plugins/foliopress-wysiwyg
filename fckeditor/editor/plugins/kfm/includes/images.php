@@ -19,6 +19,9 @@ function _resizeImage($fid,$width,$height){
 	if($im->hasErrors())return $im->getErrors();
 	return kfm_loadFiles($cwd_id);
 }
+function _resizeImages($fs,$width,$height){
+	foreach($fs as $f)_resizeImage($f,$width,$height);
+}
 function _rotateImage($fid,$direction){
 	$im=kfmImage::getInstance($fid);
 	$im->rotate($direction);
@@ -42,13 +45,24 @@ function _cropToNew($fid, $x1, $y1, $width, $height, $newname){
 	if($im->hasErrors())return $im->getErrors();
 	return kfm_loadFiles($cwd_id);
 }
-
-### Added		pBaran		10/12/2007		Foliovision
-## This function gets image size from url
-function _getImageSize( $strUrl ){
-	$strFile = $_SERVER['DOCUMENT_ROOT'] . $strUrl;
-	$aSize = getimagesize( $strFile );
+// Changed zUhrikova 05/02/2010 Foliovision
+## This function gets image size from id
+function _getImageSize( $fid ){ //was $strUrl
+//	$strFile = $_SERVER['DOCUMENT_ROOT'] . $strUrl;
+	$file  = kfmFile::getInstance($fid);
+  	$aSize = getimagesize( $file->path );
+	//	$aSize = getimagesize( $strFile );
 	return $aSize;
 }
-### End of add		pBaran		10/12/2007
+// End of add		zUhrikova 05/02/2010
+// Changed zUhrikova 15/02/2010 Foliovision
+## This function gets image size from url
+function _getImageSizeUrl( $furl ){ //was $strUrl
+//	$strFile = $_SERVER['DOCUMENT_ROOT'] . $strUrl;
+	$file  = kfmFile::getInstance($furl);
+  	$aSize = getimagesize( $file->path );
+	//	$aSize = getimagesize( $strFile );
+	return $aSize;
+}
+### End of add		zUhrikova 15/02/2010
 ?>

@@ -1,161 +1,107 @@
 // see license.txt for licensing
 var kfm_file_bits={
+	cacheableIcons:[],
+	contextMenu:function(e){
+		var el=e.target;
+		while(el.parentNode&&!el.file_id)el=el.parentNode;
+		if(!el.parentNode)return;
+		if(selectedFiles.length>1)kfm_getLinks(selectedFiles);
+		else kfm_getLinks([el.file_id]);
+	},
 	dragDisplay:function(){
-		kfm_addToSelection(this.file_id);
-		var drag_wrapper=new Element('div',{
-			'id':'kfm_drag_wrapper',
-			styles:{
-				'min-width':100,
-				'opacity':'.7'
-			}
-		});
-		for(var i=0;i<10&&i<selectedFiles.length;++i)kfm.addEl(drag_wrapper,[File_getInstance(selectedFiles[i]).name,new Element('br')]);
-		if(selectedFiles.length>10)kfm.addEl(
-			drag_wrapper,
-			(new Element('i')).setHTML(kfm.lang.AndNMore(selectedFiles.length-10))
-		);
-		return drag_wrapper;
+		var i;
+		window.dragAddedFileToSelection=false;
+		if(!kfm_isFileSelected(this.file_id)){
+		  kfm_selectNone();
+			kfm_addToSelection(this.file_id);
+			window.dragAddedFileToSelection=true;
+		}
+		/*var drag_wrapper=document.createElement('div');
+		drag_wrapper.id='kfm_drag_wrapper';
+		drag_wrapper.style.minWidth='100px';
+		drag_wrapper.style.opacity='.7';
+		for(i=0;i<10&&i<selectedFiles.length;++i)kfm.addEl(drag_wrapper,[File_getInstance(selectedFiles[i]).name,document.createElement('br')]);
+		if(selectedFiles.length>10){
+			i=document.createElement('i');
+			i.innerHTML=kfm.lang.AndNMore(selectedFiles.length-10);
+			drag_wrapper.appendChild(i);
+		}
+		return drag_wrapper;*/
+	},
+	dblclick:function(e){
+		var el=e.target;
+		while(!el.file_id && el)el=el.parentNode;
+		if(!el)return;
+		var id=el.file_id;
+		kfm_selectNone();
+		kfm_addToSelection(id);
+		var openingHook=kfm_getDefaultOpener([id]);
+		if(openingHook)openingHook.doFunction([id]);
+	},
+	infoTooltipStart:function(e){ // initialise info tooltip
+	   //changed zUhrikova 17/02/2010 Foliovision
+      //	kfm_showFileDetails(e.target.file_id);
+		if(window.kfm_tooltipInit)clearTimeout(window.kfm_tooltipInit);
+		if(window.kdnd_dragging)return; // don't open if currently dragging files
+		if (!bFileSelected)window.kfm_tooltipInit=setTimeout('kfm_showFileDetails('+e.target.file_id+')',50);
+	},
+	infoTooltipStop:function(){ // remove info tooltip
+		if(window.kfm_tooltipInit)clearTimeout(window.kfm_tooltipInit);
+		var o=document.getElementById('kfm_tooltip');
+		if(o)o.parentNode.removeChild(o);
 	},
 	padding:0
 }
-function kfm_buildFileDetailsTable(res){
-	if(!res)return kfm_log('error: missing file details?');
-	var table=new Element('table'),r;
-	if(res.name){ // filename
-		r=kfm.addRow(table);
-		kfm.addCell(r,0,0,(new Element('strong')).setHTML(kfm.lang.Filename));
-		kfm.addCell(r,1,0,res.name);
-	}
-	if(res.filesize){ // filesize
-		r=kfm.addRow(table);
-		kfm.addCell(r,0,0,(new Element('strong')).setHTML(kfm.lang.Filesize));
-		kfm.addCell(r,1,0,res.filesize);
-	}
-	if(res.tags&&res.tags.length){ // tags
-		r=kfm.addRow(table);
-		kfm.addEl(kfm.addCell(r,0),(new Element('strong')).setHTML(kfm.lang.Tags));
-		var arr=[],c=kfm.addCell(r,1);
-		for(var i=0;i<res.tags.length;++i){
-			kfm.addEl(c,kfm_tagDraw(res.tags[i]));
-			if(i!=res.tags.length-1)kfm.addEl(c,', ');
-		}
-	}
-	if(res.mimetype){ // mimetype
-		r=kfm.addRow(table);
-		kfm.addEl(kfm.addCell(r,0),(new Element('strong')).setHTML(kfm.lang.Mimetype));
-		kfm.addEl(kfm.addCell(r,1),res.mimetype);
-		switch(res.mimetype.replace(/\/.*/,'')){
-			case 'image':{
-				if(res.caption){ // caption
-					r=kfm.addRow(table);
-					kfm.addCell(r,0,0,(new Element('strong')).setHTML(kfm.lang.Caption));
-					kfm.addCell(r,1).innerHTML=(res.caption).replace(/\n/g,'<br \/>');
-				}
-				break;
-			}
-		}
-	}
-	if(res.ctime){ // last change time
-		r=kfm.addRow(table);
-		kfm.addEl(kfm.addCell(r,0),(new Element('strong')).setHTML(kfm.lang.LastModified));
-		var d=(new Date(res.ctime*1000)).toGMTString();
-		kfm.addEl(kfm.addCell(r,1),d);
-	}
-	if(res.width) {
-		r=kfm.addRow(table);
-		kfm.addCell(r,0,0,(new Element('strong')).setHTML(kfm.lang.ImageDimensions));
-		kfm.addCell(r,1,0,res.width+" x "+res.height);      
-	}
-	if( is_gecko ){
-		table.setAttribute( 'style', "max-width: 100px; width: 100px;" );
-		//alert('get');
-	}
-	return table;
+function kfm_fileLoader(id){
+	if($type(id)!='array')return $j('#kfm_file_icon_'+id).css('background-image','url(themes/'+kfm_theme+'/icons/64x64/loader.gif)');
+	id.each(kfm_fileLoader);
 }
-function kfm_deleteFile(id){
-	if(!kfm_vars.permissions.file.rm)return kfm.alert(kfm.lang.PermissionDeniedCannotDeleteFile);
-	var filename=File_getInstance(id).name;
-	if(kfm.confirm(kfm.lang.DelFileMessage(filename))){
-		x_kfm_rm([id],kfm_removeFilesFromView);
-	}
+function kfm_filesLoader(){
+	$j('<img src="themes/'+kfm_theme+'/small_loader.gif" alt=""/>').appendTo('#documents_loader');
 }
-function kfm_deleteSelectedFiles(){
-	if(!kfm_vars.permissions.file.rm)return kfm.alert('permission denied: cannot delete files');
-	kfm_deleteFiles(selectedFiles);
+function kfm_files_reflowIcons(){
+	var el,panel,els,k;
+	panel=document.getElementById('documents_body');
+	if(panel.contentMode!='file_icons')return;
+	k=0;
+	els=$j('#documents_body .kfm_file_icon');
+	els.each(function(){
+		if(!this)return;
+		ej=$j(this);
+		ej.css({'clear':'none'});
+		if(k&&els[k-1].offsetLeft>=this.offsetLeft)ej.css({'clear':'left'});
+		++k;
+	});
+	kfm_show_number_of_files(k);
+	kfm_setThumbnails();
 }
-function kfm_deleteFiles(dfiles){
-	var names=[],m='';
-	if(dfiles.length>10){
-		for(var i=0;i<9;++i)names.push(File_getInstance(dfiles[i]).name);
-		m='\n'+kfm.lang.AndNMore(dfiles.length-9);
-	}
-	else for(var i=0;i<dfiles.length;++i)names.push(File_getInstance(dfiles[i]).name);
-	if(kfm.confirm(kfm.lang.DelMultipleFilesMessage+names.join('\n')+m))x_kfm_rm(dfiles,kfm_removeFilesFromView);
-}
-function kfm_downloadFileFromUrl(filename,msg){
-	if(filename.toString()!==filename)filename='';
-	var url=$('kfm_url').value;
-	if(url.substring(0,4)!='http'){
-		kfm_log(kfm.lang.UrlNotValidLog);
-		return;
-	}
-	if(!filename)filename=url.replace(kfm_regexps.all_up_to_last_slash,'');
-	var not_ok=0,o;
-	kfm_prompt(kfm.lang.FileSavedAsMessage+msg,filename,function(filename){
-		if(!filename)return;
-		if(kfm_isFileInCWD(filename)){
-			o=kfm.confirm(kfm.lang.AskIfOverwrite(filename));
-			if(!o)not_ok=1;
+function kfm_setThumbnails(){
+	var els,F,d,fold;
+	fold = $j(window).height() + $j(window).scrollTop();
+	els=$j('#documents_body .kfm_file_icon');
+	els.each(function(){
+		F=File_getInstance(this.file_id);
+		if(F.width && !this.icon_loaded && fold>=getOffset(this,'Top')){
+			F.setThumbnailBackground(this.imageHolder);
 		}
-		if(filename.indexOf('/')>-1){
-			msg=kfm.lang.NoForwardslash;
-			not_ok=1;
-		}
-		if(not_ok)return kfm_downloadFileFromUrl(filename,msg);
-		x_kfm_downloadFileFromUrl(url,filename,kfm_refreshFiles);
-		$('kfm_url').value='';
 	});
 }
-function kfm_downloadSelectedFiles(id){
-	var wrapper=$('kfm_download_wrapper');
-	if(!wrapper){
-		wrapper=new Element('div',{
-			'id':'kfm_download_wrapper',
-			'styles':{
-				'display':'none'
-			}
-		});
-		kfm.addEl(document.body,wrapper);
-	}
-	wrapper.empty();
-	if(id)kfm_downloadSelectedFiles_addIframe(wrapper,id);
-	else for(var i=0;i<selectedFiles.length;++i)kfm_downloadSelectedFiles_addIframe(wrapper,selectedFiles[i]);
-}
-function kfm_downloadSelectedFiles_addIframe(wrapper,id){
-	var iframe=new Element('iframe');
-	iframe.src='get.php?id='+id+'&forcedownload=1';
-	kfm.addEl(wrapper,iframe);
-}
-function kfm_extractZippedFile(id){
-	x_kfm_extractZippedFile(id,kfm_refreshFiles);
-}
-function kfm_files_panelResized(){
-	var panel=$('kfm_right_column');
-	if(panel.contentMode!='file_icons')return;
-	var els=$ES('.kfm_file_icon',panel);
-	for(var i=0;i<els.length;++i){
-		var el=els[i];
-		el.setStyle('clear','none');
-		if(i&&els[i-1].offsetLeft>=el.offsetLeft)el.setStyle('clear','left');
-	}
+function kfm_getCachedIcon(type){
+	if(window.kfm_file_bits.cacheableIcons[type])return window.kfm_file_bits.cacheableIcons[type];
+	var icon=document.createElement('div');
+	icon.className='kfm_file '+(type?'kfm_file_listview':'kfm_file_icon');
+	icon.style.cursor=window.ie?'hand':'pointer';
+	window.kfm_file_bits.cacheableIcons[type]=icon;
+	return icon;
 }
 function kfm_isFileInCWD(id){
-	var i,files=$('kfm_right_column').fileids;
+	var i,files=document.getElementById('documents_body').fileids;
 	for(i=0;i<files.length;++i)if(files[i]==id)return true;
 	return false;
 }
 
-/// #### Add		pBaran		12/12/2007		Foliovision
+
+/// #### Add	zUhrikova	moved from older version by pBaran		1/2/2010		Foliovision
 var iCaller = -1;
 function kfmAdd_TryToFindCaller(){
 	try{
@@ -163,220 +109,170 @@ function kfmAdd_TryToFindCaller(){
 		if( bCaller ) iCaller = 0;
 	}catch( ex ){ iCaller = 1; }
 }
-/// #### End of add		pBaran		12/12/2007
+/// #### End of add		zUhrikova		1/2/2010
 
-function kfm_incrementalFileDisplay(){
-	var b=window.kfm_incrementalFileDisplay_vars,fsdata=b.data.files,wrapper=$('kfm_right_column');
-	var icon=new Element('div',{
-		'class':'kfm_file '+(kfm_listview?'kfm_file_listview':'kfm_file_icon kfm_icontype_'+ext),
-		'styles':{
-			'cursor':(window.ie?'hand':'pointer')
-		},
-		'events':{
-			'click':kfm_toggleSelectedFile,
-			'dblclick':function(e){
-				e=new Event(e);
-				var el=e.target;
-				while(!el.file_id && el)el=el.parentNode;
-				if(!el)return;
-				kfm_selectNone();
-				kfm_addToSelection(el.file_id);
-				kfm_chooseFile();
-			}
-		}
-	});
-	if(!kfm_listview){
-		/// #### Change		pBaran		18/12/2007		Foliovision
-		/// Details of file will only be displayed in File details panel, no tooltip will be showing up.
-		icon.addEvent('mouseover',function(e){ // initialise info tooltip
-//			if(window.kfm_tooltipInit)$clear(window.kfm_tooltipInit);
-//			if(window.kdnd_dragging)return; // don't open if currently dragging files
-			e=new Event(e);
-//			window.kfm_tooltipInit=setTimeout('kfm_showToolTip('+e.target.file_id+')',500);
-			if( !bFileSelected ) kfmAdd_run_delayed( 'file_details', 'kfm_showFileDetails(' + e.target.file_id + ');', 50 );
-		});
-		icon.addEvent('mouseout',function(){ // remove info tooltip
-//			if(window.kfm_tooltipInit)$clear(window.kfm_tooltipInit);
-//			var o=$('kfm_tooltip');
-//			if(o)o.remove();
-			if( !bFileSelected ) kfmAdd_run_delayed( 'file_details', 'kfm_showFileDetails();', 50 );
-		});
-		/// #### End of change		pBaran		18/12/2007
-	}
-	kfm_addContextMenu(icon,function(e){
-		var el=e.target;
-		while(el.parentNode&&!el.file_id)el=el.parentNode;
-		if(!el.parentNode)return;
-		
-		/// #### Change		pBaran		12/12/2007		Foliovision
-		if( iCaller == -1 ) kfmAdd_TryToFindCaller();
-		/// #### End of change		pBaran		12/12/2007
-		
-		{ // variables
-			var links=[],i,id=el.file_id;
-			var F=File_getInstance(id);
-			var extension=F.name.replace(/.*\./,'').toLowerCase();
-			var writable=F.writable;
-		}
-		{ // add the links
-/// #### Change		pBaran		xx/11/2007-10/12/2007		Foliovision
-/**
- *	Changed the context menu so that only options that Foliovision wants will be there
- */ 
-			if(selectedFiles.length>1){
-				//if(!window.ie)links.push(['kfm_downloadSelectedFiles()','download selected files']); // IE can't handle this...
-				//links.push(['kfm_deleteSelectedFiles()',kfm.lang.DeleteFile,'remove',!kfm_vars.permissions.file.rm]);
-				//var imgs=[];
-				//for(var i=0;i<selectedFiles.length;++i)if(File_getInstance(selectedFiles[i]).width)imgs.push(selectedFiles[i]);
-				//if(imgs.length)links.push(['kfm_img_startLightbox(['+imgs.join(',')+'])','view slideshow']);
-			}
-			else{
-				//links.push(['kfm_downloadSelectedFiles('+id+')','download file']);
-				//links.push(['kfm_renameFile('+id+')',kfm.lang.RenameFile,'edit',!kfm_vars.permissions.file.ed]);
-				if(F.width){
-					/*if(writable){
-						//var manip=!(kfm_vars.permissions.file.ed&&kfm_vars.permissions.image.manip);
-						//links.push(['kfm_rotateImage('+id+',270)',kfm.lang.RotateClockwise,'rotate_cw',manip]);
-						//links.push(['kfm_rotateImage('+id+',90)',kfm.lang.RotateAntiClockwise,'rotate_ccw',manip]);
-						//links.push(['kfm_resizeImage('+id+')',kfm.lang.ResizeImage,'resize_image',manip]);
-						//links.push(['kfm_cropImage('+id+')','crop', '', manip]);
-					}*/
-					//links.push(['kfm_returnThumbnail('+id+')',kfm.lang.ReturnThumbnailToOpener]);
-					if( iCaller == 0 ){
-						for( ii=0; ii<aThumbSizes.length; ii++  ) {
-    						///   Addition    29/10/09    Foliovision
-    						if(aThumbSizes[ii]>F.width)
-                                continue;
-    						///   End of addition
-                            links.push(['kfmAdd_returnImageWithFormating(' + id + ', ' + aThumbSizes[ii] + ')','Send ' + aThumbSizes[ii] + ' thumbnail']);
-                        }
-						links.push(['kfmAdd_returnImageWithFormating(' + id + ', ' + 0 + ')',kfm.lang.ReturnImageToOpener]);
-						links.push(['kfmAdd_returnImage('+id+')','Send bare image']);
-						///   Addition    23/07/09    Foliovision
-						links.push(['kfmAdd_returnImageThumbnail(' + id + ', ' + aThumbSizes[aThumbSizes.length-1] + ')','Open thumbnail image']);
-						///   End of Addition 23/07/09    Foliovision
-					}else{
-						for( ii=0; ii<aThumbSizes.length; ii++  ) links.push(['kfmAdd_returnSetUrl(' + id + ', ' + aThumbSizes[ii] + ')','Send ' + aThumbSizes[ii] + ' thumbnail']);
-						links.push(['kfmAdd_returnSetUrl(' + id + ', ' + 0 + ')',kfm.lang.ReturnImageToOpener]);
-					}
-					links.push(['kfmAdd_openInWindow('+id+')',kfm.lang.ViewImage]);
-					links.push( ['kfmAdd_copyUrl(' + id + ', ' + 0 + ')', 'Copy to clipboard'] );
-					//links.push(['kfm_changeCaption('+id+')',kfm.lang.ChangeCaption,'edit',!kfm_vars.permissions.file.ed]);
-					
-				/// #### Change		pBaran		18/12/2007		Foliovision
-				/// sends any file url into post
-				}else{
-					links.push(['kfmAdd_returnPlainUrl(' + id + ', ' + 0 + ')',kfm.lang.ReturnImageToOpener]);
-				}
-				/// #### End of change		pBaran		18/12/2007
-				
-				//if(kfm_inArray(extension,['zip']))links.push(['kfm_extractZippedFile("'+id+'")',kfm.lang.ExtractZippedFile,'extract_zip',!kfm_vars.permissions.file.mk]);
-				if(kfm_inArray(extension,viewable_extensions)){
-					links.push(['x_kfm_getTextFile("'+id+'",function(res){kfm_textfile_initEditor(res,'+((writable&&kfm_inArray(extension,editable_extensions))?'false':'true')+');})',kfm.lang.EditTextFile,'edit',!kfm_vars.permissions.file.ed]);
-				}
-				links.push(['kfm_deleteFile('+id+')',kfm.lang.DeleteFile,'remove',!kfm_vars.permissions.file.rm]);
-			}
-			//links.push(['kfm_tagAdd('+id+')',kfm.lang.AddTagsToFiles,'add_tags',!kfm_vars.permissions.file.ed]);
-			//links.push(['kfm_tagRemove('+id+')',kfm.lang.RemoveTagsFromFiles,'',!kfm_vars.permissions.file.ed]);
-/// #### End of change		pBaran		xx/11/2007-10/12/2007
-			kfm_createContextMenu(e.page,links);
-		}
-	});
-	do{
-		var a=b.at,fdata=fsdata[a];
-		if(wrapper.contentMode!='file_icons')return (window.kfm_incrementalFileDisplay_vars=null);
-		var name=fdata.name,ext=name.replace(kfm_regexps.all_up_to_last_dot,''),b,fullfilename=kfm_cwd_name+'/'+name,id=fdata.id;
-		var F=File_getInstance(id,fdata);
-		var nameEl=F.getText('name');
-		var el=icon.cloneNode(true);
-		el.cloneEvents(icon);
-		el.id='kfm_file_icon_'+id;
-		el.dragDisplay=kfm_file_bits.dragDisplay;
-		var writable=fdata.writable;
-		{ // file attributes
-			el.file_id=id;
-			if(!kfm_listview && fdata.width)F.setThumbnailBackground(el);
-			wrapper.files[a]=el;
-		}
-		kfm.addEl(wrapper,el);
-		if(kfm_listview){
-			var listview_table=$('kfm_files_listview_table');
-			var rows=listview_table.rows.length;
-			var row=listview_table.insertRow(rows);
-			row.className=rows%2?'even':'odd';
-			var cell=row.insertCell(0);
-			cell.appendChild(el);
-			row.insertCell(1).appendChild(F.getText('filesize'));
-			row.insertCell(2).appendChild(F.getText('mimetype'));
-			row.insertCell(3).appendChild(F.getText('modified'));
-		}
-		else wrapper.appendChild(el);
-		el.appendChild(nameEl);
-		if(a&&$('kfm_file_icon_'+fsdata[a-1].id).offsetLeft>=el.offsetLeft)el.setStyle('clear','left');
-		window.kfm_incrementalFileDisplay_vars.at=a+1;
-	}while(a+1<fsdata.length && (a+1)%kfm_show_files_in_groups_of);
-	if(a+1<fsdata.length)window.kfm_incrementalFileDisplay_loader=setTimeout('kfm_incrementalFileDisplay()',1);
-	else kdnd_makeDraggable('kfm_file');
-}
-function kfm_refreshFiles(res){
-
-	/// Addition		pBaran		11/07/2008		Foliovision
-	if( 0 < kfm_cwd_id_startup ){
-		for( var i=0; i<kfm_startup_dirs.length; i++ ) kfm_refreshDirectories( kfm_startup_dirs[i] );
-		kfm_changeDirectory( 'kfm_directory_icon_' + kfm_startup_dirs[kfm_startup_dirs.length-1].parent );
-		kfm_refreshPanels('kfm_left_column');
-		kfm_cwd_id_startup = -1;
+function kfm_incrementalFileDisplay(refresh_count){
+	if(refresh_count!=kfm_vars.files.refresh_count){ // a new refresh is fired
 		return;
 	}
+	var a,b,fsdata,wrapper,fdata,name,F,el,id,prevEl;
+	b=window.kfm_incrementalFileDisplay_vars;
+	fsdata=b.data.files;
+
+	wrapper=document.getElementById('documents_body');
+	
+	if(wrapper.contentMode!='file_icons')return (window.kfm_incrementalFileDisplay_vars=null);
+	icon=kfm_getCachedIcon(kfm_listview);
+
+	a=b.at;
+	if(a)prevEl=document.getElementById('kfm_file_icon_'+fsdata[a-1].id);
+	do{
+		fdata=fsdata[a];
+		name=fdata.name;
+		id=fdata.id;
+		F=File_getInstance(id,fdata);
+		ext=fdata.ext;
+		el=icon.cloneNode(true);
+		if(!kfm_listview){ // add icon holder
+			var img=document.createElement('div');
+			img.className='img_holder';
+			el.appendChild(img);
+			el.imageHolder=img;
+		}
+		kfm_fileIcon_addEvents(el);
+		el.id='kfm_file_icon_'+id;
+		el.file_id=id;
+		wrapper.files[a]=el;
+		el.appendChild(F.getText('name'));
+		if(kfm_listview){
+			var cs=0,cell;
+			var listview_table=$j('#kfm_files_listview_table tbody').get(0);
+			var rows=listview_table.rows.length;
+			var row=listview_table.insertRow(rows);
+			row.fileid=F.id;
+			row.id='kfm_files_listview_table_row'+F.id;
+			cell=row.insertCell(cs++);
+			cell.className='listview_icon listview_icon_'+ext;
+			cell.innerHTML='&nbsp;';
+			row.insertCell(cs++).appendChild(el);
+			{ // file size
+				cell=row.insertCell(cs++);
+				var hidden=document.createElement('span');
+				hidden.style.display='none';
+				hidden.appendChild(document.createTextNode(F.filesize_raw));
+				cell.appendChild(hidden);
+				cell.appendChild(F.getText('filesize'));
+			}
+			row.insertCell(cs++).appendChild(F.getText('ext'));
+			{ // modified time
+				cell=row.insertCell(cs++);
+				var hidden=document.createElement('span');
+				hidden.style.display='none';
+				hidden.appendChild(document.createTextNode(F.ctime));
+				cell.appendChild(hidden);
+				cell.appendChild(F.getText('modified'));
+			}
+		}
+		else{
+			el.className+=' kfm_icontype_'+ext;
+			wrapper.appendChild(el);
+			if(a&&prevEl.offsetLeft>=el.offsetLeft)el.style.clear='left';
+		}
+		prevEl=el;
+		++a;
+	}while(a<fsdata.length && a%kfm_show_files_in_groups_of);
+	window.kfm_incrementalFileDisplay_vars.at=a;
+	if(a<fsdata.length)kfm_incrementalFileDisplay(refresh_count);
+	else{ // finished displaying icons
+		kdnd_makeDraggable('kfm_file');
+		if(kfm_listview){
+			$j('#kfm_tooltip').remove();
+			$j('#kfm_files_listview_table').columnSizing();
+			$j('#kfm_files_listview_table').tablesorter({
+				sortList:[[1,0]],
+				headers:{
+					1:{
+						sorter:'kfmobject'
+					}
+				},
+				widgets:['zebra']
+			});
+		}
+		else kfm_files_reflowIcons();
+		$j('#documents_loader').html('&nbsp;');
+		if(kfm_vars.startup_selectedFiles){
+			for(var i=0;i<kfm_vars.startup_selectedFiles.length;++i){
+        kfm_selectNone(); //added zUhrikova 21/02/2010 Foliovision
+        kfm_addToSelection(kfm_vars.startup_selectedFiles[i]);
+      }
+			kfm_vars.startup_selectedFiles=false;
+		}
+	}
+}
+function kfm_fileIcon_addEvents(icon){
+	$j.event.add(icon,'mouseover',function(e){
+      if(!kfm_listview)window.kfm_file_bits.infoTooltipStart(e);
+		//kfm_showFileDetails(selectedFiles[selectedFiles.length-1]);
+      if(this.hasActionEvents)return;
+//		if (!e.ctrlKey){
+      $j.event.add(this,'click', kfm_toggleSelectedFile);
+     	$j.event.add(this,'dblclick',window.kfm_file_bits.dblclick);
+   	if(!kfm_listview)$j.event.add(this,'mouseout',window.kfm_file_bits.infoTooltipStop);
+		kfm_addContextMenu(icon,window.kfm_file_bits.contextMenu);
+		this.hasActionEvents=true;
+		this.dragDisplay=kfm_file_bits.dragDisplay;
+	});
+/*	$j.event.add(icon,'mouseover',function(e){
+	   // Changed zUhrikova 05/02/2010 Foliovision
+		if(!kfm_listview) 
+      window.kfm_file_bits.infoTooltipStart(e); 
+		/*  if( !bFileSelected )
+		  {   //e=new Event(e);
+		      window.kfm_showFileDetails(e.target.file_id);
+//    		window.kfm_run_delayed( 'file_details', 'kfm_showFileDetails(' + e.target.file_id + ');', 50 );
+    		  }*/
+  		   // 
+      // End of change zUhrikova
+	/*	if(this.hasActionEvents)return;
+		$j.event.add(this,'click',kfm_toggleSelectedFile);
+		$j.event.add(this,'dblclick',window.kfm_file_bits.dblclick);
+		if((!kfm_listview))
+        $j.event.add(this,'mouseout',window.infoTooltipStop);
+      kfm_addContextMenu(icon,window.kfm_file_bits.contextMenu);
+		this.hasActionEvents=true;
+		this.dragDisplay=kfm_file_bits.dragDisplay;
+	});*/
+}
+function kfm_refreshFiles(res){
+	/// Addition		pBaran		11/07/2008		Foliovision
+	if( 0 < kfm_cwd_id_startup ){
+//	   console.log(kfm_startup_dirs);
+		for( var i=0; i<kfm_startup_dirs.length-1; i++ )
+        kfm_refreshDirectories( kfm_startup_dirs[i] );
+		kfm_changeDirectory( 'kfm_directory_icon_' + kfm_startup_dirs[kfm_startup_dirs.length-1].parent );//
+   	kfm_refreshPanels('kfm_left_column');
+		kfm_cwd_id_startup = -1;
+		return;
+	} 
 	/// End of addition		pBaran		11/07/2008
 
-	kdnd_addDropHandler('kfm_file','.kfm_directory_link',function(e){
-		dir_over=e.targetElement.node_id;
-		var links=[];
-		links.push(['x_kfm_copyFiles(['+selectedFiles.join(',')+'],'+dir_over+',kfm_showMessage);kfm_selectNone()',kfm.lang.CopyFiles]);
-		links.push(['x_kfm_moveFiles(['+selectedFiles.join(',')+'],'+dir_over+',function(e){if($type(e)=="string")return alert(kfm.lang.CouldNotMoveFiles);kfm_removeFilesFromView(['+selectedFiles.join(',')+'])});kfm_selectNone()',kfm.lang.MoveFiles,0,!kfm_vars.permissions.file.mv]);
-		kfm_createContextMenu(e.page,links);
-	});
+	if(!res.files)return;
+	kfm_show_number_of_files(res.files.length);
+	kdnd_addDropHandler('kfm_file','.kfm_directory_link',kfm_files_dragToDirectory);
 	if(window.kfm_incrementalFileDisplay_loader){
-		$clear(window.kfm_incrementalFileDisplay_loader);
+		clearTimeout(window.kfm_incrementalFileDisplay_loader);
 		window.kfm_incrementalFileDisplay_vars=null;
 	}
 	kfm_selectNone();
 	if(!res)return;
 	if(res.parent)kfm_cwd_id=res.parent;
-	if(res.toString()===res)return kfm_log(res);
+	if(res.toString()===res)return;
 	window.kfm_incrementalFileDisplay_vars={at:0,data:res};
-	var a,b,lowest_name,lowest_index,wrapper=$('kfm_right_column').empty();
+	var a,b,lowest_name,lowest_index,s,wrapper;
+	wrapper=document.getElementById('documents_body');
+	wrapper.innerHTML='';
 	$extend(wrapper,{contentMode:'file_icons',fileids:[],files:[]});
-	var lselect=new Element('select',{
-		'styles':{
-			'position':'absolute',
-			'z-index':2,
-			'right':0,
-			'top':1,
-			'border':0
-		},
-		'events':{
-			'change':function(){
-				kfm_listview=parseInt(this.value);
-				x_kfm_loadFiles(kfm_cwd_id, kfm_refreshFiles);
-			}
-		}
-	});
-	lselect.appendChild((new Element('option',{
-		'selected':!kfm_listview,
-		'value':0
-	})).appendText(kfm.lang.Icons));
-	lselect.appendChild((new Element('option',{
-		'selected':kfm_listview,
-		'value':1
-	})).appendText(kfm.lang.ListView));
-	var header=new Element('div',{
-		'class':'kfm_panel_header',
-		'id':'kfm_panel_header'
-	}).setHTML('<span>'+kfm.lang.CurrentWorkingDir(res.reqdir)+'</span>');
-	wrapper.appendChild(lselect);
-	wrapper.appendChild(header);
+	document.getElementById('cwd_display').innerHTML=kfm.lang.CurrentWorkingDir(res.reqdir);
 	{ // order files by name
 		if(!res.files)res.files=[];
 		for(a=0;a<res.files.length-1;++a){
@@ -396,107 +292,49 @@ function kfm_refreshFiles(res){
 		}
 	}
 	for(a=0;a<res.files.length;++a)wrapper.fileids[a]=res.files[a].id;
+	kfm_directories[kfm_cwd_id].hasChildren=res.files.length;
 	document.title='KFM: '+res.reqdir;
 	kfm_lastClicked=null;
-	kfm_log(kfm.lang.FilesRefreshed);
-	if(res.uploads_allowed)kfm_addPanel('kfm_left_column','kfm_file_upload_panel');
+	if(res.uploads_allowed)kfm_addPanel(document.getElementById('kfm_left_column'),'kfm_file_upload_panel');
 	else kfm_removePanel('kfm_left_column','kfm_file_upload_panel');
 	kfm_refreshPanels('kfm_left_column');
-	if(!res.files.length)kfm.addEl(wrapper,(new Element('span',{
-		'class':'kfm_empty'
-	})).setHTML(kfm.lang.DirEmpty(res.reqdir)));
-	else{
+	if(!res.files.length){
+		$j('#documents_loader').empty().html('&nbsp;');
+		s=document.createElement('span');
+		s.className='kfm_empty';
+		s.innerHTML=kfm.lang.DirEmpty(res.reqdir);
+		wrapper.appendChild(s);
+	}else{
 		if(kfm_listview){
-			var listview_table=new Element('table',{
-				'id':'kfm_files_listview_table'
-			});
+			var listview_table=document.createElement('table');
+			listview_table.id='kfm_files_listview_table';
 			wrapper.appendChild(listview_table);
-			listview_table.setHTML('<tbody><tr class="listview_headers"><th>Name</th><th>Size</th><th>Type</th><th>Modified</th></tr></tbody>');
+			$j(listview_table).html('<thead><tr class="listview_headers"><th>&nbsp;</th><th id="listview_headers_name">'+_('Name',0,0,1)+'</th><th id="listview_headers_size">'+_('Size',0,0,1)+'</th><th id="listview_headers_type">'+_('Type',0,0,1)+'</th><th id="listview_headers_lastmodified">'+_('Last Modified',0,0,1)+'</th></tr></thead><tbody></tbody>');
+			$j(listview_table).css('width','99%');
 		}
-		kfm_incrementalFileDisplay();
+		kfm_vars.files.refresh_count++;
+		kfm_incrementalFileDisplay(kfm_vars.files.refresh_count);
 	}
 }
-function kfm_removeFilesFromView(files){
-	kfm_selectNone();
-	if($type(files)!='array')return;
-	var i=0,right_column=$('kfm_right_column');
-	for(var i=0;i<files.length;++i){
-		var el=$('kfm_file_icon_'+files[i]);
-		if(el){
-			if(kfm_listview)el.parentNode.parentNode.remove();
-			else el.remove();
-		}
-		right_column.fileids.remove(files[i]);
-	}
+function kfm_show_number_of_files(num){
+	$j('#folder_info').text(num+(num==1?' file':' files')); //TODO new string
 }
-function kfm_renameFile(id){
-	var filename=File_getInstance(id).name;
-	kfm_prompt(kfm.lang.RenameFileToWhat(filename),filename,function(newName){
-		if(!newName||newName==filename)return;
-		kfm_log(kfm.lang.RenamedFile(filename,newName));
-		x_kfm_renameFile(id,newName,kfm_refreshFiles);
-	});
-}
-function kfm_renameFiles(nameTemplate){
-	if(nameTemplate && nameTemplate.toString()!==nameTemplate)nameTemplate='';
-	var ok=false;
-	kfm_prompt(kfm.lang.HowWouldYouLikeToRenameTheseFiles,nameTemplate,function(nameTemplate){
-		var asterisks=nameTemplate.replace(/[^*]/g,'').length;
-		if(!nameTemplate)return;
-		if(!/\*/.test(nameTemplate))alert(kfm.lang.YouMustPlaceTheWildcard);
-		else if(/\*[^*]+\*/.test(nameTemplate))alert(kfm.lang.IfYouUseMultipleWildcards);
-		else if(asterisks<(''+selectedFiles.length).length)alert(kfm.lang.YouNeedMoreThan(asterisks,selectedFiles.length));
-		else ok=true;
-		if(!ok)return kfm_renameFiles(nameTemplate);
-		x_kfm_renameFiles(selectedFiles,nameTemplate,kfm_refreshFiles);
-	});
-}
-function kfm_runSearch(){
-/// Change		pBaran		18/12/2007		Foliovision
-//	kfm_run_delayed('search','var keywords=$("kfm_search_keywords").value,tags=$("kfm_search_tags").value;if(keywords==""&&tags=="")x_kfm_loadFiles(kfm_cwd_id,kfm_refreshFiles);else x_kfm_search(keywords,tags,kfm_refreshFiles)');
-	var sCall = 'var id=' + kfm_cwd_id + ',keywords=$("kfm_search_keywords").value,tags=$("kfm_search_tags").value;if(keywords==""&&tags=="")x_kfm_loadFiles(kfm_cwd_id,kfm_refreshFiles);else x_kfm_search(id,keywords,tags,kfm_refreshFiles)';
-	kfm_run_delayed('search',sCall);
-/// End of change		pBaran		18/12/2007
-}
-function kfm_showFileDetails(id){
-	var res=File_getInstance(id);
-	var fd=$('kfm_file_details_panel'),el=$('kfm_left_column');
-	if(!fd){
-		kfm_addPanel('kfm_left_column','kfm_file_details_panel');
-		kfm_refreshPanels(el);
-	}
-	var body=$E('#kfm_file_details_panel div.kfm_panel_body').empty();
-	if(!res){
-		body.innerHTML=kfm.lang.NoFilesSelected;
-		return;
-	}
-	var table=kfm_buildFileDetailsTable(res);
-	kfm.addEl(body,table);
-}
-function kfm_showToolTip(id){
-	if(!id)return;
-	var F=File_getInstance(id);
-	var table=kfm_buildFileDetailsTable(F),icon=$('kfm_file_icon_'+id);
-	if(!icon||contextmenu)return;
-	table.id='kfm_tooltip';
-	kfm.addEl(document.body,table);
-	var l=getOffset(icon,'Left'),t=getOffset(icon,'Top'),w=icon.offsetWidth,h=icon.offsetHeight,ws=window.getSize().size;
-	l=(l+(w/2)>ws.x/2)?l-table.offsetWidth:l+w;
-	table.setStyles('position:absolute;top:'+t+'px;left:'+l+'px;visibility:visible;opacity:.9');
-}
-function kfm_zip(name){
-	if(!name || name.toString()!==name)name='zipped.zip';
-	var ok=false;
-	kfm_prompt(kfm.lang.WhatFilenameDoYouWantToUse,name,function(name){
-		if(!name)return;
-		if(/\.zip$/.test(name))ok=true;
-		else kfm.alert(kfm.lang.TheFilenameShouldEndWithN('.zip'));
-		if(!ok)return kfm_zip(name);
-		x_kfm_zip(name,selectedFiles,kfm_refreshFiles);
-	});
-}
-
-/// #### Add      pBaran      03/12/2007
+// { these are defined in their own files in /j/functions/
+llStubs.push('kfm_deleteFile');
+llStubs.push('kfm_deleteFiles');
+llStubs.push('kfm_deleteSelectedFiles');
+llStubs.push('kfm_downloadFileFromUrl');
+llStubs.push('kfm_downloadSelectedFiles');
+llStubs.push('kfm_downloadSelectedFiles_addIframe');
+llStubs.push('kfm_files_dragToDirectory');
+llStubs.push('kfm_extractZippedFile');
+llStubs.push('kfm_removeFilesFromView');
+llStubs.push('kfm_renameFile');
+llStubs.push('kfm_renameFiles');
+llStubs.push('kfm_showToolTip');
+llStubs.push('kfm_zip');
+// }
+/// #### Add zUhrikova code from older version by pBaran     03/02/2010 Foliovision
 
 var g_objPreviewWindow = null;
 var g_strPreviousUrl = "";
@@ -523,4 +361,4 @@ function kfmAdd_openInWindow( id ){
 	});
 }
 
-/// #### End of add     pBaran      03/12/2007
+/// #### End of add     zUhrikova     03/02/2010

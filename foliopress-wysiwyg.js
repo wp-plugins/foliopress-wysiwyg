@@ -220,3 +220,15 @@ function KFM_CheckPNG( bSelect ){
 	
 	bPNGTransform = bSelect;
 }
+function KFM_CheckDIR( bSelect ){
+	var elDIR = document.getElementById( 'chkDIRset' );
+	
+	if( bSelect ){
+		elDIR.checked = true;
+	}
+	else{
+		elDIR.checked = false;
+	}
+	
+	bDIRTransform = bSelect;
+}
