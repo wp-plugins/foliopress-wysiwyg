@@ -1,7 +1,3 @@
-<?php require_once( dirname( __FILE__ ) . '/../foliopress-wysiwyg-class.php' ); ?>
-
-<?php $options = get_option( FV_FCK_OPTIONS ); ?>
-
 /// PLEASE CHANGE THIS FILE ONLY IF YOU KNOW WHAT YOU ARE DOING !!!!!
 
 /*
@@ -15,6 +11,10 @@ If you want to add skin, just copy it into default skins directory, it will
 automatically load into Options page. Again make sure skin you are adding is
 correct.
 */
+
+/*<?php require_once( dirname( __FILE__ ) . '/../foliopress-wysiwyg-class.php' ); ?>*/
+
+<?php $options = get_option( FV_FCK_OPTIONS ); ?>
 
 /* toolbars */
 
