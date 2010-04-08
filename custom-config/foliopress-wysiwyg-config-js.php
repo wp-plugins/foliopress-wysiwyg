@@ -12,7 +12,7 @@ automatically load into Options page. Again make sure skin you are adding is
 correct.
 */
 
-/*<?php require_once( dirname( __FILE__ ) . '/../foliopress-wysiwyg-class.php' ); ?>*/
+/* (todo - some nicer way how to load the plugin with no warnings) <?php require_once( dirname( __FILE__ ) . '/../foliopress-wysiwyg-class.php' ); ?>*/
 
 <?php $options = get_option( FV_FCK_OPTIONS ); ?>
 
