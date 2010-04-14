@@ -53,3 +53,24 @@ You can configure it in the Advanced options.
 = What about some more buttons? =
 
 You can customize the styling dropdown.
+
+= Your plugin is not working, all I can see it this: =
+
+> Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96
+
+Contact your webhost to switch you to PHP 5, you are probably still running on obsolete PHP 4.
+
+= I get a ugly message like this one: =
+
+> Warning: mkdir() [function.mkdir]: Permission denied in /home/... ..../wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/plugins/kfm/initialise.php on line 172
+
+Make sure your /images directory has the 777 permissions. 755 can be enough too, depending on your PHP configuration (PHP Fast CGI).
+
+= I get the paste as plain text dialogue box whenever I try to paste with Ctrl + V into a post. =
+
+We are doing our best to protect your post from the bad HTML code in case you are pasting from programs like Microsoft Office or web sites.
+
+However, if you still want to disable this dialog by default, do the following: 
+
+1. Open this file: /wp-content/plugins/foliopress-wysiwyg/fckeditor/fckconfig.js
+1. Change ÒFCKConfig.ForcePasteAsPlainText= true ;Ó to ÒFCKConfig.ForcePasteAsPlainText= false ;Ó
