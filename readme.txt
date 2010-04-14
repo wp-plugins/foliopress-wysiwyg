@@ -73,4 +73,4 @@ We are doing our best to protect your post from the bad HTML code in case you ar
 However, if you still want to disable this dialog by default, do the following: 
 
 1. Open this file: /wp-content/plugins/foliopress-wysiwyg/fckeditor/fckconfig.js
-1. Change ÒFCKConfig.ForcePasteAsPlainText= true ;Ó to ÒFCKConfig.ForcePasteAsPlainText= false ;Ó
+1. Change "FCKConfig.ForcePasteAsPlainText= true ;" to "FCKConfig.ForcePasteAsPlainText= false ;"
