@@ -54,14 +54,16 @@ You can configure it in the Advanced options.
 
 You can customize the styling dropdown.
 
-= Your plugin is not working, all I can see it this: > Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96 =
+= Your plugin is not working, all I can see it this: =
+
+> Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96
 
 Contact your webhost to switch you to PHP 5, you are probably still running on obsolete PHP 4.
 
 = I get a ugly message like this one: =
 
 > Warning: mkdir() [function.mkdir]: Permission denied in /home/... ..../wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/plugins/kfm/initialise.php on line 172
-
+s
 Make sure your /images directory has the 777 permissions. 755 can be enough too, depending on your PHP configuration (PHP Fast CGI).
 
 = I get the paste as plain text dialogue box whenever I try to paste with Ctrl + V into a post. =
