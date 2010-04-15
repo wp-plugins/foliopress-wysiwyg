@@ -54,8 +54,7 @@ You can configure it in the Advanced options.
 
 You can customize the styling dropdown.
 
-= Your plugin is not working, all I can see it this: 
-> Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96 =
+= Your plugin is not working, all I can see it this: > Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96 =
 
 Contact your webhost to switch you to PHP 5, you are probably still running on obsolete PHP 4.
 
