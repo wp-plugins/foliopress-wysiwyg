@@ -172,7 +172,6 @@ class kfmFile extends kfmObject{
 	 * @return Object file or image
 	 */
 	function getInstance($id=0){
-	$file=fopen($_SERVER['DOCUMENT_ROOT']."/debug.txt","a");
 		if(is_object($id))$id=$id->id;
 		$id=(int)$id;
 		if($id<1)return;

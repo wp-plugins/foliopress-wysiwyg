@@ -413,6 +413,18 @@ class fp_wysiwyg_class{
 		if( $this->bUseFCK ) {
 			print( 'fv_wysiwyg_load();' );
 		} ?>
+		
+		jQuery(document).ready(function() {
+      window.setTimeout("fv_wysiwyg_update_content();", 5000);
+    });
+    
+		function fv_wysiwyg_update_content() {
+		  if( typeof(FCKeditorAPI) != 'undefined' ) {
+		    /*console.log( FCKeditorAPI.GetInstance('content').GetXHTML() );*/
+		    jQuery('#content').val( FCKeditorAPI.GetInstance('content').GetXHTML() );
+		  }
+		  setTimeout("fv_wysiwyg_update_content();", 5000);
+		}
 		</script>
 <?php 
 	}

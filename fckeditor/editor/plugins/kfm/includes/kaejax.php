@@ -6,9 +6,10 @@
 }	
 function kfm_kaejax_handle_client_request(){
 	if(!isset($_POST['kaejax']))return;  
-	$file=fopen($_SERVER['DOCUMENT_ROOT']."/debug.txt","a");
-  //added zUhrikova 2010/02/12
-  $kae_replaced = str_replace('\"','"',$_POST['kaejax']);
+  
+  preg_match( '/(\\\*)?"/i', $_POST['kaejax'], $escape_junk );  //  let's find out how many escapes for " there are and store it
+  $kae_replaced = str_replace( $escape_junk[1],'',$_POST['kaejax']);  //  it's the array item with number 1
+  
   $unmangled=kfm_decode_unicode_url(str_replace(array('%2B',"\r","\n","\t"),array('+','\r','\n','\t'),$kae_replaced));
   $obj=kfm_json_decode($unmangled);
 	$fs=$obj->c;
