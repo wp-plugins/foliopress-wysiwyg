@@ -84,6 +84,8 @@ Here's how you can switch the language:
 2. search for FCKConfig.DefaultLanguage = 'en' ; and change it to
 FCKConfig.DefaultLanguage = 'de' ;
 
+(you are able to get full list of languages in /wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/lang)
+
 3. search for FCKConfig.AutoDetectLanguage = true ; and change it to
 FCKConfig.AutoDetectLanguage    = false ;
 
