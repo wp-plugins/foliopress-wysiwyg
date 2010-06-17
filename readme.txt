@@ -79,7 +79,7 @@ However, if you still want to disable this dialog by default, do the following:
 
 Here's how you can switch the language:
 
-1. open foliopress-wysiwyg/fckeditor/fckconfig.js
+1. open /wp-content/plugins/foliopress-wysiwyg/fckeditor/fckconfig.js
 
 2. search for FCKConfig.DefaultLanguage = 'en' ; and change it to
 FCKConfig.DefaultLanguage = 'de' ; (you are able to get full list of languages in /wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/lang)
