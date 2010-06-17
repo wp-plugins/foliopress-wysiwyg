@@ -74,3 +74,18 @@ However, if you still want to disable this dialog by default, do the following:
 
 1. Open this file: /wp-content/plugins/foliopress-wysiwyg/fckeditor/fckconfig.js
 1. Change "FCKConfig.ForcePasteAsPlainText= true ;" to "FCKConfig.ForcePasteAsPlainText= false ;"
+
+= How about different language versions? =
+
+Here's how you can switch the language:
+
+1. open foliopress-wysiwyg/fckeditor/fckconfig.js
+
+2. search for FCKConfig.DefaultLanguage = 'en' ; and change it to
+FCKConfig.DefaultLanguage = 'de' ;
+
+3. search for FCKConfig.AutoDetectLanguage = true ; and change it to
+FCKConfig.AutoDetectLanguage    = false ;
+
+We will try to make this easier in one of the next versions. Also our
+custom buttons and Image Managemetn won't be translated for now.
