@@ -85,7 +85,6 @@ Here's how you can switch the language:
 FCKConfig.DefaultLanguage = 'de' ; (you are able to get full list of languages in /wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/lang)
 
 3. search for FCKConfig.AutoDetectLanguage = true ; and change it to
-FCKConfig.AutoDetectLanguage    = false ;
+FCKConfig.AutoDetectLanguage = false ;
 
-We will try to make this easier in one of the next versions. Also our
-custom buttons and Image Managemetn won't be translated for now.
+In a future version, we will be adding languages to the Settings panel. Please note that the image management system remains English for the moment but will also be updated to multilingual in 2010.
