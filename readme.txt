@@ -94,7 +94,7 @@ In a future version, we will be adding languages to the Settings panel. Please n
 = 0.9.12 =
 * works with Wordpress 3.0
 * working Word count 
-Flash/no Flash uploader option fixed
+* Flash/no Flash uploader option fixed
 
 = 0.9.11 =
 * Wordpress autosave support
