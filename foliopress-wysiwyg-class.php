@@ -671,11 +671,11 @@ class fp_wysiwyg_class{
     		global $post;
 				$meta = get_post_meta( $post->ID, 'wysiwyg', true );
 
-				if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {echo '1';
+				if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
 					return $content;
 				}
 
-        if(!$this->aOptions['autowpautop']) {echo '2';
+        if(!$this->aOptions['autowpautop']) {
             return $content;
         }
         if(strlen($content)>0) {   // try to guess if the post should use wpautop
@@ -683,7 +683,7 @@ class fp_wysiwyg_class{
                 return wpautop($content);      
             /*if(stripos($content,'&lt;p&gt;')===FALSE && (stripos($content,'<')===FALSE || stripos($content,'>')===FALSE) )
                 return wpautop($content);*/      
-        }echo '3';
+        }
         return $content;
     }
 	///  End of addition
