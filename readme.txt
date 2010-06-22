@@ -1,6 +1,6 @@
 === Foliopress WYSIWYG ===
 Contributors: FolioVision
-Tags: wysiwyg,editor,foliopress,image,images,seo,lightbox
+Tags: wysiwyg,editor,foliopress,image,images,seo,lightbox,fck
 Requires at least: 2.2.3
 Tested up to: 3.0 
 Stable tag: trunk
@@ -88,3 +88,66 @@ FCKConfig.DefaultLanguage = 'de' ; (you are able to get full list of languages i
 FCKConfig.AutoDetectLanguage = false ;
 
 In a future version, we will be adding languages to the Settings panel. Please note that the image management system remains English for the moment but will also be updated to multilingual in 2010.
+
+== Changelog ==
+
+= 0.9.12 =
+* works with Wordpress 3.0
+* working Word count 
+Flash/no Flash uploader option fixed
+
+= 0.9.11 =
+* Wordpress autosave support
+* better Wordpress MU support
+* HTML entities are not processed by default - keeping your accented characters unchanged
+
+= 0.9.10 =
+* Image management tool is now using new version of KFM which works with Safari
+* Image management tool now allows multiple file uploads via built-in Flash uploader
+* Plain text editing option for posts
+* Wpautop and wptexturize are disabled on posts edited with Foliopress WYSIWYG - makes sure your posts have the cleanest and untouched HTML possible
+
+= 0.9.8 =
+* WYSIWYG style configuration now resides in plugin options - easier configuration
+* Image management tool now appears with the right year/month/ directory opened
+* All uploaded images above certain height and width (check out plugin options) are sized down to fit into it
+* Works on sites with secured wp-config.
+* Insert FV Wordpress Flowplayer button added
+* Pasting dialog receives focus when it appears
+* Dreamhost JSON glitch fixed
+
+= 0.9.7 =
+* Easy Toolbar customization
+* Easy Formating dropdown customization
+
+= 0.9.6 =
+* Multiple image posting
+* No need to edit any configuration files
+* Available thumbnail sizes are limited by the size of the picture
+* Better security
+* Automatic wpautop can be turned off
+
+= 0.9.5 =
+* Safari editor window height issue fixed
+* Firefox spellchecker enabled by default
+
+= 0.9.4 =
+* Blockquote button added
+
+= 0.9.3 =
+* Introducing the Paste Rich Text Mode button to override standard paste dialog in Firefox and Safari. This lets you select between plain/formated text pasting.
+* Automatic wpautop
+
+= 0.9.2 =
+* Foliopress WYSIWYG now works on secure https sites.
+
+= 0.9.1 =
+* Bug fixes, new option to hide Wordpress Uploader Buttons.
+
+= 0.9 =
+* SEO Images are now compatible with FTP uploaded files. Read a manual on how to upload files and prepare them on handling with SEO Images.
+
+== Upgrade Notice ==
+
+= 0.9.12 =
+* Worpdress 3.0 compatibility added
