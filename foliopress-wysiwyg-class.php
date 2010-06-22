@@ -374,7 +374,7 @@ class fp_wysiwyg_class{
 	 */
 	function KillTinyMCE( $in ){
 		global $current_user;
-	
+
 		if ( 'true' == $current_user->rich_editing && strpos($_SERVER['REQUEST_URI'], 'wp-admin') !== false && strpos($_SERVER['REQUEST_URI'], 'wp-admin/profile.php') === false ){
 			$this->bUseFCK = true;
 			$current_user->rich_editing = 'false';
@@ -383,6 +383,13 @@ class fp_wysiwyg_class{
 		}
 
 		return $in;
+	}
+	
+	/*
+	Disable visual editor
+	*/
+	function user_can_richedit($can) {
+	   return false;
 	}
 	
 	function admin_init() {
@@ -440,6 +447,7 @@ class fp_wysiwyg_class{
 			print( 'fv_wysiwyg_load();' );
 		} ?>
 		
+		<?php if( $GLOBALS['wp_version'] >= 2.7 ) : ?>
 		jQuery(document).ready(function() {
       window.setTimeout("fv_wysiwyg_update_content();", 5000);
     });
@@ -449,8 +457,11 @@ class fp_wysiwyg_class{
 		    /*console.log( FCKeditorAPI.GetInstance('content').GetXHTML() );*/
 		    jQuery('#content').val( FCKeditorAPI.GetInstance('content').GetXHTML() );
 		  }
+		  
+		  wpWordCount.wc( FCKeditorAPI.GetInstance('content').GetXHTML() );
 		  setTimeout("fv_wysiwyg_update_content();", 5000);
 		}
+		<?php endif; ?>
 		</script>
 <?php 
 	}
@@ -660,11 +671,11 @@ class fp_wysiwyg_class{
     		global $post;
 				$meta = get_post_meta( $post->ID, 'wysiwyg', true );
 
-				if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
+				if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {echo '1';
 					return $content;
 				}
 
-        if(!$this->aOptions['autowpautop']) {
+        if(!$this->aOptions['autowpautop']) {echo '2';
             return $content;
         }
         if(strlen($content)>0) {   // try to guess if the post should use wpautop
@@ -672,7 +683,7 @@ class fp_wysiwyg_class{
                 return wpautop($content);      
             /*if(stripos($content,'&lt;p&gt;')===FALSE && (stripos($content,'<')===FALSE || stripos($content,'>')===FALSE) )
                 return wpautop($content);*/      
-        }
+        }echo '3';
         return $content;
     }
 	///  End of addition

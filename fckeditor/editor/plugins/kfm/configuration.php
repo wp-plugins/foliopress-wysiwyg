@@ -15,8 +15,11 @@
  * @link     http://kfm.verens.com/
  */
 
-require_once( dirname(__FILE__).'/../../../../../../../wp-load.php' );
-/*require_once( dirname(__FILE__).'/../../../../../../../wp-config.php' );
+if( file_exists( dirname(__FILE__).'/../../../../../../../wp-load.php' ) )
+  require_once( dirname(__FILE__).'/../../../../../../../wp-load.php' );
+else
+  require_once( dirname(__FILE__).'/../../../../../../../wp-config.php' );
+
 //if (!DB_HOST) require_once( dirname(__FILE__).'/../../../../../../../../../wp-config.php' );*/
 
 global $current_user;
