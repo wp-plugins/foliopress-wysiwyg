@@ -456,10 +456,10 @@ class fp_wysiwyg_class{
 		  if( typeof(FCKeditorAPI) != 'undefined' ) {
 		    /*console.log( FCKeditorAPI.GetInstance('content').GetXHTML() );*/
 		    jQuery('#content').val( FCKeditorAPI.GetInstance('content').GetXHTML() );
+		    wpWordCount.wc( FCKeditorAPI.GetInstance('content').GetXHTML() );
+		    setTimeout("fv_wysiwyg_update_content();", 5000);
 		  }
-		  
-		  wpWordCount.wc( FCKeditorAPI.GetInstance('content').GetXHTML() );
-		  setTimeout("fv_wysiwyg_update_content();", 5000);
+
 		}
 		<?php endif; ?>
 		</script>
