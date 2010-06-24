@@ -712,6 +712,10 @@ class fp_wysiwyg_class{
    }
    
    function wp_insert_post($id) {
+      $post = get_post( $id );
+      if( $post->post_type == 'revision' )
+        return $id;
+        
    		$meta = get_post_meta( $id, 'wysiwyg', true );
    		if( isset( $_POST['plain_text_editing']) ) {
 				$meta['plain_text_editing'] = true;
@@ -719,9 +723,7 @@ class fp_wysiwyg_class{
 			else {
 				$meta['plain_text_editing'] = false;
 			}
-			update_post_meta( $id, 'wysiwyg', $meta );
-			
-			$post = get_post( $id );
+	
 			$meta['post_modified'] = $post->post_modified;
 			update_post_meta( $id, 'wysiwyg', $meta );
    }
