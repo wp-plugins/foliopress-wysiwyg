@@ -99,6 +99,8 @@ Please check the following:
 
 3. If you are running a test site with no domain mapped, make sure your Apache DOCUMENT_ROOT directory is set properly. You need to contact your host technical support about this.
 
+In a future version, we will automate this checking process.
+
 == Changelog ==
 
 = 0.9.12 =
