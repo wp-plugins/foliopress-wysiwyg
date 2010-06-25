@@ -89,7 +89,7 @@ FCKConfig.AutoDetectLanguage = false ;
 
 In a future version, we will be adding languages to the Settings panel. Please note that the image management system remains English for the moment but will also be updated to multilingual in 2010.
 
-= I get "Toolbar set "Foliovision" doesn't exist" error message when I edit a post. =
+= I get 'Toolbar set "Foliovision" doesn't exist' error message when I edit a post. =
 
 Please check the following:
 
