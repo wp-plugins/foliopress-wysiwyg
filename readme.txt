@@ -42,6 +42,10 @@ manually.
 
 == Frequently Asked Questions ==
 
+= Is there any illustrated user guide? =
+
+Yes, right here: http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/end-user-guide
+
 = Is Foliopress WYSIWYG able to work with the images already stored on the site? =
 
 Yes it is. Depending on your PHP configuration, you might have to change the directory permissions according to [this guide](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/prepare-ftp-files-for-seo-images) in order to make thumbnails work.
@@ -53,6 +57,30 @@ You can configure it in the Advanced options.
 = What about some more buttons? =
 
 You can customize the styling dropdown.
+
+= How do I add a caption to the image? =
+
+First of all, make sure your image is properly named before uploading. Our image uploader will make sure that the actual uploaded filename will be SEO optimized. Then insert the image with the "Send thumbnail" function and the image name will be used as its caption. Then you can change it to anything you want, or remove it.
+
+The caption is bound to the image using an H5 tag. Here's the example HTML:
+
+`<h5><a rel="lightbox[slideshow]" title="testing image" href="/images/2009/11/testing-image.png"><img height="419" width="400" alt="testing image" src="/images/2010/06/400/testing-image.png" /></a><br />Image description</h5>`
+
+= What CSS is needed for the image alignment functions your editor provides? =
+
+Inserted images are put into a H5 tag together with the image description. Here's our standard CSS we use in our templates to display the images in H5.
+
+`/* Images in h5 */
+a img { border: none; }
+h5 { 	margin: 10px; padding: 0; line-height: 1.3em; font-size: 0.85em; font-weight: normal; text-align: center; }
+h5 img { padding: 5px; background-color: white; border: 1px solid silver; }
+h5.right { margin: 2px 0 2px 10px; text-align: center; font-weight: normal; float: right; }
+h5.left { margin: 2px 10px 2px 0; text-align: center; font-weight: normal; float: left;	}
+h5 a { text-decoration: none !important; color: #696969; }
+h5 a:link { text-decoration: none !important; color: #696969;	}
+h5.noborder img { border: none; }
+img.noborder { border: none; }
+.noborder { border: none; }`
 
 = Your plugin is not working, all I can see it this: =
 
@@ -93,7 +121,7 @@ In a future version, we will be adding languages to the Settings panel. Please n
 
 Please check the following:
 
-1. Make sure you are able to open this link: http://(enter-your-blog-address-here)/wp-content/plugins/foliopress-wysiwyg/custom-config/foliopress-wysiwyg-config-js.php You should see a Foliopress WYSIWYG JavaScript config file. If you get a 404 page, make sure the /wp-content/plugins/foliopress-wysiwyg/custom-config/ directory has right access permissions (probably 755) and that the PHP scripts are executed correctly from there.
+1. Make sure you are able to open this link: http:/&shy;/(enter-your-blog-address-here)/wp-content/plugins/foliopress-wysiwyg/custom-config/foliopress-wysiwyg-config-js.php You should see a Foliopress WYSIWYG JavaScript config file. If you get a 404 page, make sure the /wp-content/plugins/foliopress-wysiwyg/custom-config/ directory has right access permissions (probably 755) and that the PHP scripts are executed correctly from there.
 
 2. If you are using W3 Total Cache, make sure cache debug mode options are turned off.
 
