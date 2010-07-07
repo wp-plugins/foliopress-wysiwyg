@@ -121,7 +121,9 @@ In a future version, we will be adding languages to the Settings panel. Please n
 
 Please check the following:
 
-1. Make sure you are able to open this link: http:/&shy;/(enter-your-blog-address-here)/wp-content/plugins/foliopress-wysiwyg/custom-config/foliopress-wysiwyg-config-js.php You should see a Foliopress WYSIWYG JavaScript config file. If you get a 404 page, make sure the /wp-content/plugins/foliopress-wysiwyg/custom-config/ directory has right access permissions (probably 755) and that the PHP scripts are executed correctly from there.
+1. Make sure you are able to open this link: http:/&shy;/(enter-your-blog-address-here)/wp-content/plugins/foliopress-wysiwyg/custom-config/foliopress-wysiwyg-config-js.php
+
+You should see a Foliopress WYSIWYG JavaScript config file. If you get a 404 page, make sure the /wp-content/plugins/foliopress-wysiwyg/custom-config/ directory has right access permissions (probably 755) and that the PHP scripts are executed correctly from there.
 
 2. If you are using W3 Total Cache, make sure cache debug mode options are turned off.
 
