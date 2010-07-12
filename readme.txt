@@ -105,17 +105,7 @@ However, if you still want to disable this dialog by default, do the following:
 
 = How about different language versions? =
 
-Here's how you can switch the language:
-
-1. open /wp-content/plugins/foliopress-wysiwyg/fckeditor/fckconfig.js
-
-2. search for FCKConfig.DefaultLanguage = 'en' ; and change it to
-FCKConfig.DefaultLanguage = 'de' ; (you are able to get full list of languages in /wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/lang)
-
-3. search for FCKConfig.AutoDetectLanguage = true ; and change it to
-FCKConfig.AutoDetectLanguage = false ;
-
-In a future version, we will be adding languages to the Settings panel. Please note that the image management system remains English for the moment but will also be updated to multilingual in 2010.
+Check out the plugin settings. Please note that the image management system remains English for the moment but will also be updated to multilingual in 2010.
 
 = I get 'Toolbar set "Foliovision" doesn't exist' error message when I edit a post. =
 
