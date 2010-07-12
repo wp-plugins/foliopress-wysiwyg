@@ -92,7 +92,7 @@ Contact your webhost to switch you to PHP 5, you are probably still running on o
 
 > Warning: mkdir() [function.mkdir]: Permission denied in /home/... ..../wp-content/plugins/foliopress-wysiwyg/fckeditor/editor/plugins/kfm/initialise.php on line 172
 
-Make sure your /images directory has the 777 permissions. 755 can be enough too, depending on your PHP configuration (PHP Fast CGI).
+Make sure your /images directory has the 777 permissions. 755 can be enough too, depending on your PHP configuration (PHP Fast CGI). This directory should be located in the same place as your .htaccess file and Wordpress installation. It's referenced by your domain name.
 
 = I get the paste as plain text dialogue box whenever I try to paste with Ctrl + V into a post. =
 
