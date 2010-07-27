@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.14
+ * @version 0.9.15
  * @package foliopress-wysiwyg
  */
 

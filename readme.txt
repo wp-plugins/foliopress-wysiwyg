@@ -123,6 +123,10 @@ In a future version, we will automate this checking process.
 
 == Changelog ==
 
+= 0.9.15 =
+* Bug fixes
+* 'There is a problem opening your configuration file' warning message removed.
+
 = 0.9.14 =
 * Bug fixes
 * custom-config configuration file replaced by inline JS - less trouble with compatibility issues
@@ -190,6 +194,9 @@ In a future version, we will automate this checking process.
 * SEO Images are now compatible with FTP uploaded files. Read a manual on how to upload files and prepare them on handling with SEO Images.
 
 == Upgrade Notice ==
+
+= 0.9.15 =
+* 'There is a problem opening your configuration file' warning message removed.
 
 = 0.9.13 =
 * Autosave glitch fixed, languages added and even more!
