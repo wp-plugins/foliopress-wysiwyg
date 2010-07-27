@@ -13,7 +13,7 @@
 		<h2><?php print( FV_FCK_NAME ); ?></h2>
 		
 		<?php
-		if (!function_exists('curl_init')) { 
+		/*if (!function_exists('curl_init')) { 
         echo('<div class="updated"><p>cURL is not installed, can\'t perform self-checking mechanism!</p></div>');
     }
     else {
@@ -39,7 +39,7 @@
       else if( $error == 2 ) {
         echo '<div class="error"><p>Looks like your <a href="'.$this->strPluginPath . self::FVC_FCK_CONFIG_RELATIVE_PATH.'">configuration file</a> is not able to reach your Wordpress installation.</p></div>';
       }
-    }
+    }*/
     ?>
 		
 		<h3>Basic Options</h3>
