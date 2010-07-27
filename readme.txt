@@ -82,6 +82,10 @@ h5.noborder img { border: none; }
 img.noborder { border: none; }
 .noborder { border: none; }`
 
+= My empty paragraphs are being removed all the time. How can I stop this? =
+
+For complex reasons we need to strip empty paragraphs but you can use &lt;br /&gt; break tags to create the same effect of empty lines. The keyboard shortcut is shift enter. We don't really recommend using either &lt;br /&gt; tags or empty paragraphs for formatting, you should be able to handle it in your CSS.
+
 = Your plugin is not working, all I can see it this: =
 
 > Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96
@@ -109,17 +113,7 @@ Check out the plugin settings. Please note that the image management system rema
 
 = I get 'Toolbar set "Foliovision" doesn't exist' error message when I edit a post. =
 
-Please check the following:
-
-1. Make sure you are able to open this link: http:/&shy;/(enter-your-blog-address-here)/wp-content/plugins/foliopress-wysiwyg/custom-config/foliopress-wysiwyg-config-js.php
-
-You should see a Foliopress WYSIWYG JavaScript config file. If you get a 404 page, make sure the /wp-content/plugins/foliopress-wysiwyg/custom-config/ directory has right access permissions (probably 755) and that the PHP scripts are executed correctly from there.
-
-2. If you are using W3 Total Cache, make sure cache debug mode options are turned off.
-
-3. If you are running a test site with no domain mapped, make sure your Apache DOCUMENT_ROOT directory is set properly. You need to contact your host technical support about this.
-
-In a future version, we will automate this checking process.
+Since 0.9.14, this message should not appear. If it does, you can send us the source HTML of your editing page and we will see what failed.
 
 == Changelog ==
 
