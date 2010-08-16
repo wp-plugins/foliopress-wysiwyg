@@ -113,7 +113,7 @@ Check out the plugin settings. Please note that the image management system rema
 
 = I get 'Toolbar set "Foliovision" doesn't exist' error message when I edit a post. =
 
-Since 0.9.14, this message should not appear. If it does, you can send us the source HTML of your editing page and we will see what failed.
+Since 0.9.14, this message should not appear. If you just updated you plugin, make sure you clear your browser cache properly and then reload the editing page.
 
 == Changelog ==
 
