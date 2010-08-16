@@ -641,7 +641,7 @@ class fp_wysiwyg_class{
 		
 		$strLatestVersion = '';
 		$strLinkToChangesLog = '';
-		$aResult = $this->GetLatestVersion();
+		//$aResult = $this->GetLatestVersion();
 		if( false !== $aResult ){
 			if( isset( $aResult['version'] ) ) $strLatestVersion = $aResult['version'];
 			if( isset( $aResult['changes'] ) ) $strLinkToChangesLog = $aResult['changes'];
