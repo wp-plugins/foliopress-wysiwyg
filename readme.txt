@@ -50,9 +50,9 @@ Yes, right here: http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/end-
 
 Yes it is. Depending on your PHP configuration, you might have to change the directory permissions according to [this guide](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/prepare-ftp-files-for-seo-images) in order to make thumbnails work.
 
-= What about my own toolbar? =
+= What about more styling buttons for font color, size etc.?  =
 
-You can configure it in the Advanced options.
+You can configure it in the Advanced options. Check out "Toolbar customization" on our <a href="http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/installation">Foliopress WYSIWYG Installation page</a> for instructions.
 
 = What about some more buttons? =
 
