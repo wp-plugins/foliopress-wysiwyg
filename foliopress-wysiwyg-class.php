@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.15
+ * @version 0.9.16
  * @package foliopress-wysiwyg
  */
 
@@ -63,7 +63,7 @@ class fp_wysiwyg_class{
 	 * Plugin version
 	 * @var string
 	 */
-	var $strVersion = '0.9.10';
+	var $strVersion = '0.9.16';
 	/**
 	 * Custom options array.
 	 * Array of options that are stored in database:
@@ -556,16 +556,16 @@ class fp_wysiwyg_class{
         FCKConfig.Plugins.Add( 'foliopress-wp' ); \
         FCKConfig.Plugins.Add( 'foliopress-clean' ); \
         <?php  
-        	if( count( $fp_wysiwyg->aOptions[fp_wysiwyg_class::FVC_FPC_TEXTS] ) ){
+        	if( count( $options[fp_wysiwyg_class::FVC_FPC_TEXTS] ) ){
         		print( 'FCKConfig.FPClean_SpecialText = [' );
-        		$aFP = $fp_wysiwyg->aOptions[fp_wysiwyg_class::FVC_FPC_TEXTS];
+        		$aFP = $options[fp_wysiwyg_class::FVC_FPC_TEXTS];
         		$iFP = count( $aFP );
         		for( $i=0; $i<$iFP; $i++ ){
         
-        			if( $i < $iFP - 1 ) print( " '".$aFP[$i]."'," );
-        			else print( " '".$aFP[$i]."' " );
+        			if( $i < $iFP - 1 ) print( " '".addslashes($aFP[$i])."'," );
+        			else print( " '".addslashes($aFP[$i])."' " );
         		}
-        		print( "];\n" );
+        		print( "];\\\n" );
         	}
         ?> \
         FCKConfig.FPClean_Tags = 'p|div'; \

@@ -67,6 +67,31 @@ FPNext.prototype.GetState = function(){
 	return FCK_TRISTATE_OFF;
 }
 
+
+/**
+ * Class that represents next page button in FCK Toolbar
+ */
+var FPBreak = function( strName ){
+	this.Name = strName;
+}
+
+/**
+ * Function that is called when you click FPNext button on FCK Toolbar
+ */
+FPBreak.prototype.Execute=function(){
+	var oBreak = FCK.EditorDocument.createComment( 'break' );
+	var oFakeText = FPDocumentProcessor_CreateFakeText( '&lt!--break--&gt', oBreak );
+	oFakeText = FCK.InsertElement( oFakeText );
+}
+
+/**
+ * Unknown function, but probably important for FCK
+ */
+FPBreak.prototype.GetState = function(){
+	return FCK_TRISTATE_OFF;
+}
+
+
 /**
  * This is class that will process the text
  */
@@ -83,6 +108,10 @@ FPProcessor.ProcessDocument = function( oDocument ){
 		}else if( strValue == '<!--nextpage-->' ){
 			var oNext = FCKTempBin.AddElement(FCK.EditorDocument.createComment( 'nextpage' ));
 			var strFakeText = "<p _fckfakelement='true' _fckrealelement='"+ oNext + "'>&lt!--nextpage--&gt</p>";
+			return strFakeText;
+		}else if( strValue == '<!--break-->' ){
+			var oBreak = FCKTempBin.AddElement(FCK.EditorDocument.createComment( 'break' ));
+			var strFakeText = "<p _fckfakelement='true' _fckrealelement='"+ oBreak + "'>&lt!--break--&gt</p>";
 			return strFakeText;
 		}else{
 			return strMatch;
@@ -140,6 +169,11 @@ FCKCommands.RegisterCommand( 'foliopress-next', new FPNext( 'foliopress-next' ) 
 var oNext = new FCKToolbarButton( 'foliopress-next', 'WordPress Next Page', null, null, false, true );
 oNext.IconPath = FCKConfig.PluginsPath + 'foliopress-wp/images/next.gif';
 FCKToolbarItems.RegisterItem( 'foliopress-next', oNext );
+
+FCKCommands.RegisterCommand( 'foliopress-break', new FPBreak( 'foliopress-break' ) );
+var oNext = new FCKToolbarButton( 'foliopress-break', 'Foliopress Break Page', null, null, false, true );
+oNext.IconPath = FCKConfig.PluginsPath + 'foliopress-wp/images/next.gif';
+FCKToolbarItems.RegisterItem( 'foliopress-break', oNext );
 
 ///   Addition 26/06/2009
 FCKCommands.RegisterCommand( 'foliopress-paste', new FPPaste( 'foliopress-paste' ) );

@@ -113,9 +113,12 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 
 == Changelog ==
 
+= 0.9.16 =
+* Wordpress Media Uploader compatibility fixes
+
 = 0.9.15 =
 * Bug fixes
-* 'There is a problem opening your configuration file' warning message removed.
+* 'There is a problem opening your configuration file' warning message removed
 
 = 0.9.14 =
 * Bug fixes
