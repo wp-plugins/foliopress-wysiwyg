@@ -113,7 +113,7 @@
                 <th scope="row"><label for="listKFMThumbs">Thumbnail sizes</label></th>
 				<td>
                     <select id="listKFMThumbs" style="width: 100px;"></select>
-                        <input type="text" style="width: 80px;" name="AddThumbSize" id="txtAddThumbSize" value="Add new" onclick="this.value=''" />
+                        <input type="text" style="width: 80px;" name="AddThumbSize" id="txtAddThumbSize" value="Add new" onclick="if( this.value == 'Add new') this.value=''" />
                         <input type="button" class="button" value="Add" onclick="KFMAddThumbnail()" />
                         <input type="hidden" value="0" name="KFMThumbCount" id="hidThumbCount" />
                     <input type="button" class="button" value="Remove selected" onclick="KFMRemoveThumbnail()" />
@@ -218,7 +218,7 @@
                     <th scope="row"><label for="listFPClean">FPClean</label></th>
 					<td>
                         <select id="listFPClean" style="width: 250px;"></select>
-                            <input type="text" name="AddSpecialText" id="txtAddFPClean" class="regular-text" value="Add new" onclick="this.value=''" />
+                            <input type="text" name="AddSpecialText" id="txtAddFPClean" class="regular-text" value="Add new" onclick="if( this.value == 'Add new') this.value=''" />
                             <input type="button" class="button" value="Add" onclick="FPCleanAddText()" />
                             <input type="hidden" value="0" name="FPCleanCount" id="hidFPCleanCount" />
                         <input type="button" class="button" value="Remove selected" onclick="FPCleanRemoveText()" /><br />

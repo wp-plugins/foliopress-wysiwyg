@@ -82,6 +82,18 @@ img.noborder { border: none; }
 
 For complex reasons we need to strip empty paragraphs but you can use &lt;br /&gt; break tags to create the same effect of empty lines. The keyboard shortcut is shift enter. We don't really recommend using either &lt;br /&gt; tags or empty paragraphs for formatting, you should be able to handle it in your CSS.
 
+= It seems the editor insists on putting inserted images inside a 'p' or 'h5' element. Is there a way to avoid that? =
+
+You should have no problems with images in p or h5 tags, but if any of those tags is doing any unwanted formating you can put it into a div tag. If you really insist on having the images outside of any block elements, you can use FPClean. This feature is configured in Advanced plugin options. It allows you to enter a list of regular expressions. Matching text will be striped of 'p' and 'div' tags. Use a expression like following example (notice that some of the regex symbols have to be escaped):
+
+`(<a\.\*>)\?<img\.\*>(</a>)\?`
+
+This example regex will strip the image from 'p' and 'div' tags while keeping the surrounding 'a' tag.
+
+= I want to use FCKEditor styling XML configuration file to have more control over styling dropdown. =
+
+No problem, just make your changes. The file is located in `fckeditor` directory and is called `fckstyles.xml`. Just make sure you put its drop down into a Custom Toolbar setting (it's called `'Style'`) and turn on `Custom Toolbar` using `FCKEditor toolbar` setting. All of it is done on plugin Settings page in WP admin.
+
 = Your plugin is not working, all I can see it this: =
 
 > Parse error: syntax error, unexpected T_CONST, expecting T_OLD_FUNCTION or T_FUNCTION or T_VAR or '}' in {your web root}/wp-content/plugins/foliopress-wysiwyg/foliopress-wysiwyg-class.php on line 96
