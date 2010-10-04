@@ -92,7 +92,9 @@ This example regex will strip the image from 'p' and 'div' tags while keeping th
 
 = I want to use FCKEditor styling XML configuration file to have more control over styling dropdown. =
 
-No problem, just make your changes. The file is located in `fckeditor` directory and is called `fckstyles.xml`. Just make sure you put its drop down into a Custom Toolbar setting (it's called `'Style'`) and turn on `Custom Toolbar` using `FCKEditor toolbar` setting. All of it is done on plugin Settings page in WP admin.
+No problem, just make your changes. The file is located in `fckeditor` directory and is called `fckstyles.xml`. The XML structure is pretty self-explainatory. You can define your own items with custom names, which will add any attributes to desired HTML elements. Items show up in the editor dropdown based on what HTML element is selected, so don't expect your 'img' styles to show up unless you click an image when editing.
+
+Just make sure you put its drop down into a Custom Toolbar setting (it's called `'Style'`) and turn on `Custom Toolbar` using `FCKEditor toolbar` setting. All of it is done on plugin Settings page in WP admin.
 
 = Your plugin is not working, all I can see it this: =
 
