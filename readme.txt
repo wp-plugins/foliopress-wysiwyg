@@ -198,6 +198,9 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 
 == Upgrade Notice ==
 
+= 0.9.17 =
+* Please make sure you clear your browser cache after upgrade. Major bugfixes included!
+
 = 0.9.15 =
 * 'There is a problem opening your configuration file' warning message removed.
 
