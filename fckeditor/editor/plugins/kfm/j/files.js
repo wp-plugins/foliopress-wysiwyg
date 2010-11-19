@@ -39,6 +39,13 @@ var kfm_file_bits={
 		if(openingHook)openingHook.doFunction([id]);
 	},
 	infoTooltipStart:function(e){ // initialise info tooltip
+
+	///	2010/11/19, this fixes the hover over thumbnails issue - it grabs the parent node to get the file info
+	if( !e.target.className.match(/kfm_file/gi) ) {
+		e.target = e.target.parentNode;
+	}
+	///
+
 	   //changed zUhrikova 17/02/2010 Foliovision
       //	kfm_showFileDetails(e.target.file_id);
 		if(window.kfm_tooltipInit)clearTimeout(window.kfm_tooltipInit);
@@ -46,9 +53,10 @@ var kfm_file_bits={
 		if (!bFileSelected)window.kfm_tooltipInit=setTimeout('kfm_showFileDetails('+e.target.file_id+')',50);
 	},
 	infoTooltipStop:function(){ // remove info tooltip
-		if(window.kfm_tooltipInit)clearTimeout(window.kfm_tooltipInit);
+		///	tooltip stay
+		/*if(window.kfm_tooltipInit)clearTimeout(window.kfm_tooltipInit);
 		var o=document.getElementById('kfm_tooltip');
-		if(o)o.parentNode.removeChild(o);
+		if(o)o.parentNode.removeChild(o);*/
 	},
 	padding:0
 }
@@ -64,11 +72,13 @@ function kfm_files_reflowIcons(){
 	panel=document.getElementById('documents_body');
 	if(panel.contentMode!='file_icons')return;
 	k=0;
+	iBoxSize = iThumbnail_size+10;
 	els=$j('#documents_body .kfm_file_icon');
 	els.each(function(){
 		if(!this)return;
 		ej=$j(this);
 		ej.css({'clear':'none'});
+		ej.css({'width':iBoxSize+'px'});
 		if(k&&els[k-1].offsetLeft>=this.offsetLeft)ej.css({'clear':'left'});
 		++k;
 	});
@@ -136,8 +146,12 @@ function kfm_incrementalFileDisplay(refresh_count){
 		if(!kfm_listview){ // add icon holder
 			var img=document.createElement('div');
 			img.className='img_holder';
+			img.style.width = iThumbnail_size+'px';
+			img.style.height = iThumbnail_size+'px';
 			el.appendChild(img);
 			el.imageHolder=img;
+			///el.imageHolder.id = 'aaa';///	2010/11/08
+			$j.event.add(el.imageHolder,'mouseover',window.kfm_dir_bits.addHover);
 		}
 		kfm_fileIcon_addEvents(el);
 		el.id='kfm_file_icon_'+id;

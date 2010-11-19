@@ -36,7 +36,12 @@ function FPClean_ClearTags( strText ){
 		strChange = strChange.replace( FPClean.aRegexes[i], "$1" );
 	}
 
-	strChange = strChange.replace ("<p>&nbsp;</p>","");
+	
+	///  Modification 2010/11/09
+	//strChange = strChange.replace ("<p>&nbsp;</p>","");
+	strChange = strChange.replace (/<p>&nbsp;<\/p>/gi,"");
+	strChange = strChange.replace (/<p>&#160;<\/p>/gi,"");
+	///  End of modification
 
 	return strChange;
 }

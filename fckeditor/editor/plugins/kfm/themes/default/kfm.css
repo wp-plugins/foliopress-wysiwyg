@@ -26,7 +26,7 @@ td{vertical-align:top}
 #kfm_directory_properties strong{display:block;font-weight:bold;border:solid #bababa;border-width:0 1px 1px 0}
 #kfm_drag_wrapper{position:absolute;padding:10px;color:#00f;border:1px solid #000;-moz-border-radius:10px;font-size:smaller;background:#eee;opacity:.7}
 #kfm_drag_wrapper i{font-style:italic;text-decoration:none;color:#666}
-#kfm_drag_wrapper.directory{padding:0 0 0 16px;-moz-border-radius:0;min-width:120px;background:url(folders.gif) no-repeat -48px 0 #fff;}
+#kfm_drag_wrapper.directory{padding:0 0 0 16px;-moz-border-radius:0;min-width:150px;background:url(folders.gif) no-repeat -48px 0 #fff;}
 #kfm_selection_drag_wrapper{position:absolute;border:1px solid #000;-moz-border-radius:10px}
 #kfm_left_column{width:240px;position:relative;float:left;background:white;border-right:1px solid #bababa;overflow:hidden}
 #kfm_right_column{overflow:hidden;position:relative;height:100%;background:white}
@@ -84,9 +84,9 @@ div.kfm_panel_header a{float:right;text-decoration:none}
 #documents_loader{width:25px;float:left;margin:0;padding:3px;height:16px;}
 #folder_info{margin-left:40px}
 .kfm_empty{font-style:italic;color:#666}
-.kfm_file_icon{display:block;margin:5px;float:left;min-height:20px;padding:0 10px 5px 10px;text-align:center;color:#00f;border:1px solid #fff;-moz-border-radius:10px;width:108px;overflow-x:hidden}
+.kfm_file_icon{display:block;margin:5px;float:left;min-height:20px;padding:0 10px 5px 10px;text-align:center;color:#00f;border:1px solid #fff;-moz-border-radius:10px;width:140px;overflow-x:hidden}
 .kfm_file_icon .img_holder{background:url(icons/64x64/mimetypes/unknown.png) no-repeat top center;}
-.kfm_file_icon .img_holder{width:64px;height:64px;display:block;margin:0 auto}
+.kfm_file_icon .img_holder{width:128px;height:128px;display:block;margin:0 auto}
 .kfm_file_icon span.filename{text-decoration:underline}
 .kfm_file_icon.kfm_icontype_bz2 .img_holder{background-image:url(icons/64x64/mimetypes/bz2.png)}
 .kfm_file_icon.kfm_icontype_aac2 .img_holder{background-image:url(icons/64x64/mimetypes/aac2.png)}

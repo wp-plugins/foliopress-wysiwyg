@@ -17,6 +17,7 @@ function kdnd_drag(e){
 function kdnd_dragInit(el,source_class){
 	return function(e){
 		if(e.type=="contextmenu" || e.button==2|| ((e.keyCode==17||e.ctrlKey==true) &&e.button>0))return;
+		if( g_CtrlKeyDown && e.button == 0 )return;
 		$j.event.add(document,'mouseup',function(e){kdnd_dragFinish(e);});
 		clearTimeout(window.dragTrigger);
 /*		window.dragTrigger=setTimeout(function(){

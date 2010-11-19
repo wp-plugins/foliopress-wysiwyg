@@ -5,7 +5,15 @@ function kfm_addContextMenu(el,fn){
 	if($j.browser.opera)evtype='mousedown'; // Opera
 
 	$j.event.add(el,evtype,function(e){
-		if(e.type=='contextmenu' || e.button==2 || ((e.keyCode==17||e.ctrlKey==true) &&e.button>0))fn(e);
+	  /// Modification 2010/11/08
+		if(e.type=='contextmenu' || e.button==2 || ((e.keyCode==17||e.ctrlKey==true) &&e.button>0)) {
+			fn(e);
+		}
+		if( ( g_CtrlKeyDown && e.button == 0 ) ) {
+			e.button = 2;
+			fn(e);
+		}
+		/// End of modification
 	});
 	return el;
 }

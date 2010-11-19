@@ -49,7 +49,7 @@ $iDir = 0;
 
 if ($bDefDirectory) {	//	check if /year/month is the default directory
   $sNewDirPath = date( 'Y\/m' ) ;	//	year/month structure
-  
+
   $aNewDir = explode( '/', $sNewDirPath );
 
 	//$sBasePath = $_SERVER['DOCUMENT_ROOT'].$user_root_dir;
@@ -57,7 +57,7 @@ if ($bDefDirectory) {	//	check if /year/month is the default directory
 	$objDir = new kfmDirectory();
   
   //	let's use KFM stuff to create the directory and the enter into it, this makes sure everything will be fine in db
-	if ($sNewDirPath)
+	if ($sNewDirPath) {
 	  foreach( $aNewDir AS $sNewDir) {
 		//echo 'stepping into '.$sNewDir.' ';
 		$iDirParent = $objDir->id;
@@ -77,7 +77,8 @@ if ($bDefDirectory) {	//	check if /year/month is the default directory
 		$aCurDir = db_fetch_row("SELECT * FROM ".KFM_DB_PREFIX."directories WHERE name = '".$sNewDir."' AND parent = ".$iDirParent." ");
 		$iDir = $aCurDir['id'];
 		$objDir = kfmDirectory::getInstance( $aCurDir['id'] );
-	 }
+	  }
+  }
 	else{
 	   $iDirParent = 0;
 		//	check for dir in KFM db
@@ -87,6 +88,7 @@ if ($bDefDirectory) {	//	check if /year/month is the default directory
 		$iDir = $aCurDir['id'];
 	//	var_dump($iDir);
 		$objDir = kfmDirectory::getInstance( $aCurDir['id'] );
+		die();
 	}
 }
 else {	//	otherwise we use the value from a cookie
@@ -275,6 +277,8 @@ if(!empty($_POST['kaejax']))kfm_kaejax_handle_client_request();
 			<?php endif; ?>
 					/// End of addition		pBaran		11/07/2008
 
+  			var iThumbnail_size = <?php if($kfm_thumb_size) echo $kfm_thumb_size; else echo '128'; ?>;
+
 		</script>
 	</head>
 	<body>
@@ -395,10 +399,27 @@ if($pluginssrc!='')echo "<script type=\"text/javascript\"><!--\n$pluginssrc\n-->
 // }
 // } ?>
 <?php // { more JavaScript environment variables. These should be merged into the above set whenever possible ?>
+
+<?php //  let's detect Ctrl + Left click too! This is the Ctrl part ?>
 		<script type="text/javascript">
       jQuery(document).ready(function(){
 	      kfm.build();
       });
+      
+      var g_CtrlKeyDown = false;
+      
+      jQuery( document ).bind( "keydown", function( e ){
+         if( 16 == e.which || 17 == e.which || 18 == e.which ) g_CtrlKeyDown = true;
+         /*if( 27 == e.which ){
+            if( 0 < g_strEdit.length ) SaveEdit( g_strEdit, false );
+            CloseEditList();
+            CloseEditResponsible();
+         }*/
+         
+      }).bind( "keyup", function( e ){
+         g_CtrlKeyDown = false;
+      });
+
 			<?php echo kfm_kaejax_get_javascript(); ?>
 			<?php if(isset($_GET['kfm_caller_type']))echo 'window.kfm_caller_type="'.addslashes($_GET['kfm_caller_type']).'";'; ?>
 		</script>

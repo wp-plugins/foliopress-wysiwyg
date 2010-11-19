@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.16
+ * @version 0.9.17
  * @package foliopress-wysiwyg
  */
 
@@ -24,7 +24,7 @@ else
 require_once( 'include/foliopress-wysiwyg-load.php' );
 
 if( isset( $_POST['recreate_submit'] ) ){
-	require_once( dirname(__FILE__).'/fckeditor/editor/plugins/kfm/cleanup.php' );
+	//require_once( dirname(__FILE__).'/fckeditor/editor/plugins/kfm/cleanup.php' );
 }
 /**
  * Main Foliopress WYSIWYG class
@@ -122,6 +122,10 @@ class fp_wysiwyg_class{
 	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
 	 */
 	const FVC_KFM_THUMBS = 'KFMThumbs';
+	/**
+	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
+	 */
+	const FVC_KFM_THUMB_SIZE = 'KFMThumbnailSize';
 	/**
 	 * Key for {@link fp_wysiwyg_class::$aOptions Options array} 
 	 */
@@ -226,6 +230,7 @@ class fp_wysiwyg_class{
 		if( !isset( $this->aOptions[self::FVC_PNG] ) ) $this->aOptions[self::FVC_PNG] = true;
 		if( !isset( $this->aOptions[self::FVC_PNG_LIMIT] ) ) $this->aOptions[self::FVC_PNG_LIMIT] = 5000;
 		if( !isset( $this->aOptions[self::FVC_DIR] ) ) $this->aOptions[self::FVC_DIR] = true;
+		if( !isset( $this->aOptions[self::FVC_KFM_THUMB_SIZE] ) ) $this->aOptions[self::FVC_KFM_THUMB_SIZE] = 128;
 		/// Addition 2009/06/02  mVicenik Foliovision
 		if( !isset( $this->aOptions[self::FVC_HIDEMEDIA] ) ) $this->aOptions[self::FVC_HIDEMEDIA] = true;
 		/// End of addition
@@ -591,13 +596,22 @@ class fp_wysiwyg_class{
 		
 		<?php if( $GLOBALS['wp_version'] >= 2.7 ) : ?>
 		jQuery(document).ready(function() {
-      window.setTimeout("fv_wysiwyg_update_content();", 5000);
-
+		  window.setTimeout("fv_wysiwyg_startup();", 1000);
     });
+    
+    function fv_wysiwyg_startup() {
+      if( typeof(FCKeditorAPI) != 'undefined' ) {
+        FCKeditorAPI.GetInstance('content').GetXHTML(); //  don't remove
+        FCKeditorAPI.GetInstance('content').ResetIsDirty();
+        window.setTimeout("fv_wysiwyg_update_content();", 5000);
+      } else {
+        setTimeout("fv_wysiwyg_startup();", 1000);
+      }
+    }
     
 		function fv_wysiwyg_update_content() {
 		  if( typeof(FCKeditorAPI) != 'undefined' ) {
-		    if( FCKeditorAPI.GetInstance('content').IsDirty() ) { //  only update if there was any change
+		    if( FCKeditorAPI.GetInstance('content').IsDirty() ) {
 		      jQuery('#content').val( FCKeditorAPI.GetInstance('content').GetXHTML() );
 		    }
 		    wpWordCount.wc( FCKeditorAPI.GetInstance('content').GetXHTML() );
@@ -675,7 +689,8 @@ class fp_wysiwyg_class{
 			/// When user returns from recreate page, thumbnails will be recreated
 			if( isset( $_POST['recreate_submit'] ) ){
 				set_time_limit( 300 );
-				
+				require_once( dirname(__FILE__).'/fckeditor/editor/plugins/kfm/cleanup.php' );
+
 				$aSetup = array();
 				$aSetup['JPGQuality'] = $this->aOptions[self::FVC_JPEG];
 				$aSetup['transform'] = $this->aOptions[self::FVC_PNG];
@@ -684,6 +699,7 @@ class fp_wysiwyg_class{
 
 				
 				KFM_RecreateThumbnailsSilent( realpath( $_SERVER['DOCUMENT_ROOT'].$this->aOptions[self::FVC_IMAGES] ), $this->aOptions[self::FVC_KFM_THUMBS], $kfm_workdirectory, $aSetup );
+				echo '<div class="updated"><p>Thumbnails recreated.</p></div>';
 			}
 			
 			/// This is regular saving of options that are on the main Options page
@@ -781,6 +797,12 @@ class fp_wysiwyg_class{
 				
 				if( isset( $_POST['MaxWidth'] ) ) $this->aOptions[self::FVC_MAXW] = intval( $_POST['MaxWidth'] );
 				if( isset( $_POST['MaxHeight'] ) ) $this->aOptions[self::FVC_MAXH] = intval( $_POST['MaxHeight'] );
+				if( intval( $_POST['KFMThumbnailSize'] ) < 64 ) {
+				  $_POST['KFMThumbnailSize'] = 64;
+				} else if( intval( $_POST['KFMThumbnailSize'] ) > 256 ) {
+				  $_POST['KFMThumbnailSize'] = 256;
+				}							
+				if( isset( $_POST['KFMThumbnailSize'] ) ) $this->aOptions[self::FVC_KFM_THUMB_SIZE] = intval( $_POST['KFMThumbnailSize'] );
 				
 				$this->aOptions[self::FVC_USE_FLASH_UPLOADER] = false;
 				if( isset( $_POST[self::FVC_USE_FLASH_UPLOADER] ) ) $this->aOptions[self::FVC_USE_FLASH_UPLOADER] = true;

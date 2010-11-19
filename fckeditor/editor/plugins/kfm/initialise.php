@@ -107,7 +107,7 @@ $kfm->defaultSetting('subcontext_categories',array());
 $kfm->defaultSetting('subcontext_size',20);
 // directory
 //$kfm->defaultSetting('root_folder_name',str_replace('/','',$aFckOptions["images"]));
-$kfm->defaultSetting('root_folder_name',(isset($aFckOptions["images"]))?str_replace('/','',$aFckOptions["images"]):'images');
+$kfm->defaultSetting('root_folder_name',(isset($aFckOptions["images"]))?str_replace('/','/',$aFckOptions["images"]):'images');
 $kfm->defaultSetting('allow_files_in_root',1);
 $kfm->defaultSetting('allow_directory_create',1);
 $kfm->defaultSetting('allow_directory_delete',1);
@@ -211,9 +211,9 @@ if (is_dir($workpath)) {
         echo 'error: could not create directory <code>"'.htmlspecialchars($workpath_tmp).'"</code>. please make sure that <code>'.htmlspecialchars(preg_replace('#/[^/]*$#', '', $workpath_tmp)).'</code> is writable by the server';
         exit;
     }
-}
+}//var_dump( $workpath );
 // }
-
+//die('ende');
 // { database
 $db_defined            = 0;
 $kfm_db_prefix_escaped = str_replace('_', '\\\\_', KFM_DB_PREFIX);

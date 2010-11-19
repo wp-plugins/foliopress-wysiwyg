@@ -3,7 +3,7 @@ function kfm_addToSelection(id){
 	id=parseInt(id);
 	if(!id || selectedFiles.indexOf(id)!=-1)return;
 	selectedFiles.push(id);
-	document.getElementById('kfm_file_icon_'+id).className+=' selected';
+	document.getElementById('kfm_file_icon_'+id).className+=' selected';	///	selected
 	kfm_selectionCheck();
 }
 llStubs.push('kfm_chooseFile');
@@ -51,6 +51,8 @@ function kfm_selectionCheck(){
 		//var el=$j('#kfm_file_details_panel div.kfm_panel_body')[0];
 		//if(el)el.innerHTML='loading';
 		//kfm_run_delayed('file_details','if(selectedFiles.length==1)kfm_showFileDetails(selectedFiles[0]);');
+		
+		///	2010/11/19	not needed??
 		kfm_showFileDetails(selectedFiles[selectedFiles.length-1]);
 	}
 	else {
@@ -175,7 +177,10 @@ function kfm_toggleSelectedFile(e){
 		}
 	//}
 	kfm_lastClicked=id;
-	document.getElementById('kfm_file_icon_'+id).className+=' last_clicked';
+	///	2010/11/19
+	if( document.getElementById('kfm_file_icon_'+id) ) {
+		document.getElementById('kfm_file_icon_'+id).className+=' last_clicked';
+	}
 }
 function kfm_selectSingleFile(id){
    bFileSelected = true;

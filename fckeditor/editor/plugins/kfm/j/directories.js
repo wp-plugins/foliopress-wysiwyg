@@ -55,7 +55,7 @@ kfm_dir_bits={
 		kfm_directory_over=0;
 		$j(this).removeClass('hovered');
 	},
-	addHover:function(){
+	addHover:function(e){
 		if(!this.actionEvents){
 			$j.event.add(this,'click',window.kfm_dir_bits.clickDir);
 			$j.event.add(this,'mouseout',window.kfm_dir_bits.removeHover);
@@ -64,16 +64,21 @@ kfm_dir_bits={
 		if(kfm_directory_over==this.node_id)return;
 		this.className+=' hovered';
 		kfm_directory_over=+this.node_id;
+
+		window.kfm_file_bits.infoTooltipStart(e);	//	image hover
 	},
 	idealNameHeight:0,
 	dirnames_being_drawn:0,
 	dirnames_wrappers:[]
 };
 function kfm_changeDirectory(id, nofiles){
-  if(!isNaN(id))id='kfm_directory_icon_'+id;
+
+  	if(!isNaN(id))id='kfm_directory_icon_'+id;
 	if(id=='kfm_directory_icon_0')id='kfm_directory_icon_1';
 	var el=document.getElementById(id);
+
 	if(!el)return;
+	
 	var a,els=$j('td.kfm_directory_open');
 	setTimeout('clearTimeout(window.dragTrigger);',1);
 	if(window.ie)while(el&&!el.node_id)el=el.parentNode;
@@ -82,6 +87,7 @@ function kfm_changeDirectory(id, nofiles){
 	clearTimeout(window.kfm_incrementalFileDisplay_loader);
 	for(var a=0;a<els.length;++a)$j(els[a]).removeClass('kfm_directory_open');
 	el.parentNode.className+=' kfm_directory_open';
+	
 	if(!nofiles){
 		kfm_filesLoader();
 		setTimeout('x_kfm_loadFiles(kfm_cwd_id,kfm_refreshFiles);',20);

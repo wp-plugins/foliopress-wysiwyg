@@ -268,7 +268,11 @@
                         <label for="ProcessHTMLEntities"><input id="chkProcessHTMLEntities" type="checkbox" name="ProcessHTMLEntities" value="yes" <?php if($this->aOptions['ProcessHTMLEntities']) echo 'checked="checked"'; ?> /> Process HTML Entities</label><br /><span class="description">If you are using UTF-8, you should leave this option disabled. If you use foreign languages and your website is not UTF-8 (it should be), then you will want to enable this option.</span><br />
                     </fieldset></td>
                 </tr>
-                                
+          				<tr valign="top"> 
+                    <th scope="row">KFM Thumbnail size</th>
+                    <td><label for="KFMThumbnailSize"><input type="text" name="KFMThumbnailSize" value="<?php echo $this->aOptions[self::FVC_KFM_THUMB_SIZE]; ?>" class="small-text" /> px</label><br /><span class="description">Size of the thumnails in the image uploader.</span></td>
+                </tr>
+                      
 			</table>
 			<br />
 			<p><input type="button" name="expert_options" class="button" value="Expert Options" onclick="jQuery('#divExpert').toggle()" /></p>

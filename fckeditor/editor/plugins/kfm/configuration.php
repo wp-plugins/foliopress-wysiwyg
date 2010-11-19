@@ -23,9 +23,12 @@ else
 //if (!DB_HOST) require_once( dirname(__FILE__).'/../../../../../../../../../wp-config.php' );*/
 
 global $current_user;
-//var_dump($_POST["Upload"]);
-if((!$current_user->id)&& !($_POST["kfm_session"]))//!($_POST["Upload"]=="Submit Query"))
+
+if( ( (!$current_user->id)&& !($_POST["kfm_session"]) ) ) {
+  if( !check_admin_referer( 'foliopress-wysiwyg-recreate-thumbnails', 'foliopress-wysiwyg-recreate-thumbnails' ) ) {
     die('Access denied.');
+  }
+}
 
 //echo(DB_NAME);
 // what type of database to use
@@ -68,7 +71,7 @@ $use_kfm_security=false;
  */
  
 if(isset($aFckOptions["images"]))
-  $defDirImages = str_replace('/','',$aFckOptions["images"]);
+  $defDirImages = str_replace('/','/',$aFckOptions["images"]);
 else 
   $defDirImages = "images";
 
@@ -109,6 +112,7 @@ $kfm_server_hours_offset = 1;
 
 // thumb format. use .png if you need transparencies. .jpg for lower file size
 $kfm_thumb_format='.jpg';
+$kfm_thumb_size = ($aFckOptions["KFMThumbnailSize"])?$aFckOptions["KFMThumbnailSize"]:128;
 
 // what plugin should handle double-clicks by default
 $kfm_default_file_selection_handler='return_url';
