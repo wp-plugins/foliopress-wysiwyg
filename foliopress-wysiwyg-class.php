@@ -1042,6 +1042,9 @@ class fp_wysiwyg_class{
 
 			foreach (array('normal', 'advanced', 'side') as $context){
 				remove_meta_box('pageauthordiv', 'page', $context);
+				/// bugfix  2010/11/26, for latest WP I guess
+				remove_meta_box('authordiv', 'page', $context);
+				///
 			}
 		}
 		 
