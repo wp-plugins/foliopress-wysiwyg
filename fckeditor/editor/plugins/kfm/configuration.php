@@ -187,6 +187,8 @@ $kfmAdd_banned_folders[] = 'tmp_thumbs';
 //$kfm->defaultSetting('banned_folders',array('/^\./'));
 ### ### End of add		zUhrikova		1/2/2010
 
+$kfm_dont_send_metrics = true;
+
 /**
  * This function is called in the admin area. To specify your own admin requirements or security, un-comment and edit this function
  */
