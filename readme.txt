@@ -201,4 +201,4 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 == Upgrade Notice ==
 
 = 0.9.18 =
-* If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade. Please make sure you clear your browser cache after upgrade.
+* If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
