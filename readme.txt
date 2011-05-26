@@ -54,9 +54,11 @@ Check out <a href="http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/in
 
 Yes it is. Depending on your PHP configuration, you might have to change the directory permissions according to [this guide](http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/prepare-ftp-files-for-seo-images) in order to make thumbnails work.
 
-= What about more styling buttons for font color, size etc.?  =
+= How can I set different font sizes or colors? =
 
-You can configure it in the Advanced options. Check out "Toolbar customization" on our <a href="http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/installation">Foliopress WYSIWYG Installation page</a> for instructions. However we recommend you to customize the styling dropdown instead and put in all the styling classes you need.
+Most editors use inline style tags to allow font size and color changes of any text. We are strongly against this approach - it's a bad practice because you can't style these elements with CSS stylesheets. We recommend that you edit your template stylesheet and add required styling into new P (for whole paragraphs) or SPAN (for single words) classes. Then you can add these classes into Format drop down, see <a href="http://foliovision.com/seo-tools/wordpress/plugins/wysiwyg/installation#dropdown-customization">Foliopress WYSIWYG Installation page</a> for instructions and examples.
+
+There is also an option to insert buttons which do this with inline CSS (TextColor, FontSize etc.), but it's not recommended.
 
 = How do I add a caption to the image? =
 
