@@ -317,7 +317,7 @@ if ($last_registration!=$today) {
 	echo '<iframe style="display:none" src="maintenance.php"></iframe>';
 // }
 // { once per day, tell the kfm website a few simple details about usage
-	if (!$kfm_dont_send_metrics) {
+	if (!$kfm_dont_send_metrics && 1<0 ) {
 		echo '<img src="http://kfm.verens.com/extras/register.php?version='.urlencode(KFM_VERSION).
 			'&amp;domain_name='.urlencode($_SERVER['SERVER_NAME']).
 			'&amp;db_type='.$kfm_db_type.
