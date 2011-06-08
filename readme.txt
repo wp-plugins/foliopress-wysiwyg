@@ -84,7 +84,7 @@ img.noborder { border: none; }
 
 = My empty paragraphs are being removed all the time. How can I stop this? =
 
-For complex reasons we need to strip empty paragraphs but you can use &lt;br /&gt; break tags to create the same effect of empty lines. The keyboard shortcut is shift enter. We don't really recommend using either &lt;br /&gt; tags or empty paragraphs for formatting, you should be able to handle it in your CSS.
+For complex reasons we need to strip empty paragraphs but you can use <br /> break tags to create the same effect of empty lines. The keyboard shortcut is shift enter. We don't really recommend using either <br /> tags or empty paragraphs for formatting, you should be able to handle it in your CSS.
 
 = Your plugin is not working, all I can see it this: =
 
@@ -211,3 +211,9 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 
 = 0.9.18 =
 * If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
+
+== Other Notes ==
+
+= Featured image feature =
+
+Since version 0.9.19 there is a support for native Wordpress Feature Image function. Wordpress Uploads folder has to be set to the same path as Foliopress WYSIWYG, otherwise it won't be displayed.
