@@ -207,7 +207,7 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 == Upgrade Notice ==
 
 = 0.9.19 =
-* New - Featured Image support (beta), Link to post feature, Impact support. <abbr title="If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.">(?)</abbr>
+* New - Featured Image support (beta), Link to post feature, Impact support. If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
 
 = 0.9.18 =
 * If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
