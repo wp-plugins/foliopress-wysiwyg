@@ -1088,7 +1088,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 				$this->aOptions[self::FVC_USE_FLASH_UPLOADER] = false;
 				if( isset( $_POST[self::FVC_USE_FLASH_UPLOADER] ) ) $this->aOptions[self::FVC_USE_FLASH_UPLOADER] = true;
 				
-				$this->aOptions[self::FV_SEO_IMAGES_POSTMETA] = $_POST['postmeta'];	var_dump( $this->aOptions[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] );
+				$this->aOptions[self::FV_SEO_IMAGES_POSTMETA] = $_POST['postmeta'];
 				
 				if( $_POST[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] != '' ) {
 				  $this->aOptions[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] = $_POST[self::FV_SEO_IMAGES_IMAGE_TEMPLATE];								
