@@ -1,7 +1,7 @@
 === Foliopress WYSIWYG ===
 Contributors: FolioVision
 Tags: wysiwyg,editor,foliopress,image,images,seo,lightbox,fck,tinymce,editor
-Requires at least: 2.2.3
+Requires at least: 3.1 
 Tested up to: 3.1.3 
 Stable tag: trunk
 
