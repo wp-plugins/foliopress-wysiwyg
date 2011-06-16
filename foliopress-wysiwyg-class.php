@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.18.7
+ * @version 0.9.19
  * @package foliopress-wysiwyg
  */
 
@@ -86,7 +86,9 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 	 * @var bool
 	 */
 	var $bUseFCK = false;
-
+	
+	var $has_wpautop;
+	var $has_wptexturize;
 
 ///  -------------------------------------------------------------------------------------------------------------------
 ///  --------------------------------------------------   Constants   --------------------------------------------------
@@ -1211,7 +1213,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 		
 		
 	/**
-	 * Checks if the post was most recently edited by Foliopress WYSIWYG and disables wpautop and wptexturize
+	 * Checks if the post was most recently edited by Foliopress WYSIWYG and disables wpautop and wptexturize. Also remember in first the_content call if these functions were on or of and add them only if they were active and the post was not recently edited in FP WYSIWYG. This is for loops
 	 *
 	 * @param string $content Raw Post content.
 	 *
@@ -1220,15 +1222,33 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
   function the_content($content) {
     global $post;
     global $wp_filter;
+ 
+    ///echo '<!--wysiwyg has_wpautop '.var_export( $this->has_wpautop, true ).'-->';
+    ///echo '<!--wysiwyg has_wptexturize '.var_export( $this->has_wptexturize, true ).'-->';
+    
+    if( $this->has_wpautop === NULL ) { ///echo '<!--wysiwyg store status: wpautop '.var_export( has_filter( 'the_content', 'wpautop' ), true ).'-->';
+      $this->has_wpautop = has_filter( 'the_content', 'wpautop' );
+    }
+    if( $this->has_wptexturize === NULL ) { ///echo '<!--wysiwyg store status: wptexturize '.var_export( has_filter( 'the_content', 'has_wptexturize' ), true ).'-->';
+      $this->has_wptexturize = has_filter( 'the_content', 'wptexturize' );
+    }    
+
+    //echo '<!--wysiwyg has_filter wpautop '.var_export( has_filter( 'the_content', 'wpautop' ), true ).'-->';
+    //echo '<!--wysiwyg has_filter wptexturize '.var_export( has_filter( 'the_content', 'wptexturize' ), true ).'-->';    
     
     $meta = get_post_meta( $post->ID, 'wysiwyg', true );
+    ///echo '<!--wysiwyg'.var_export( $meta, true ).' vs '.$post->post_modified.'-->';
     if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
       remove_filter ('the_content',  'wpautop');
       remove_filter ('the_content',  'wptexturize');
     }
     else {
-      add_filter ('the_content',  'wpautop');
-      add_filter ('the_content',  'wptexturize');	
+      if( $this->has_wpautop ) { ///echo '<!--wysiwyg +wpautop-->';
+        add_filter ('the_content',  'wpautop');
+      }
+      if( $this->has_wptexturize ) { ///echo '<!--wysiwyg +wptexturize-->';     
+        add_filter ('the_content',  'wptexturize');	
+      }
     }
     return $content;
   }		
