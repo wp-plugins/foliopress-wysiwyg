@@ -276,9 +276,10 @@ class kfmImage extends kfmFile{
 			$kfm->db->exec("INSERT INTO ".KFM_DB_PREFIX."files_images_thumbs (image_id,width,height) VALUES (".$this->id.",".$iSize.",".$iSize.")");
 			$id=$kfm->db->lastInsertId(KFM_DB_PREFIX.'files_images_thumbs','id');
 		}
+				
 		$file = $strPath . '/'. $this->name;      
 	 //zUhrikova new function Imagick  
-		if(!$kfm_use_imagemagick || !$this->useIMagick($this->path,$thumb_width,$thumb_height,$file))
+		if(!$kfm_use_imagemagick || $this->useImageMagick($this->path,'resize '.$thumb_width.'x'.$thumb_height.$hsl,$file) )
     {  
     $this->createResizedCopy($file,$thumb_width,$thumb_height);
     }
@@ -455,10 +456,10 @@ class kfmImage extends kfmFile{
 		$arr=array();
 		
 //		passthru(IMAGEMAGICK_PATH.' '.$from.' -'.$action.' '.$to.'',$arr,$retval);
-		
+
 		exec(IMAGEMAGICK_PATH.' "'.escapeshellcmd($from).'" -'.escapeshellcmd($action).' "'.escapeshellcmd($to).'"',$arr,$retval);
 
-
+  
 		return $retval;
 	}
 	// addition zUhrikova
