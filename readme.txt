@@ -115,6 +115,14 @@ Check out the plugin settings. Please note that the image management system rema
 
 Since 0.9.14, this message should not appear. If you just updated you plugin, make sure you clear your browser cache properly and then reload the editing page.
 
+= How do I get lightbox effect for images? =
+
+You need to use a plugin like WP Slimbox 2. Foliopress WYSIWYG adds rel="lightbox" to the inserted thumbnail images, so the big images open with the lightbox effect when that plugin is installed.
+
+= How do I use ImageMagick with this plugin? =
+
+The ImageMagick binary must be executable from PHP and be available as /bin/convert. We will add automated checks for this. ImageMagick provides superior image quality than standard PHP GD library!
+
 == Changelog ==
 
 = 0.9.19 =
