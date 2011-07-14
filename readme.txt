@@ -117,7 +117,7 @@ Since 0.9.14, this message should not appear. If you just updated you plugin, ma
 
 = How do I get lightbox effect for images? =
 
-You need to use a plugin like WP Slimbox 2. Foliopress WYSIWYG adds rel="lightbox" to the inserted thumbnail images, so the big images open with the lightbox effect when that plugin is installed.
+You need to use a plugin like [WP Slimbox 2](http://wordpress.org/extend/plugins/wp-slimbox2/). Foliopress WYSIWYG adds rel="lightbox" to the inserted thumbnail images, so the big images open with the lightbox effect when that plugin is installed.
 
 = How do I use ImageMagick with this plugin? =
 
