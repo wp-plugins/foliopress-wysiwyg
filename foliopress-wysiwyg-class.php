@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.19
+ * @version 0.9.19.6
  * @package foliopress-wysiwyg
  */
 
@@ -371,7 +371,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 	
 	
 	function checkImageMagick() {
-	  return is_executable( '/usr/bin/convert' );
+	  return @is_executable( '/usr/bin/convert' );
 	}
 	
 	

@@ -451,7 +451,7 @@ class kfmImage extends kfmFile{
 ### End of add		pBaran		10/12/2007
 
 	function useImageMagick($from,$action,$to){
-		if(!file_exists(IMAGEMAGICK_PATH))return true;
+		if(!@file_exists(IMAGEMAGICK_PATH))return true;
 		$retval=true;
 		$arr=array();
 		

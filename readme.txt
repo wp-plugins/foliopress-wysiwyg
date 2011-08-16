@@ -125,6 +125,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Changelog ==
 
+= 0.9.19.6 =
+* bugfix for ImageMagick detection when using open_basedir restrictions.
+
 = 0.9.19.5 =
 * editor is for now disabled in IE 9.0 as both FCKEditor and CKEditor are having some issues
 * WP Link Dialog is now optional - check our Advanced settings.
