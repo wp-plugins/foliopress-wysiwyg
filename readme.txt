@@ -125,6 +125,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Changelog ==
 
+= 0.9.19.7 =
+* SEO Images autoload bugfix (thanks goes to Edrard!)
+
 = 0.9.19.6 =
 * bugfix for ImageMagick detection when using open_basedir restrictions.
 

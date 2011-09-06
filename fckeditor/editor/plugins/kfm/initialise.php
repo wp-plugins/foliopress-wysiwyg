@@ -21,6 +21,8 @@ if(!function_exists('__autoload')){
     require_once KFM_BASE_PATH . 'classes/' . $class_name . '.php';
 	}
 }
+//var_dump( class_exists( 'kfmSession') );
+//spl_autoload_register(__autoload);
 
 require KFM_BASE_PATH.'includes/lang.php';
 require KFM_BASE_PATH.'includes/db.php';
@@ -334,6 +336,10 @@ if (!function_exists('kfm_json_encode')) { // php-json is not installed
 // }
 // { start session
 $session_id  = (isset($_REQUEST['kfm_session']))?$_REQUEST['kfm_session']:'';
+
+if( !class_exists( 'kfmSession') ) {
+  spl_autoload_register( __autoload );
+}
 $kfm_session = new kfmSession($session_id);
 if (isset($_GET['logout'])||isset($_GET['log_out'])) $kfm_session->set('loggedin',0);
 $kfm->defaultSetting('kfm_session_id', $kfm_session->key);
