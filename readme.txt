@@ -224,6 +224,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Upgrade Notice ==
 
+= 0.9.19.7 =
+* Editor disabled in IE 9.0 due to compatibility issues, until it gets resolved. If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
+
 = 0.9.19.5 =
 * This is a bugfix release for IE 9.0 users and Link Dialog issues. If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
 
