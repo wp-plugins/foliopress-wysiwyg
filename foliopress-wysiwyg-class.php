@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 0.9.20
+ * @version 0.9.21
  * @package foliopress-wysiwyg
  */
 
@@ -1181,6 +1181,11 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
   function parse_dropdown_menu() {
     $items = explode("\r\n",$this->aOptions['customdropdown']);             //  one item per line
     $i = 0;                                                                 //  counter
+    
+    $corestyles = '';
+    $fontformats = '';
+    $fontformatnames = '';
+    
     foreach ($items AS $item) {
       $i++;
       preg_match('/<(.*?)>/i',$item,$match);                              //  take only the part inside <>
@@ -1210,17 +1215,21 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
       
       $attr_text = rtrim($attr_text,', ');
       $styles_text = rtrim($styles_text,', ');
-
-      $corestyles = "'".$element[1]."_".$i."' : { Element : '".$element[1]."'";        //  do the proper output
+      
+      if(strlen($corestyles)>0)
+        $corestyles .= ",\r\n";
+      $corestyles .= "'".$element[1]."_".$i."' : { Element : '".$element[1]."'";        //  do the proper output
       if(strlen($attr_text)>0)
         $corestyles .= ", Attributes : { ".$attr_text." } ";
       if(strlen($styles_text)>0)
-        $corestyles .= ", Styles : { ".$styles_text." } ";      
+        $corestyles .= ", Styles : { ".$styles_text." } ";
+      
       $corestyles .= " }";
       
-      $fontformats = "".$element[1]."_".$i.";";
-
-      $fontformatnames = "".$element[1]."_".$i." : '".$name[1]."'";   
+      $fontformats .= "".$element[1]."_".$i.";";
+      if(strlen($fontformatnames)>0)
+        $fontformatnames .= ",\r\n";
+      $fontformatnames .= "".$element[1]."_".$i." : '".$name[1]."'";   
     }
     $this->aOptions['customdropdown-fontformats'] = rtrim($fontformats,';');
     $this->aOptions['customdropdown-corestyles'] = rtrim($corestyles,',');

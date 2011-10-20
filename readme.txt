@@ -125,6 +125,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Changelog ==
 
+= 0.9.21 =
+* quick bug fix release for formating drop down
+
 = 0.9.20 =
 * quick edit bug fix (it was removing the plain text editing option)
 * new button for easy insertion of embed codes (Youtube, Vimeo etc.)
@@ -228,6 +231,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 * SEO Images are now compatible with FTP uploaded files. Read a manual on how to upload files and prepare them on handling with SEO Images.
 
 == Upgrade Notice ==
+
+= 0.9.21 =
+* IE9 still won't work, but try switching it to IE8 compatibility mode. There is also new simple button for inserting embed codes. If the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Make sure you clear your browser cache after upgrade.
 
 = 0.9.19.7 =
 * Editor disabled in IE 9.0 due to compatibility issues, until it gets resolved. If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
