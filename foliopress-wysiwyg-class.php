@@ -1406,6 +1406,9 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
     $meta = get_post_meta( $post->ID, '_wysiwyg', true );
     if( !$meta ) {
     	$meta = get_post_meta( $post->ID, 'wysiwyg', true );	//	check old meta
+    	if( $meta ) {
+    	  delete_post_meta( $post->ID, 'wysiwyg');	//	check old meta
+    	}
     }
     if( !isset($_POST['_inline_edit']) ) {  //  we can't check for this in quick edit       
       if( isset( $_POST['plain_text_editing']) ) {
