@@ -278,8 +278,8 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 		if( !isset( $this->aOptions['FCKLang'] ) ) $this->aOptions['FCKLang'] = 'auto';
 		if( !isset( $this->aOptions['FCKLangDir'] ) ) $this->aOptions['FCKLangDir'] = 'ltr';
 		if( !isset( $this->aOptions['kfmlang'] ) ) $this->aOptions['kfmlang'] = 'en';
-		if( !isset( $this->aOptions['dirperm'] ) ) $this->aOptions['dirperm'] = '777';
-		if( !isset( $this->aOptions['fileperm'] ) ) $this->aOptions['fileperm'] = '666';
+		if( !isset( $this->aOptions['dirperm'] ) ) $this->aOptions['dirperm'] = '755';
+		if( !isset( $this->aOptions['fileperm'] ) ) $this->aOptions['fileperm'] = '644';
 		/// End of addition
 		if( !isset( $this->aOptions['filter_wp_thumbnails'] ) ) $this->aOptions['filter_wp_thumbnails'] = true;
 		if( !isset( $this->aOptions[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] ) || $this->aOptions[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] == '' ) $this->aOptions[self::FV_SEO_IMAGES_IMAGE_TEMPLATE] = addslashes( '"<h5>"+sHtmlCode+"<br />"+sAlt+"</h5>"' );
