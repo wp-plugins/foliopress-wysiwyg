@@ -2,7 +2,7 @@
 Contributors: FolioVision
 Tags: wysiwyg,editor,foliopress,image,images,seo,lightbox,fck,tinymce,editor
 Requires at least: 3.1 
-Tested up to: 3.3.1
+Tested up to: 3.2.1
 Stable tag: trunk
 
 Foliopress WYSIWYG is the editor you were always hoping for, every time you installed a new content management system.
@@ -125,16 +125,9 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Changelog ==
 
-= 0.9.23 =
-* read more button now uses the standard read more icon 
-* WP internal linking dialog disabled
-* bugfix for custom post types
-* wysiwyg post meta changed to _wysiwyg
-* SEO Images loading script renamed
-* bugfix for featured image
-
 = 0.9.22 =
-* fix for Wordpress 3.3
+* Wordpress 3.3 display issues fix
+* Featured Image functionality bugfix
 
 = 0.9.21 =
 * quick bug fix release for formating drop down
@@ -243,8 +236,8 @@ The ImageMagick binary must be executable from PHP and be available as /bin/conv
 
 == Upgrade Notice ==
 
-= 0.9.21 =
-* IE9 still won't work, but try switching it to IE8 compatibility mode. There is also new simple button for inserting embed codes. If the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Make sure you clear your browser cache after upgrade.
+= 0.9.22 =
+* IE9 still won't work, but try switching it to IE8 compatibility mode. If the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Make sure you clear your browser cache after upgrade.
 
 = 0.9.19.7 =
 * Editor disabled in IE 9.0 due to compatibility issues, until it gets resolved. If Wordpress prompts for FTP information and the upgrade takes too long, you might need to do the manual upgrade or first delete the plugin and then install it through Wordpress. Please make sure you clear your browser cache after upgrade.
