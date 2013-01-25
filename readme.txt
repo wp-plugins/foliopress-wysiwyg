@@ -32,7 +32,7 @@ Foliopress WYSIWYG is the editor you were always hoping for, every time you inst
 == Installation ==
 
 You can use the built in installer and upgrader, or you can install the plugin
-manually.
+manually. 
 
 == Screenshots ==
 
