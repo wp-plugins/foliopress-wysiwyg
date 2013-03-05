@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 2.6.8.1
+ * @version 2.6.8.2
  * @package foliopress-wysiwyg
  */
 
@@ -326,7 +326,10 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 	 * Init certain variables
 	 */			
 	function admin_init() {
-	  if( $this->is_min_wp( '2.6' ) ) {
+	  if( $this->is_min_wp( '3.3' ) ) {
+	    $this->strPluginPath = trim( plugins_url( '', __FILE__ ), '/' ).'/';
+	    $this->strFCKEditorPath = trim( plugins_url( 'fckeditor', __FILE__ ), '/' ).'/';
+	  } else if( $this->is_min_wp( '2.6' ) ) {
 	    $this->strPluginPath = trailingslashit( WP_PLUGIN_URL ) . basename( dirname( __FILE__ ) ) . '/';
 	    $this->strFCKEditorPath = trailingslashit( WP_PLUGIN_URL ) . basename( dirname( __FILE__ ) ) . '/fckeditor/';
 	  } else { 
@@ -373,8 +376,9 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
       $html .= '<p class="hide-if-no-js"><a title="Set Featured image with Foliopress WYSIWYG\'s Image Manager" href="#" id="seo-images-featured-image" '.$onclick.'>Set featured image with SEO Images</a></p>';
   	  return $html;
 	  } else if( stripos( $html, 'set-post-thumbnail' ) !== FALSE && stripos( $html, '<img' ) !== FALSE ) {
-	    $html = preg_replace( '~(id="set-post-thumbnail"[^>]*?)class="thickbox">~', '$1>', $html );
-	    $html = preg_replace( '~href="media-upload.*?type=image.*?TB_iframe=1"~', 'href="#" '.$onclick, $html );
+	    $html = str_replace( 'set-post-thumbnail', 'set-post-thumbnail-fp-wysiwyg', $html );
+	    $html = str_replace( 'class="thickbox"', '', $html );	    
+	    $html = preg_replace( '~href=".*?type=image.*?TB_iframe=1"~', 'href="#" '.$onclick, $html );
 	    return $html;
 	  }
 	}	
@@ -491,7 +495,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 	 * Outputs into head section of html document script for FCK to load
 	 */
   function FckLoadAdminHead(){		  
-    if( strpos( $_SERVER['REQUEST_URI'], 'post-new.php' ) || strpos( $_SERVER['REQUEST_URI'], 'page-new.php' ) || strpos( $_SERVER['REQUEST_URI'], 'post.php' ) || strpos( $_SERVER['REQUEST_URI'], 'page.php' ) ) :
+    if( ( strpos( $_SERVER['REQUEST_URI'], 'post-new.php' ) || strpos( $_SERVER['REQUEST_URI'], 'page-new.php' ) || strpos( $_SERVER['REQUEST_URI'], 'post.php' ) || strpos( $_SERVER['REQUEST_URI'], 'page.php' ) ) && post_type_supports( get_post_type(), 'editor' ) ) :
     ?>
   <script type="text/javascript" src="<?php print( $this->strFCKEditorPath ); ?>fckeditor.js"></script>
   <style type="text/css">
@@ -549,7 +553,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
       		$thumbnail_html = wp_get_attachment_image( $thumbnail_id, 'thumbnail' );
       		if ( !empty( $thumbnail_html ) ) {
       			update_post_meta( $post_ID, '_thumbnail_id', $thumbnail_id );
-      			die( _wp_post_thumbnail_html( $thumbnail_id ) );
+      			die( _wp_post_thumbnail_html( $thumbnail_id, $post_ID ) );
       		}          
         }        
          
@@ -699,7 +703,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
    * This function starts FCKEditor through javascript.
    */
 	function LoadFCKEditor(){
-	  if( $this->checkUserAgent() ) return;
+	  if( $this->checkUserAgent() || !post_type_supports( get_post_type(), 'editor' ) ) return;
 ?>		
 		<script type="text/javascript">
 		<?php  //  detect FV WP Flowplayer
