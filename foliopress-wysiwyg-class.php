@@ -5,7 +5,7 @@
  * Main class that handles all implementation of plugin into WordPress. All WordPress actions and filters are handled here
  *  
  * @author Foliovision s.r.o. <info@foliovision.com>
- * @version 2.6.8.2
+ * @version 2.6.8.3
  * @package foliopress-wysiwyg
  */
 
@@ -707,7 +707,7 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
 ?>		
 		<script type="text/javascript">
 		<?php  //  detect FV WP Flowplayer
-		if( has_action( 'media_upload_fv-wp-flowplayer' ) ) : ?>
+		if( has_action( 'media_upload_fvplayer' ) ) : ?>
 			var g_fv_wp_flowplayer_found = true; 
 		<?php else : ?>
 			var g_fv_wp_flowplayer_found = false; 
@@ -1348,7 +1348,10 @@ class fp_wysiwyg_class extends Foliopress_Plugin {
     $meta = get_post_meta( $post->ID, 'wysiwyg', true );
     ///echo '<!--wysiwyg'.var_export( $meta, true ).' vs '.$post->post_modified.'-->';
 
-    if( $meta['plain_text_editing'] == 1 || $meta['post_modified'] == $post->post_modified ) {
+    if(
+      ( isset($meta['plain_text_editing']) && $meta['plain_text_editing'] == 1 ) || 
+      ( isset($meta['post_modified']) && $meta['post_modified'] == $post->post_modified )
+    ) {
 
       remove_filter ('the_content',  'wpautop');
 
